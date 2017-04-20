@@ -25,11 +25,12 @@
 }
 <br />
 
-<table class="table">
+<table class="table table-hover">
+    <thead>
     <tr>
         <th>
             @Html.ActionLink("Student Full Name", "Index", new { sortOrder = ViewBag.FullNameSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>   
+        </th>
         <th>
             @Html.ActionLink("Teacher", "Index", new { sortOrder = ViewBag.TeacherSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
@@ -44,34 +45,42 @@
         </th>
         <th></th>
     </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.FullName)
+                </td>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.FullName)
-            </td>
-          
-            <td>
-                @Html.DisplayFor(modelItem => item.TeacherId)
-            </td>           
-            <td>
-                @Html.DisplayFor(modelItem => item.Course.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Grade)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Promoted)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new {id = item.ClassBookId}) |
-                @Html.ActionLink("Details", "Details", new {id = item.ClassBookId}) |
-                @Html.ActionLink("Delete", "Delete", new {id = item.ClassBookId})
-            </td>
-        </tr>
-    }
-
+                <td>
+                    @Html.DisplayFor(modelItem => item.TeacherId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Course.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Grade)
+                </td>
+                <td>
+                    @if (item.Promoted == true)
+                {
+                        <button type="button" class="btn btn-success">Promoted</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-danger">Failed</button>
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ClassBookId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ClassBookId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ClassBookId })
+                </td>
+            </tr>
+        }
+        </tbody>
 </table>
 
 <br />

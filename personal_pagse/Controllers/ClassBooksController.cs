@@ -38,7 +38,7 @@ namespace personal_pages.Controllers
             if (!string.IsNullOrEmpty(searchString))
             {
                 classBooks = classBooks.Where(s => s.User.FirstName.Contains(searchString)
-                                       || s.User.FirstName.Contains(searchString));
+                                       || s.User.LastName.Contains(searchString));
             }
 
             switch (sortOrder)
@@ -142,6 +142,7 @@ namespace personal_pages.Controllers
         {
             if (ModelState.IsValid)
             {
+                classBook.User = classBook.User;
                 classBook.TeacherId = User.Identity.Name;
                 classBook.Grade_modified = DateTime.Now;
                 classBook.Promoted = classBook.Grade >= 5;
@@ -150,8 +151,7 @@ namespace personal_pages.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name", classBook.CourseId);
-            ViewBag.StudentId = new SelectList(_db.Users.Where(a => a.AspNetRole.Name == "Student"), "UserId",
-                "FullName");         
+             
             return View(classBook);
         }
 

@@ -8,22 +8,46 @@
 
 <div>
     <h4>ClassBook</h4>
-    <hr/>
+    <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Grade)
+            Student First Name
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Grade)
+            @Html.DisplayFor(model => model.User.FirstName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Promoted)
+            Student Last Name
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Promoted)
+            @Html.DisplayFor(model => model.User.LastName)
+        </dd>
+        
+        <dt>
+            University Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Faculty.University.Name)
+        </dd>
+        
+        <dt>
+            Faculty Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Faculty.Name)
+        </dd>
+
+        <dt>
+            Course Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Course.Name)
         </dd>
 
         <dt>
@@ -51,33 +75,30 @@
         </dd>
 
         <dt>
-            Course Name
+            @Html.DisplayNameFor(model => model.Grade)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Course.Name)
+            @Html.DisplayFor(model => model.Grade)
         </dd>
 
         <dt>
-            Student First Name
+            @Html.DisplayNameFor(model => model.Promoted)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.User.FirstName)
+            @if (Model.Promoted == true)
+            {
+                <button type="button" class="btn btn-success">Promoted</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-danger">Promoted</button>
+            }
         </dd>
-
-
-        <dt>
-            Student Last Name
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.User.LastName)
-        </dd>
-
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new {id = Model.ClassBookId}) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ClassBookId }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
