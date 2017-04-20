@@ -27,24 +27,24 @@
 
 <table class="table table-hover">
     <thead>
-    <tr>
-        <th>
-            @Html.ActionLink("Student Full Name", "Index", new { sortOrder = ViewBag.FullNameSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>
-        <th>
-            @Html.ActionLink("Teacher", "Index", new { sortOrder = ViewBag.TeacherSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>
-        <th>
-            Course
-        </th>
-        <th>
-            @Html.ActionLink("Grade", "Index", new { sortOrder = ViewBag.GradeSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>
-        <th>
-            @Html.ActionLink("Promoted", "Index", new { sortOrder = ViewBag.PromotedSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>
-        <th></th>
-    </tr>
+        <tr>
+            <th>
+                @Html.ActionLink("Student Full Name", "Index", new { sortOrder = ViewBag.FullNameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Teacher", "Index", new { sortOrder = ViewBag.TeacherSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                Course
+            </th>
+            <th>
+                @Html.ActionLink("Grade", "Index", new { sortOrder = ViewBag.GradeSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Promoted", "Index", new { sortOrder = ViewBag.PromotedSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
@@ -80,7 +80,7 @@
                 </td>
             </tr>
         }
-        </tbody>
+    </tbody>
 </table>
 
 <br />
