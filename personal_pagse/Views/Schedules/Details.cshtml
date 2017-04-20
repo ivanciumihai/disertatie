@@ -1,0 +1,51 @@
+﻿@model Schedule
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Schedule</h4>
+    <hr/>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Class_Nr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Class_Nr)
+        </dd>
+
+        <dt>
+            Course
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Course.Name)
+        </dd>
+
+        <dt>
+            Teacher Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.FirstName)
+            @Html.DisplayFor(model => model.User.LastName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new {id = Model.ScheduleId}) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
