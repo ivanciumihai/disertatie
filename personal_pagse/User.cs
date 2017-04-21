@@ -40,7 +40,8 @@ namespace personal_pages
         public System.Guid FacultyId { get; set; }
         public System.Guid UniversityId { get; set; }
         public string RoleId { get; set; }
-    
+        public string ImagePath { get; set; }
+
         public virtual AspNetRole AspNetRole { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ClassBook> ClassBooks { get; set; }

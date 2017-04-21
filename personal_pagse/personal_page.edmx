@@ -195,6 +195,7 @@
           <Property Name="FacultyId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="UniversityId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="RoleId" Type="nvarchar" MaxLength="128" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="128" />
         </EntityType>
         <Association Name="FK_ClassBook_Course">
           <End Role="Course" Type="Self.Course" Multiplicity="0..1" />
@@ -815,6 +816,7 @@
           <NavigationProperty Name="Requests" Relationship="Self.FK_Requests_User" FromRole="Users" ToRole="Requests" />
           <NavigationProperty Name="Schedules" Relationship="Self.FK_Schedule_Users" FromRole="Users" ToRole="Schedule" />
           <NavigationProperty Name="AspNetUser" Relationship="personal_pageModel.FK_Users_AspNetUsers" FromRole="User" ToRole="AspNetUser" />
+          <Property Name="ImagePath" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Users_AspNetRoles">
           <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="0..1" />
@@ -1358,6 +1360,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="personal_pageModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />

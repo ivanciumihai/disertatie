@@ -427,6 +427,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Img\default-avatar.png" />
+    <Content Include="Img\default_avatar.jpg" />
     <Content Include="personal_page.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>personal_page.edmx</DependentUpon>

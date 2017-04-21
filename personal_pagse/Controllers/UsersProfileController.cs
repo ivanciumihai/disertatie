@@ -91,9 +91,14 @@ namespace personal_pages.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var user = await _db.Users.FindAsync(id);
+
             if (user == null)
             {
                 return HttpNotFound();
+            }
+            if (user.ImagePath == null)
+            {
+                user.ImagePath = "~/Img/default-avatar.png";
             }
             return View(user);
         }
