@@ -87,12 +87,13 @@
                 @Html.ValidationMessageFor(model => model.FacultyId, "", new { @class = "text-danger" })
             </div>
         </div>
-        
-        <fieldset>
-            <span class="span4">
-                <input type="file" name="imagePath" accept=".png,.jpg,.jpeg,.gif,.tif" />
-            </span>
-        </fieldset>
+
+        <div class="form-group">
+            @Html.Label("Image Upload", new { @class = "control-label col-md-2", @visiblity = "hidden" })
+            <div class="col-md-10">
+                <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.tif" class="form-group" />
+            </div>
+        </div>
 
     </div>
     <div class="row">
