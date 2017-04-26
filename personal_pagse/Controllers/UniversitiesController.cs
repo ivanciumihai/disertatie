@@ -8,11 +8,11 @@ namespace personal_pages.Controllers
 {
     public class UniversitiesController : Controller
     {
-        private readonly personal_pageEntities db = new personal_pageEntities();
+        private readonly personal_pageEntities _db = new personal_pageEntities();
         // GET: Universities
         public async Task<ActionResult> Index()
         {
-            return View(await db.Universities.ToListAsync());
+            return View(await _db.Universities.ToListAsync());
         }
 
         // GET: Universities/Create
@@ -22,8 +22,6 @@ namespace personal_pages.Controllers
         }
 
         // POST: Universities/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "UniversityId,Name")] University university)
@@ -31,8 +29,8 @@ namespace personal_pages.Controllers
             if (ModelState.IsValid)
             {
                 university.UniversityId = Guid.NewGuid();
-                db.Universities.Add(university);
-                await db.SaveChangesAsync();
+                _db.Universities.Add(university);
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -46,7 +44,7 @@ namespace personal_pages.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var university = await db.Universities.FindAsync(id);
+            var university = await _db.Universities.FindAsync(id);
             if (university == null)
             {
                 return HttpNotFound();
@@ -55,16 +53,14 @@ namespace personal_pages.Controllers
         }
 
         // POST: Universities/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "UniversityId,Name")] University university)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(university).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _db.Entry(university).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(university);
@@ -77,7 +73,7 @@ namespace personal_pages.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var university = await db.Universities.FindAsync(id);
+            var university = await _db.Universities.FindAsync(id);
             if (university == null)
             {
                 return HttpNotFound();
@@ -90,9 +86,9 @@ namespace personal_pages.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            var university = await db.Universities.FindAsync(id);
-            db.Universities.Remove(university);
-            await db.SaveChangesAsync();
+            var university = await _db.Universities.FindAsync(id);
+            _db.Universities.Remove(university);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -100,7 +96,7 @@ namespace personal_pages.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }

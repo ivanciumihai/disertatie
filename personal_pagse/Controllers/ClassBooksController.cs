@@ -95,8 +95,7 @@ namespace personal_pages.Controllers
         // POST: ClassBooks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(
-            [Bind(Include = "ClassBookId,CourseId,StudentId,Grade")] ClassBook classBook)
+        public async Task<ActionResult> Create(ClassBook classBook)
         {
             if (ModelState.IsValid)
             {
@@ -137,8 +136,7 @@ namespace personal_pages.Controllers
         // POST: ClassBooks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(
-            [Bind(Include = "ClassBookId,CourseId,StudentId,Grade,Grade_Date")] ClassBook classBook)
+        public async Task<ActionResult> Edit(ClassBook classBook)
         {
             if (ModelState.IsValid)
             {

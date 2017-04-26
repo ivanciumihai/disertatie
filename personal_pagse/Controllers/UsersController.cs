@@ -11,19 +11,12 @@ namespace personal_pages.Controllers
         // GET: Users
         public bool isAdminUser()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                var user = User.Identity;
-                var context = new ApplicationDbContext();
-                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-                var s = UserManager.GetRoles(user.GetUserId());
-                if (s[0] == "Admin")
-                {
-                    return true;
-                }
-                return false;
-            }
-            return false;
+            if (!User.Identity.IsAuthenticated) return false;
+            var user = User.Identity;
+            var context = new ApplicationDbContext();
+            var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            var s = UserManager.GetRoles(user.GetUserId());
+            return s[0] == "Admin";
         }
 
         public ActionResult Index()
@@ -32,10 +25,7 @@ namespace personal_pages.Controllers
             {
                 var user = User.Identity;
                 ViewBag.Name = user.Name;
-                //	ApplicationDbContext context = new ApplicationDbContext();
-                //	var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
-                //var s=	UserManager.GetRoles(user.GetUserId());
                 ViewBag.displayMenu = "No";
 
                 if (isAdminUser())

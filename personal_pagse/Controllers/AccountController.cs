@@ -14,14 +14,14 @@ namespace personal_pages.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext _context;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private personal_pageEntities db = new personal_pageEntities();
+        private readonly personal_pageEntities _db = new personal_pageEntities();
 
         public AccountController()
         {
-            context = new ApplicationDbContext();
+            _context = new ApplicationDbContext();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -126,20 +126,18 @@ namespace personal_pages.Controllers
             }
         }
 
-        //
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
         {
             ViewBag.Name = User.IsInRole("Admin")
-                ? new SelectList(context.Roles.ToList(), "Name", "Name")
-                : new SelectList(context.Roles.Where(u => !u.Name.Contains("Admin")).ToList(), "Name", "Name");
+                ? new SelectList(_context.Roles.ToList(), "Name", "Name")
+                : new SelectList(_context.Roles.Where(u => !u.Name.Contains("Admin")).ToList(), "Name", "Name");
 
 
             return View();
         }
 
-        //
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
@@ -149,7 +147,7 @@ namespace personal_pages.Controllers
             if (!ModelState.IsValid) return View(model);
             var user = new ApplicationUser {UserName = model.UserName, Email = model.Email, Reg_Date = DateTime.Now};
             var role = new IdentityRole();
-            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(_context));
             var chkUser = UserManager.Create(user, model.Password);
          //   var user2 = new User();
 //
@@ -164,7 +162,7 @@ namespace personal_pages.Controllers
                 //return RedirectToAction("Register", "Account");
                 return RedirectToAction("Create","UsersProfile");
             }
-            ViewBag.Name = new SelectList(context.Roles.Where(u => !u.Name.Contains("Admin"))
+            ViewBag.Name = new SelectList(_context.Roles.Where(u => !u.Name.Contains("Admin"))
                 .ToList(), "Name", "Name");
 
             AddErrors(result1);
@@ -204,7 +202,6 @@ namespace personal_pages.Controllers
             return View("Error");
         }
 
-        //
         // GET: /Account/ForgotPassword
         [AllowAnonymous]
         public ActionResult ForgotPassword()
@@ -212,36 +209,31 @@ namespace personal_pages.Controllers
             return View();
         }
 
-        //
         // POST: /Account/ForgotPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+            var user = _db.AspNetUsers.FirstOrDefault(x => x.Email == model.Email);
+            // var user = await UserManager.FindByNameAsync(model.Email);
+            if (user == null )
             {
-                var user = db.AspNetUsers.FirstOrDefault(x => x.Email == model.Email);
-               // var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null )
-                {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return View("ForgotPasswordConfirmation");
-                }
-
-                var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ResetPassword", "Account",
-            new { UserId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(user.Id, "Reset Password",
-            "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
+                // Don't reveal that the user does not exist or is not confirmed
                 return View("ForgotPasswordConfirmation");
             }
 
+            var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            var callbackUrl = Url.Action("ResetPassword", "Account",
+                new { UserId = user.Id, code = code }, protocol: Request.Url.Scheme);
+            await UserManager.SendEmailAsync(user.Id, "Reset Password",
+                "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
+            return View("ForgotPasswordConfirmation");
+
             // If we got this far, something failed, redisplay form
-            return View(model);
         }
 
-        //
         // GET: /Account/ForgotPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
@@ -249,7 +241,6 @@ namespace personal_pages.Controllers
             return View();
         }
 
-        //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
@@ -257,7 +248,6 @@ namespace personal_pages.Controllers
             return code == null ? View("Error") : View();
         }
 
-        //
         // POST: /Account/ResetPassword
         [HttpPost]
         [AllowAnonymous]
@@ -283,7 +273,6 @@ namespace personal_pages.Controllers
             return View();
         }
 
-        //
         // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
@@ -291,7 +280,6 @@ namespace personal_pages.Controllers
             return View();
         }
 
-        //
         // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]
@@ -303,7 +291,6 @@ namespace personal_pages.Controllers
                 Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl}));
         }
 
-        //
         // GET: /Account/SendCode
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
@@ -320,7 +307,6 @@ namespace personal_pages.Controllers
                 View(new SendCodeViewModel {Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe});
         }
 
-        //
         // POST: /Account/SendCode
         [HttpPost]
         [AllowAnonymous]
@@ -341,7 +327,6 @@ namespace personal_pages.Controllers
                 new {Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe});
         }
 
-        //
         // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
@@ -372,7 +357,6 @@ namespace personal_pages.Controllers
             }
         }
 
-        //
         // POST: /Account/ExternalLoginConfirmation
         [HttpPost]
         [AllowAnonymous]
@@ -411,7 +395,7 @@ namespace personal_pages.Controllers
             return View(model);
         }
 
-        //
+        
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]

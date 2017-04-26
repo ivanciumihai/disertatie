@@ -4,16 +4,16 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-namespace personal_pages.Models
+namespace personal_pages.Controllers
 {
     [MyAuthorize]
     public class RolesController : Controller
     {
-        private readonly personal_pageEntities db = new personal_pageEntities();
+        private readonly personal_pageEntities _db = new personal_pageEntities();
         // GET: Roles
         public async Task<ActionResult> Index()
         {
-            return View(await db.AspNetRoles.ToListAsync());
+            return View(await _db.AspNetRoles.ToListAsync());
         }
 
         // GET: Roles/Create
@@ -23,8 +23,6 @@ namespace personal_pages.Models
         }
 
         // POST: Roles/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Name")] AspNetRole aspNetRole)
@@ -32,8 +30,8 @@ namespace personal_pages.Models
             if (ModelState.IsValid)
             {
                 aspNetRole.Id = Guid.NewGuid().ToString();
-                db.AspNetRoles.Add(aspNetRole);
-                await db.SaveChangesAsync();
+                _db.AspNetRoles.Add(aspNetRole);
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -47,7 +45,7 @@ namespace personal_pages.Models
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var aspNetRole = await db.AspNetRoles.FindAsync(id);
+            var aspNetRole = await _db.AspNetRoles.FindAsync(id);
             if (aspNetRole == null)
             {
                 return HttpNotFound();
@@ -56,16 +54,14 @@ namespace personal_pages.Models
         }
 
         // POST: Roles/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Name")] AspNetRole aspNetRole)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(aspNetRole).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _db.Entry(aspNetRole).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(aspNetRole);
@@ -78,7 +74,7 @@ namespace personal_pages.Models
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var aspNetRole = await db.AspNetRoles.FindAsync(id);
+            var aspNetRole = await _db.AspNetRoles.FindAsync(id);
             if (aspNetRole == null)
             {
                 return HttpNotFound();
@@ -91,9 +87,9 @@ namespace personal_pages.Models
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
-            var aspNetRole = await db.AspNetRoles.FindAsync(id);
-            db.AspNetRoles.Remove(aspNetRole);
-            await db.SaveChangesAsync();
+            var aspNetRole = await _db.AspNetRoles.FindAsync(id);
+            _db.AspNetRoles.Remove(aspNetRole);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -101,7 +97,7 @@ namespace personal_pages.Models
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }

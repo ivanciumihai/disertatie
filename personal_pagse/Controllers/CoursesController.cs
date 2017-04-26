@@ -51,8 +51,7 @@ namespace Personal_Pages.Controllers
         // POST: Courses/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(
-            [Bind(Include = "CourseId,Name,Credits,DepartamentId,TeacherId")] Course course)
+        public async Task<ActionResult> Create(Course course)
         {
             if (ModelState.IsValid)
             {
@@ -89,8 +88,7 @@ namespace Personal_Pages.Controllers
         // POST: Courses/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(
-            [Bind(Include = "CourseId,Name,Credits,DepartamentId,TeacherId")] Course course)
+        public async Task<ActionResult> Edit(Course course)
         {
             if (ModelState.IsValid)
             {

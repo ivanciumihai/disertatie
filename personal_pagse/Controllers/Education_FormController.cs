@@ -9,11 +9,11 @@ namespace Personal_Pages.Controllers
 {
     public class Education_FormController : Controller
     {
-        private readonly personal_pageEntities db = new personal_pageEntities();
+        private readonly personal_pageEntities _db = new personal_pageEntities();
         // GET: Education_Form
         public async Task<ActionResult> Index()
         {
-            return View(await db.Education_Form.ToListAsync());
+            return View(await _db.Education_Form.ToListAsync());
         }
 
         // GET: Education_Form/Details/5
@@ -23,12 +23,12 @@ namespace Personal_Pages.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var education_Form = await db.Education_Form.FindAsync(id);
-            if (education_Form == null)
+            var educationForm = await _db.Education_Form.FindAsync(id);
+            if (educationForm == null)
             {
                 return HttpNotFound();
             }
-            return View(education_Form);
+            return View(educationForm);
         }
 
         // GET: Education_Form/Create
@@ -38,21 +38,19 @@ namespace Personal_Pages.Controllers
         }
 
         // POST: Education_Form/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "id,name")] Education_Form education_Form)
+        public async Task<ActionResult> Create(Education_Form educationForm)
         {
             if (ModelState.IsValid)
             {
-                education_Form.id = Guid.NewGuid();
-                db.Education_Form.Add(education_Form);
-                await db.SaveChangesAsync();
+                educationForm.id = Guid.NewGuid();
+                _db.Education_Form.Add(educationForm);
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            return View(education_Form);
+            return View(educationForm);
         }
 
         // GET: Education_Form/Edit/5
@@ -62,28 +60,23 @@ namespace Personal_Pages.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var education_Form = await db.Education_Form.FindAsync(id);
-            if (education_Form == null)
+            var educationForm = await _db.Education_Form.FindAsync(id);
+            if (educationForm == null)
             {
                 return HttpNotFound();
             }
-            return View(education_Form);
+            return View(educationForm);
         }
 
         // POST: Education_Form/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "id,name")] Education_Form education_Form)
+        public async Task<ActionResult> Edit(Education_Form educationForm)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(education_Form).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            return View(education_Form);
+            if (!ModelState.IsValid) return View(educationForm);
+            _db.Entry(educationForm).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         // GET: Education_Form/Delete/5
@@ -93,12 +86,12 @@ namespace Personal_Pages.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var education_Form = await db.Education_Form.FindAsync(id);
-            if (education_Form == null)
+            var educationForm = await _db.Education_Form.FindAsync(id);
+            if (educationForm == null)
             {
                 return HttpNotFound();
             }
-            return View(education_Form);
+            return View(educationForm);
         }
 
         // POST: Education_Form/Delete/5
@@ -106,9 +99,9 @@ namespace Personal_Pages.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            var education_Form = await db.Education_Form.FindAsync(id);
-            db.Education_Form.Remove(education_Form);
-            await db.SaveChangesAsync();
+            var educationForm = await _db.Education_Form.FindAsync(id);
+            _db.Education_Form.Remove(educationForm);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -116,7 +109,7 @@ namespace Personal_Pages.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }

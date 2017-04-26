@@ -40,18 +40,11 @@ namespace personal_pages.Controllers
 
         public bool isAdminUser()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                var user = User.Identity;
-                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-                var s = UserManager.GetRoles(user.GetUserId());
-                if (s[0] == "Admin" || s[0] == "Teacher")
-                {
-                    return true;
-                }
-                return false;
-            }
-            return false;
+            if (!User.Identity.IsAuthenticated) return false;
+            var user = User.Identity;
+            var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            var s = UserManager.GetRoles(user.GetUserId());
+            return s[0] == "Admin" || s[0] == "Teacher";
         }
 
         /// <summary>

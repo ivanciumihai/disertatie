@@ -8,11 +8,11 @@ namespace personal_pages.Controllers
 {
     public class DepartamentsController : Controller
     {
-        private readonly personal_pageEntities db = new personal_pageEntities();
+        private readonly personal_pageEntities _db = new personal_pageEntities();
         // GET: Departaments
         public async Task<ActionResult> Index()
         {
-            return View(await db.Departaments.ToListAsync());
+            return View(await _db.Departaments.ToListAsync());
         }
 
 
@@ -25,17 +25,13 @@ namespace personal_pages.Controllers
         // POST: Departaments/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "DepId,Name,StartDate")] Departament departament)
+        public async Task<ActionResult> Create(Departament departament)
         {
-            if (ModelState.IsValid)
-            {
-                departament.DepId = Guid.NewGuid();
-                db.Departaments.Add(departament);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-
-            return View(departament);
+            if (!ModelState.IsValid) return View(departament);
+            departament.DepId = Guid.NewGuid();
+            _db.Departaments.Add(departament);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         // GET: Departaments/Edit/5
@@ -45,7 +41,7 @@ namespace personal_pages.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var departament = await db.Departaments.FindAsync(id);
+            var departament = await _db.Departaments.FindAsync(id);
             if (departament == null)
             {
                 return HttpNotFound();
@@ -56,15 +52,12 @@ namespace personal_pages.Controllers
         // POST: Departaments/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "DepId,Name,StartDate")] Departament departament)
+        public async Task<ActionResult> Edit(Departament departament)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(departament).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            return View(departament);
+            if (!ModelState.IsValid) return View(departament);
+            _db.Entry(departament).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         // GET: Departaments/Delete/5
@@ -74,7 +67,7 @@ namespace personal_pages.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var departament = await db.Departaments.FindAsync(id);
+            var departament = await _db.Departaments.FindAsync(id);
             if (departament == null)
             {
                 return HttpNotFound();
@@ -87,9 +80,9 @@ namespace personal_pages.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            var departament = await db.Departaments.FindAsync(id);
-            db.Departaments.Remove(departament);
-            await db.SaveChangesAsync();
+            var departament = await _db.Departaments.FindAsync(id);
+            _db.Departaments.Remove(departament);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -97,7 +90,7 @@ namespace personal_pages.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }

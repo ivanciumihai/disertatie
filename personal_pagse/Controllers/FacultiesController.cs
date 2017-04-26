@@ -8,24 +8,22 @@ namespace personal_pages.Controllers
 {
     public class FacultiesController : Controller
     {
-        private readonly personal_pageEntities db = new personal_pageEntities();
+        private readonly personal_pageEntities _db = new personal_pageEntities();
         // GET: Faculties
         public async Task<ActionResult> Index()
         {
-            var faculties = db.Faculties.Include(f => f.University);
+            var faculties = _db.Faculties.Include(f => f.University);
             return View(await faculties.ToListAsync());
         }
 
         // GET: Faculties/Create
         public ActionResult Create()
         {
-            ViewBag.UniversityId = new SelectList(db.Universities, "UniversityId", "Name");
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
             return View();
         }
 
         // POST: Faculties/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "FacultyId,Name,UniversityId")] Faculty faculty)
@@ -33,12 +31,12 @@ namespace personal_pages.Controllers
             if (ModelState.IsValid)
             {
                 faculty.FacultyId = Guid.NewGuid();
-                db.Faculties.Add(faculty);
-                await db.SaveChangesAsync();
+                _db.Faculties.Add(faculty);
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.UniversityId = new SelectList(db.Universities, "UniversityId", "Name", faculty.UniversityId);
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name", faculty.UniversityId);
             return View(faculty);
         }
 
@@ -49,29 +47,27 @@ namespace personal_pages.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var faculty = await db.Faculties.FindAsync(id);
+            var faculty = await _db.Faculties.FindAsync(id);
             if (faculty == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.UniversityId = new SelectList(db.Universities, "UniversityId", "Name", faculty.UniversityId);
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name", faculty.UniversityId);
             return View(faculty);
         }
 
         // POST: Faculties/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "FacultyId,Name,UniversityId")] Faculty faculty)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(faculty).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _db.Entry(faculty).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.UniversityId = new SelectList(db.Universities, "UniversityId", "Name", faculty.UniversityId);
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name", faculty.UniversityId);
             return View(faculty);
         }
 
@@ -82,7 +78,7 @@ namespace personal_pages.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var faculty = await db.Faculties.FindAsync(id);
+            var faculty = await _db.Faculties.FindAsync(id);
             if (faculty == null)
             {
                 return HttpNotFound();
@@ -95,9 +91,9 @@ namespace personal_pages.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            var faculty = await db.Faculties.FindAsync(id);
-            db.Faculties.Remove(faculty);
-            await db.SaveChangesAsync();
+            var faculty = await _db.Faculties.FindAsync(id);
+            _db.Faculties.Remove(faculty);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -105,7 +101,7 @@ namespace personal_pages.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
