@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using Microsoft.AspNet.Identity.Owin;
 using personal_pages.Helpers;
 using personal_pages.Models;
 using PagedList;
+
 
 
 namespace personal_pages.Controllers
@@ -98,7 +100,7 @@ namespace personal_pages.Controllers
             }
             if (user.ImagePath == null)
             {
-                user.ImagePath = "~/Img/default-avatar.png";
+                user.ImagePath = "default-avatar.png";
             }
             return View(user);
         }
@@ -121,8 +123,7 @@ namespace personal_pages.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin, Secretary")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(
-            [Bind(Include = "UserId,FirstName,LastName,Ed_Form,FatherName,DepID,GroupNumber,UniversityId,FacultyId,RoleId")] User user)
+        public async Task<ActionResult> Create(User user, HttpPostedFileBase imagePath)
         {
             if (ModelState.IsValid)
             {
@@ -131,7 +132,6 @@ namespace personal_pages.Controllers
                 user.LastName = StringHelper.CutWhiteSpace(user.LastName.ToTitleCase(TitleCase.All));
                 user.FatherName = StringHelper.CutWhiteSpace(user.FatherName.ToTitleCase(TitleCase.All));
                 var context = new ApplicationDbContext();
-
                 var roles = await context.Users
                                     .Where(u => u.Id == user.UserId)
                                     .SelectMany(u => u.Roles)
@@ -143,8 +143,17 @@ namespace personal_pages.Controllers
                     user.RoleId = role.Id;
                 }
 
+                if (imagePath != null)
+                {
+                    var imageName = (user.FirstName + "." + user.LastName + Path.GetExtension(imagePath.FileName)).Replace(" ", "");
+                    var physicalPath = Server.MapPath("~/Img/" + imageName);
+                    imagePath.SaveAs(physicalPath);
+                    user.ImagePath = imageName;
+                }
+
                 _db.Users.Add(user);
                 await _db.SaveChangesAsync();
+
                 return RedirectToAction("Index");
             }
 
@@ -182,11 +191,7 @@ namespace personal_pages.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Secretary")]
-        public async Task<ActionResult> Edit(
-            [Bind(
-                Include =
-                    "UserId,FirstName,LastName,Reg_date,Ed_Form,FatherName,DepID,GroupNumber,UniversityId,FacultyId,RoleId"
-                )] User user)
+        public async Task<ActionResult> Edit(User user, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
             {
@@ -195,6 +200,21 @@ namespace personal_pages.Controllers
                 user.FirstName = StringHelper.CutWhiteSpace(user.FirstName.ToTitleCase(TitleCase.All));
                 user.LastName = StringHelper.CutWhiteSpace(user.LastName.ToTitleCase(TitleCase.All));
                 user.FatherName = StringHelper.CutWhiteSpace(user.FatherName.ToTitleCase(TitleCase.All));
+
+                if (image != null)
+                {
+                    if (user.ImagePath != null)
+                    {
+                        var filePath = Server.MapPath("~/Img/" + user.ImagePath);
+                        System.IO.File.Delete(filePath);
+                    }
+
+                    var imageName = (user.FirstName + "." + user.LastName + Path.GetExtension(image.FileName)).Replace(" ","");
+                    var physicalPath = Server.MapPath("~/Img/" + imageName);
+                    image.SaveAs(physicalPath);
+                    user.ImagePath = imageName;
+                }
+
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }

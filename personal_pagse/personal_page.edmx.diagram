@@ -21,24 +21,24 @@
         <EntityTypeShape EntityType="personal_pageModel.Schedule" Width="1.5" PointX="12.75" PointY="4.875" IsExpanded="true" />
         <EntityTypeShape EntityType="personal_pageModel.sysdiagram" Width="1.5" PointX="7.75" PointY="8.75" IsExpanded="true" />
         <EntityTypeShape EntityType="personal_pageModel.University" Width="1.5" PointX="0.75" PointY="7" IsExpanded="true" />
-        <EntityTypeShape EntityType="personal_pageModel.User" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
-        <AssociationConnector Association="personal_pageModel.FK_Users_AspNetRoles" ManuallyRouted="false" />
         <AssociationConnector Association="personal_pageModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="personal_pageModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="personal_pageModel.FK_ClassBook_Course" ManuallyRouted="false" />
-        <AssociationConnector Association="personal_pageModel.FK_ClassBook_Student" ManuallyRouted="false" />
         <AssociationConnector Association="personal_pageModel.FK_Course_Departament" ManuallyRouted="false" />
-        <AssociationConnector Association="personal_pageModel.FK_Course_Teacher" ManuallyRouted="false" />
         <AssociationConnector Association="personal_pageModel.FK_Schedule_Course" ManuallyRouted="false" />
-        <AssociationConnector Association="personal_pageModel.FK_Users_Departament" ManuallyRouted="false" />
-        <AssociationConnector Association="personal_pageModel.FK_Users_Education_Form" ManuallyRouted="false" />
         <AssociationConnector Association="personal_pageModel.FK_Faculty_University" ManuallyRouted="false" />
-        <AssociationConnector Association="personal_pageModel.FK_Users_Faculty" ManuallyRouted="false" />
         <AssociationConnector Association="personal_pageModel.FK_Notifications_University" ManuallyRouted="false" />
-        <AssociationConnector Association="personal_pageModel.FK_Requests_User" ManuallyRouted="false" />
-        <AssociationConnector Association="personal_pageModel.FK_Schedule_Users" ManuallyRouted="false" />
         <AssociationConnector Association="personal_pageModel.AspNetUserRoles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="personal_pageModel.User" Width="1.5" PointX="10.5" PointY="8.25" />
+        <AssociationConnector Association="personal_pageModel.FK_Users_AspNetRoles" />
         <AssociationConnector Association="personal_pageModel.FK_Users_AspNetUsers" />
+        <AssociationConnector Association="personal_pageModel.FK_ClassBook_Student" />
+        <AssociationConnector Association="personal_pageModel.FK_Course_Teacher" />
+        <AssociationConnector Association="personal_pageModel.FK_Users_Departament" />
+        <AssociationConnector Association="personal_pageModel.FK_Users_Education_Form" />
+        <AssociationConnector Association="personal_pageModel.FK_Users_Faculty" />
+        <AssociationConnector Association="personal_pageModel.FK_Requests_User" />
+        <AssociationConnector Association="personal_pageModel.FK_Schedule_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -7,7 +7,7 @@
 
 <h2>Edit</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit", "UsersProfile", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
@@ -63,7 +63,7 @@
                 @Html.EditorFor(model => model.GroupNumber, new { htmlAttributes = new { @class = "form-control", @type = "number", @onkeypress = "ValidateGroup(event);" } })
                 @Html.ValidationMessageFor(model => model.GroupNumber, "", new { @class = "text-danger" })
             </div>
-        </div>      
+        </div>
 
         <div class="form-group">
             @Html.Label("University", new { @class = "control-label col-md-2" })
@@ -84,10 +84,25 @@
         <div class="form-group">
             @Html.Label("Role", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(x => x.RoleId, null, new { @class = "form-control",@id="non" })
+                @Html.DropDownListFor(x => x.RoleId, null, new { @class = "form-control", @id = "non" })
                 @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        <div class="form-group" hidden>
+            @Html.Label("Image Path", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ImagePath, new { htmlAttributes = new { @class = "form-control", } })
+                @Html.ValidationMessageFor(model => model.ImagePath, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+            <div class="form-group">
+                @Html.Label("Image Path", new { @class = "control-label col-md-2", @visiblity="hidden"})
+                <div class="col-md-10">
+                    <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.tif" class="form-group" />
+                </div>
+                </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -102,6 +117,7 @@
 </div>
 
 @section Scripts {
+
     <script type="text/javascript" src="~/Scripts/regex.js"></script>
     <script type="text/javascript" src="~/Scripts/datepickerready.js"></script>
     <script type="text/javascript" src="~/Scripts/dropdownT.js"></script>
