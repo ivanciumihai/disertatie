@@ -19,6 +19,7 @@ namespace personal_pages
         public System.Guid UniversityId { get; set; }
     
         public virtual University University { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User> Users { get; set; }
     }
