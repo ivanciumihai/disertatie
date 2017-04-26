@@ -4,7 +4,6 @@ namespace personal_pages
 {
     public class BundleConfig
     {
-        // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new StyleBundle("~/Content/css").Include(
@@ -32,7 +31,6 @@ namespace personal_pages
                 "~/Scripts/jquery.validate"));
 
             // Set EnableOptimizations to false for debugging. For more information,
-            // visit http://go.microsoft.com/fwlink/?LinkId=301862
             BundleTable.EnableOptimizations = false;
         }
     }

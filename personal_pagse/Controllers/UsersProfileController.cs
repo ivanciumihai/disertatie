@@ -239,6 +239,12 @@ namespace personal_pages.Controllers
             {
                 return HttpNotFound();
             }
+
+            if (user.ImagePath == null)
+            {
+                user.ImagePath = "default-avatar.png";
+            }
+
             return View(user);
         }
 
