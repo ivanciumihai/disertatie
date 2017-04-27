@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
 using personal_pages;
 using personal_pages.Helpers;
 using personal_pages.Models;
+using PagedList;
 
 namespace Personal_Pages.Controllers
 {
@@ -19,10 +17,47 @@ namespace Personal_Pages.Controllers
     {
         private readonly personal_pageEntities _db = new personal_pageEntities();
         // GET: Courses
-        public async Task<ActionResult> Index()
+        public  ViewResult Index(string sortOrder, string searchString, string currentFilter, int? page)
         {
+            ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.NameDepSortParm = string.IsNullOrEmpty(sortOrder) ? "depname_desc" : "";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
             var courses = _db.Courses.Include(c => c.Departament).Include(c => c.User);
-            return View(await courses.ToListAsync());
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                courses = courses.Where(s => s.User.FirstName.Contains(searchString)
+                                       || s.User.LastName.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    courses = courses.OrderByDescending(s => s.Name);
+                    break;
+                case "depname_desc":
+                    courses = courses.OrderByDescending(s => s.Departament.Name);
+                    break;
+                default:
+                    courses = courses.OrderBy(s => s.Name);
+                    break;
+            }
+
+            const int pageSize = 10;
+            var pageNumber = (page ?? 1);
+
+            return View(courses.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Courses/Details/5
