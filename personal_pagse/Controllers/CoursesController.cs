@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using personal_pages;
+using personal_pages.Helpers;
 using personal_pages.Models;
 
 namespace Personal_Pages.Controllers
@@ -56,6 +57,8 @@ namespace Personal_Pages.Controllers
             if (ModelState.IsValid)
             {
                 course.CourseId = Guid.NewGuid();
+                course.Name = StringHelper.CutWhiteSpace(course.Name.ToTitleCase(TitleCase.All));
+
                 _db.Courses.Add(course);
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -93,6 +96,8 @@ namespace Personal_Pages.Controllers
             if (ModelState.IsValid)
             {
                 _db.Entry(course).State = EntityState.Modified;
+                course.Name = StringHelper.CutWhiteSpace(course.Name.ToTitleCase(TitleCase.All));
+
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }

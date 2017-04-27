@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using personal_pages.Helpers;
 
 namespace personal_pages.Controllers
 {
@@ -26,11 +27,12 @@ namespace personal_pages.Controllers
         // POST: Faculties/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "FacultyId,Name,UniversityId")] Faculty faculty)
+        public async Task<ActionResult> Create(Faculty faculty)
         {
             if (ModelState.IsValid)
             {
                 faculty.FacultyId = Guid.NewGuid();
+                faculty.Name = StringHelper.CutWhiteSpace(faculty.Name.ToTitleCase(TitleCase.All));
                 _db.Faculties.Add(faculty);
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -59,11 +61,12 @@ namespace personal_pages.Controllers
         // POST: Faculties/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "FacultyId,Name,UniversityId")] Faculty faculty)
+        public async Task<ActionResult> Edit(Faculty faculty)
         {
             if (ModelState.IsValid)
             {
                 _db.Entry(faculty).State = EntityState.Modified;
+                faculty.Name = StringHelper.CutWhiteSpace(faculty.Name.ToTitleCase(TitleCase.All));
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }

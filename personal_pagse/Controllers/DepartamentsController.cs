@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using personal_pages.Helpers;
 
 namespace personal_pages.Controllers
 {
@@ -29,6 +30,8 @@ namespace personal_pages.Controllers
         {
             if (!ModelState.IsValid) return View(departament);
             departament.DepId = Guid.NewGuid();
+            departament.Name = StringHelper.CutWhiteSpace(departament.Name.ToTitleCase(TitleCase.All));
+
             _db.Departaments.Add(departament);
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -41,7 +44,9 @@ namespace personal_pages.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var departament = await _db.Departaments.FindAsync(id);
+
             if (departament == null)
             {
                 return HttpNotFound();
@@ -56,6 +61,8 @@ namespace personal_pages.Controllers
         {
             if (!ModelState.IsValid) return View(departament);
             _db.Entry(departament).State = EntityState.Modified;
+            departament.Name = StringHelper.CutWhiteSpace(departament.Name.ToTitleCase(TitleCase.All));
+
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

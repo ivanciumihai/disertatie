@@ -25,7 +25,7 @@ namespace personal_pages.Controllers
         // POST: Roles/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Name")] AspNetRole aspNetRole)
+        public async Task<ActionResult> Create(AspNetRole aspNetRole)
         {
             if (ModelState.IsValid)
             {
@@ -56,7 +56,7 @@ namespace personal_pages.Controllers
         // POST: Roles/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Name")] AspNetRole aspNetRole)
+        public async Task<ActionResult> Edit(AspNetRole aspNetRole)
         {
             if (ModelState.IsValid)
             {

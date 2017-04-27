@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using personal_pages.Helpers;
 
 namespace personal_pages.Controllers
 {
@@ -24,17 +25,14 @@ namespace personal_pages.Controllers
         // POST: Universities/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "UniversityId,Name")] University university)
+        public async Task<ActionResult> Create(University university)
         {
-            if (ModelState.IsValid)
-            {
-                university.UniversityId = Guid.NewGuid();
-                _db.Universities.Add(university);
-                await _db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-
-            return View(university);
+            if (!ModelState.IsValid) return View(university);
+            university.Name = StringHelper.CutWhiteSpace(university.Name.ToTitleCase(TitleCase.All));
+            university.UniversityId = Guid.NewGuid();
+            _db.Universities.Add(university);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         // GET: Universities/Edit/5
@@ -55,15 +53,13 @@ namespace personal_pages.Controllers
         // POST: Universities/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "UniversityId,Name")] University university)
+        public async Task<ActionResult> Edit(University university)
         {
-            if (ModelState.IsValid)
-            {
-                _db.Entry(university).State = EntityState.Modified;
-                await _db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            return View(university);
+            if (!ModelState.IsValid) return View(university);
+            _db.Entry(university).State = EntityState.Modified;
+            university.Name = StringHelper.CutWhiteSpace(university.Name.ToTitleCase(TitleCase.All));
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         // GET: Universities/Delete/5

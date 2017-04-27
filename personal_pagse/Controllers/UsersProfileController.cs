@@ -123,7 +123,7 @@ namespace personal_pages.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin, Secretary")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(User user, HttpPostedFileBase imagePath)
+        public async Task<ActionResult> Create(User user, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
             {
@@ -143,11 +143,11 @@ namespace personal_pages.Controllers
                     user.RoleId = role.Id;
                 }
 
-                if (imagePath != null)
+                if (image != null)
                 {
-                    var imageName = (user.FirstName + "." + user.LastName + Path.GetExtension(imagePath.FileName)).Replace(" ", "");
+                    var imageName = (user.FirstName + "." + user.LastName + Path.GetExtension(image.FileName)).Replace(" ", "");
                     var physicalPath = Server.MapPath("~/Img/" + imageName);
-                    imagePath.SaveAs(physicalPath);
+                    image.SaveAs(physicalPath);
                     user.ImagePath = imageName;
                 }
 

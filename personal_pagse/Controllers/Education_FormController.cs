@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using personal_pages;
+using personal_pages.Helpers;
 
 namespace Personal_Pages.Controllers
 {
@@ -42,15 +43,13 @@ namespace Personal_Pages.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Education_Form educationForm)
         {
-            if (ModelState.IsValid)
-            {
-                educationForm.id = Guid.NewGuid();
-                _db.Education_Form.Add(educationForm);
-                await _db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
+            if (!ModelState.IsValid) return View(educationForm);
+            educationForm.id = Guid.NewGuid();
+            educationForm.name = StringHelper.CutWhiteSpace(educationForm.name.ToTitleCase(TitleCase.All));
 
-            return View(educationForm);
+            _db.Education_Form.Add(educationForm);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         // GET: Education_Form/Edit/5
@@ -75,6 +74,8 @@ namespace Personal_Pages.Controllers
         {
             if (!ModelState.IsValid) return View(educationForm);
             _db.Entry(educationForm).State = EntityState.Modified;
+            educationForm.name = StringHelper.CutWhiteSpace(educationForm.name.ToTitleCase(TitleCase.All));
+
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
