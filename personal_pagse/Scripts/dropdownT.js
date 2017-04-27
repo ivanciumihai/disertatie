@@ -50,7 +50,7 @@ $(document)
     });
 
 
-window.onload = function() {
+$(document).ready(function() {
     var id = $("#UniversityId").val();
     var url = "/UsersProfile/GetFaculty?universityId=" + id;
     $.ajax({
@@ -66,7 +66,7 @@ window.onload = function() {
             console.log(error);
         }
     });
-};
+}); 
 
 
 window.onload = function() {
