@@ -12,7 +12,9 @@
     var moment,
         VERSION = "2.9.0",
         // the global-scope this is NOT the global object in Node.js
-        globalScope = (typeof global !== "undefined" && (typeof window === "undefined" || window === global.window)) ? global : this,
+        globalScope = (typeof global !== "undefined" && (typeof window === "undefined" || window === global.window))
+            ? global
+            : this,
         oldGlobalMoment,
         round = Math.round,
         hasOwnProperty = Object.prototype.hasOwnProperty,
@@ -41,10 +43,12 @@
 
         // from http://docs.closure-library.googlecode.com/git/closure_goog_date_date.js.source.html
         // somewhat more in line with 4.4.3.2 2004 spec, but allows decimal anywhere
-        isoDurationRegex = /^(-)?P(?:(?:([0-9,.]*)Y)?(?:([0-9,.]*)M)?(?:([0-9,.]*)D)?(?:T(?:([0-9,.]*)H)?(?:([0-9,.]*)M)?(?:([0-9,.]*)S)?)?|([0-9,.]*)W)$/,
+        isoDurationRegex =
+            /^(-)?P(?:(?:([0-9,.]*)Y)?(?:([0-9,.]*)M)?(?:([0-9,.]*)D)?(?:T(?:([0-9,.]*)H)?(?:([0-9,.]*)M)?(?:([0-9,.]*)S)?)?|([0-9,.]*)W)$/,
 
         // format tokens
-        formattingTokens = /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Q|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|mm?|ss?|S{1,4}|x|X|zz?|ZZ?|.)/g,
+        formattingTokens =
+            /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Q|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|mm?|ss?|S{1,4}|x|X|zz?|ZZ?|.)/g,
         localFormattingTokens = /(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g,
 
         // parsing token regexes
@@ -53,7 +57,8 @@
         parseTokenOneToFourDigits = /\d{1,4}/, // 0 - 9999
         parseTokenOneToSixDigits = /[+\-]?\d{1,6}/, // -999,999 - 999,999
         parseTokenDigits = /\d+/, // nonzero number of digits
-        parseTokenWord = /[0-9]*['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+|[\u0600-\u06FF\/]+(\s*?[\u0600-\u06FF]+){1,2}/i, // any word (or two) characters or numbers including two/three word month in arabic.
+        parseTokenWord =
+            /[0-9]*['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+|[\u0600-\u06FF\/]+(\s*?[\u0600-\u06FF]+){1,2}/i, // any word (or two) characters or numbers including two/three word month in arabic.
         parseTokenTimezone = /Z|[\+\-]\d\d:?\d\d/gi, // +00:00 -00:00 +0000 -0000 or Z
         parseTokenT = /T/i, // T (ISO separator)
         parseTokenOffsetMs = /[\+\-]?\d+/, // 1234567890123
@@ -69,7 +74,8 @@
 
         // iso 8601 regex
         // 0000-00-00 0000-W00 or 0000-W00-0 + T + 00 or 00:00 or 00:00:00 or 00:00:00.000 + +00:00 or +0000 or +00)
-        isoRegex = /^\s*(?:[+-]\d{6}|\d{4})-(?:(\d\d-\d\d)|(W\d\d$)|(W\d\d-\d)|(\d\d\d))((T| )(\d\d(:\d\d(:\d\d(\.\d+)?)?)?)?([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/,
+        isoRegex =
+            /^\s*(?:[+-]\d{6}|\d{4})-(?:(\d\d-\d\d)|(W\d\d$)|(W\d\d-\d)|(\d\d\d))((T| )(\d\d(:\d\d(:\d\d(\.\d+)?)?)?)?([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/,
 
         isoFormat = "YYYY-MM-DDTHH:mm:ssZ",
 
@@ -325,7 +331,8 @@
 
     function printMsg(msg) {
         if (moment.suppressDeprecationWarnings === false &&
-            typeof console !== "undefined" && console.warn) {
+            typeof console !== "undefined" &&
+            console.warn) {
             console.warn("Deprecation warning: " + msg);
         }
     }
@@ -333,12 +340,13 @@
     function deprecate(msg, fn) {
         var firstTime = true;
         return extend(function() {
-            if (firstTime) {
-                printMsg(msg);
-                firstTime = false;
-            }
-            return fn.apply(this, arguments);
-        }, fn);
+                if (firstTime) {
+                    printMsg(msg);
+                    firstTime = false;
+                }
+                return fn.apply(this, arguments);
+            },
+            fn);
     }
 
     function deprecateSimple(name, msg) {
@@ -569,8 +577,9 @@
     function positiveMomentsDifference(base, other) {
         var res = { milliseconds: 0, months: 0 };
 
-        res.months = other.month() - base.month() +
-        (other.year() - base.year()) * 12;
+        res.months = other.month() -
+            base.month() +
+            (other.year() - base.year()) * 12;
         if (base.clone().add(res.months, "M").isAfter(other)) {
             --res.months;
         }
@@ -600,7 +609,12 @@
             var dur, tmp;
             //invert the arguments, but complain about it
             if (period !== null && !isNaN(+period)) {
-                deprecateSimple(name, "moment()." + name + "(period, number) is deprecated. Please use moment()." + name + "(number, period).");
+                deprecateSimple(name,
+                    "moment()." +
+                    name +
+                    "(period, number) is deprecated. Please use moment()." +
+                    name +
+                    "(number, period).");
                 tmp = val;
                 val = period;
                 period = tmp;
@@ -651,7 +665,7 @@
             i;
         for (i = 0; i < len; i++) {
             if ((dontConvert && array1[i] !== array2[i]) ||
-            (!dontConvert && toInt(array1[i]) !== toInt(array2[i]))) {
+                (!dontConvert && toInt(array1[i]) !== toInt(array2[i]))) {
                 diffs++;
             }
         }
@@ -758,16 +772,22 @@
         var overflow;
         if (m._a && m._pf.overflow === -2) {
             overflow =
-                m._a[MONTH] < 0 || m._a[MONTH] > 11 ? MONTH :
-                m._a[DATE] < 1 || m._a[DATE] > daysInMonth(m._a[YEAR], m._a[MONTH]) ? DATE :
-                m._a[HOUR] < 0 || m._a[HOUR] > 24 ||
-                (m._a[HOUR] === 24 && (m._a[MINUTE] !== 0 ||
+                m._a[MONTH] < 0 || m._a[MONTH] > 11
+                ? MONTH
+                : m._a[DATE] < 1 || m._a[DATE] > daysInMonth(m._a[YEAR], m._a[MONTH])
+                ? DATE
+                : m._a[HOUR] < 0 ||
+                m._a[HOUR] > 24 ||
+                (m._a[HOUR] === 24 &&
+                (m._a[MINUTE] !== 0 ||
                     m._a[SECOND] !== 0 ||
-                    m._a[MILLISECOND] !== 0)) ? HOUR :
-                m._a[MINUTE] < 0 || m._a[MINUTE] > 59 ? MINUTE :
-                m._a[SECOND] < 0 || m._a[SECOND] > 59 ? SECOND :
-                m._a[MILLISECOND] < 0 || m._a[MILLISECOND] > 999 ? MILLISECOND :
-                -1;
+                    m._a[MILLISECOND] !== 0))
+                ? HOUR
+                : m._a[MINUTE] < 0 || m._a[MINUTE] > 59
+                ? MINUTE
+                : m._a[SECOND] < 0 || m._a[SECOND] > 59
+                ? SECOND
+                : m._a[MILLISECOND] < 0 || m._a[MILLISECOND] > 999 ? MILLISECOND : -1;
 
             if (m._pf._overflowDayOfYear && (overflow < YEAR || overflow > DATE)) {
                 overflow = DATE;
@@ -848,8 +868,7 @@
         var res, diff;
         if (model._isUTC) {
             res = model.clone();
-            diff = (moment.isMoment(input) || isDate(input) ?
-                +input : +moment(input)) - (+res);
+            diff = (moment.isMoment(input) || isDate(input) ? +input : +moment(input)) - (+res);
             // Use low-level api, because this fn is low-level api.
             res._d.setTime(+res._d + diff);
             moment.updateOffset(res, false);
@@ -864,7 +883,8 @@
     ************************************/
 
 
-    extend(Locale.prototype, {
+    extend(Locale.prototype,
+    {
         set: function(config) {
             var prop, i;
             for (i in config) {
@@ -947,7 +967,12 @@
                 // make the regex if we don't have it already
                 if (!this._weekdaysParse[i]) {
                     mom = moment([2000, 1]).day(i);
-                    regex = "^" + this.weekdays(mom, "") + "|^" + this.weekdaysShort(mom, "") + "|^" + this.weekdaysMin(mom, "");
+                    regex = "^" +
+                        this.weekdays(mom, "") +
+                        "|^" +
+                        this.weekdaysShort(mom, "") +
+                        "|^" +
+                        this.weekdaysMin(mom, "");
                     this._weekdaysParse[i] = new RegExp(regex.replace(".", ""), "i");
                 }
                 // test the regex
@@ -968,9 +993,10 @@
         longDateFormat: function(key) {
             var output = this._longDateFormat[key];
             if (!output && this._longDateFormat[key.toUpperCase()]) {
-                output = this._longDateFormat[key.toUpperCase()].replace(/MMMM|MM|DD|dddd/g, function(val) {
-                    return val.slice(1);
-                });
+                output = this._longDateFormat[key.toUpperCase()].replace(/MMMM|MM|DD|dddd/g,
+                    function(val) {
+                        return val.slice(1);
+                    });
                 this._longDateFormat[key] = output;
             }
             return output;
@@ -1023,9 +1049,9 @@
 
         relativeTime: function(number, withoutSuffix, string, isFuture) {
             var output = this._relativeTime[string];
-            return (typeof output === "function") ?
-                output(number, withoutSuffix, string, isFuture) :
-                output.replace(/%d/i, number);
+            return (typeof output === "function")
+                ? output(number, withoutSuffix, string, isFuture)
+                : output.replace(/%d/i, number);
         },
 
         pastFuture: function(diff, output) {
@@ -1278,7 +1304,8 @@
         case "Do":
             if (input != null) {
                 datePartArray[DATE] = toInt(parseInt(
-                    input.match(/\d{1,2}/)[0], 10));
+                    input.match(/\d{1,2}/)[0],
+                    10));
             }
             break;
         // DAY OF YEAR
@@ -1582,16 +1609,18 @@
             config._pf.bigHour = undefined;
         }
         // handle meridiem
-        config._a[HOUR] = meridiemFixWrap(config._locale, config._a[HOUR],
+        config._a[HOUR] = meridiemFixWrap(config._locale,
+            config._a[HOUR],
             config._meridiem);
         dateFromConfig(config);
         checkOverflow(config);
     }
 
     function unescapeFormat(s) {
-        return s.replace(/\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g, function(matched, p1, p2, p3, p4) {
-            return p1 || p2 || p3 || p4;
-        });
+        return s.replace(/\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g,
+            function(matched, p1, p2, p3, p4) {
+                return p1 || p2 || p3 || p4;
+            });
     }
 
     // Code from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
@@ -1704,9 +1733,10 @@
         } else if (typeof input === "string") {
             makeDateFromString(config);
         } else if (isArray(input)) {
-            config._a = map(input.slice(0), function(obj) {
-                return parseInt(obj, 10);
-            });
+            config._a = map(input.slice(0),
+                function(obj) {
+                    return parseInt(obj, 10);
+                });
             dateFromConfig(config);
         } else if (typeof(input) === "object") {
             dateFromObject(config);
@@ -1780,7 +1810,8 @@
                 days < relativeTimeThresholds.d && ["dd", days] ||
                 months === 1 && ["M"] ||
                 months < relativeTimeThresholds.M && ["MM", months] ||
-                years === 1 && ["y"] || ["yy", years];
+                years === 1 && ["y"] ||
+                ["yy", years];
 
         args[2] = withoutSuffix;
         args[3] = +posNegDuration > 0;
@@ -2028,7 +2059,7 @@
         } else if (duration == null) { // checks for null or undefined
             duration = {};
         } else if (typeof duration === "object" &&
-        ("from" in duration || "to" in duration)) {
+            ("from" in duration || "to" in duration)) {
             diffRes = momentsDifference(moment(duration.from), moment(duration.to));
 
             duration = {};
@@ -2154,7 +2185,7 @@
     // compare moment object
     moment.isMoment = function(obj) {
         return obj instanceof Moment ||
-        (obj != null && hasOwnProp(obj, "_isAMomentObject"));
+            (obj != null && hasOwnProp(obj, "_isAMomentObject"));
     };
 
     // for typechecking Duration objects
@@ -2196,7 +2227,8 @@
     ************************************/
 
 
-    extend(moment.fn = Moment.prototype, {
+    extend(moment.fn = Moment.prototype,
+    {
         clone: function() {
             return moment(this);
         },
@@ -2250,7 +2282,8 @@
 
         isDSTShifted: function() {
             if (this._a) {
-                return this.isValid() && compareArrays(this._a, (this._isUTC ? moment.utc(this._a) : moment(this._a)).toArray()) > 0;
+                return this.isValid() &&
+                    compareArrays(this._a, (this._isUTC ? moment.utc(this._a) : moment(this._a)).toArray()) > 0;
             }
 
             return false;
@@ -2308,11 +2341,21 @@
                 }
             } else {
                 diff = this - that;
-                output = units === "second" ? diff / 1e3 : // 1000
-                    units === "minute" ? diff / 6e4 : // 1000 * 60
-                    units === "hour" ? diff / 36e5 : // 1000 * 60 * 60
-                    units === "day" ? (diff - zoneDiff) / 864e5 : // 1000 * 60 * 60 * 24, negate dst
-                    units === "week" ? (diff - zoneDiff) / 6048e5 : // 1000 * 60 * 60 * 24 * 7, negate dst
+                output = units === "second"
+                    ? diff / 1e3
+                    : // 1000
+                    units === "minute"
+                    ? diff / 6e4
+                    : // 1000 * 60
+                    units === "hour"
+                    ? diff / 36e5
+                    : // 1000 * 60 * 60
+                    units === "day"
+                    ? (diff - zoneDiff) / 864e5
+                    : // 1000 * 60 * 60 * 24, negate dst
+                    units === "week"
+                    ? (diff - zoneDiff) / 6048e5
+                    : // 1000 * 60 * 60 * 24 * 7, negate dst
                     diff;
             }
             return asFloat ? output : absRound(output);
@@ -2333,12 +2376,13 @@
             var now = time || moment(),
                 sod = makeAs(now, this).startOf("day"),
                 diff = this.diff(sod, "days", true),
-                format = diff < -6 ? "sameElse" :
-                    diff < -1 ? "lastWeek" :
-                    diff < 0 ? "lastDay" :
-                    diff < 1 ? "sameDay" :
-                    diff < 2 ? "nextDay" :
-                    diff < 7 ? "nextWeek" : "sameElse";
+                format = diff < -6
+                    ? "sameElse"
+                    : diff < -1
+                    ? "lastWeek"
+                    : diff < 0
+                    ? "lastDay"
+                    : diff < 1 ? "sameDay" : diff < 2 ? "nextDay" : diff < 7 ? "nextWeek" : "sameElse";
             return this.format(this.localeData().calendar(format, this, moment(now)));
         },
 
@@ -2519,7 +2563,9 @@
                 if (offset !== input) {
                     if (!keepLocalTime || this._changeInProgress) {
                         addOrSubtractDurationFromMoment(this,
-                            moment.duration(input - offset, "m"), 1, false);
+                            moment.duration(input - offset, "m"),
+                            1,
+                            false);
                     } else if (!this._changeInProgress) {
                         this._changeInProgress = true;
                         moment.updateOffset(this, true);
@@ -2771,7 +2817,8 @@
         return years * 146097 / 400;
     }
 
-    extend(moment.duration.fn = Duration.prototype, {
+    extend(moment.duration.fn = Duration.prototype,
+    {
         _bubble: function() {
             var milliseconds = this._milliseconds,
                 days = this._days,
@@ -3003,14 +3050,14 @@
 
 
     // Set default locale, other locale will inherit from English.
-    moment.locale("en", {
+    moment.locale("en",
+    {
         ordinalParse: /\d{1,2}(th|st|nd|rd)/,
         ordinal: function(number) {
             var b = number % 10,
-                output = (toInt(number % 100 / 10) === 1) ? "th" :
-                (b === 1) ? "st" :
-                (b === 2) ? "nd" :
-                (b === 3) ? "rd" : "th";
+                output = (toInt(number % 100 / 10) === 1)
+                    ? "th"
+                    : (b === 1) ? "st" : (b === 2) ? "nd" : (b === 3) ? "rd" : "th";
             return number + output;
         }
     });
@@ -3022,8 +3069,10 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("af", {
-            months: "Januarie_Februarie_Maart_April_Mei_Junie_Julie_Augustus_September_Oktober_November_Desember".split("_"),
+        return moment.defineLocale("af",
+        {
+            months: "Januarie_Februarie_Maart_April_Mei_Junie_Julie_Augustus_September_Oktober_November_Desember"
+                .split("_"),
             monthsShort: "Jan_Feb_Mar_Apr_Mei_Jun_Jul_Aug_Sep_Okt_Nov_Des".split("_"),
             weekdays: "Sondag_Maandag_Dinsdag_Woensdag_Donderdag_Vrydag_Saterdag".split("_"),
             weekdaysShort: "Son_Maa_Din_Woe_Don_Vry_Sat".split("_"),
@@ -3072,7 +3121,8 @@
             },
             ordinalParse: /\d{1,2}(ste|de)/,
             ordinal: function(number) {
-                return number + ((number === 1 || number === 8 || number >= 20) ? "ste" : "de"); // Thanks to Joris Röling : https://github.com/jjupiter
+                return number + ((number === 1 || number === 8 || number >= 20) ? "ste" : "de");
+// Thanks to Joris Röling : https://github.com/jjupiter
             },
             week: {
                 dow: 1, // Maandag is die eerste dag van die week.
@@ -3088,7 +3138,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("ar-ma", {
+        return moment.defineLocale("ar-ma",
+        {
             months: "يناير_فبراير_مارس_أبريل_ماي_يونيو_يوليوز_غشت_شتنبر_أكتوبر_نونبر_دجنبر".split("_"),
             monthsShort: "يناير_فبراير_مارس_أبريل_ماي_يونيو_يوليوز_غشت_شتنبر_أكتوبر_نونبر_دجنبر".split("_"),
             weekdays: "الأحد_الإتنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت".split("_"),
@@ -3163,7 +3214,8 @@
                 '٠': "0"
             };
 
-        return moment.defineLocale("ar-sa", {
+        return moment.defineLocale("ar-sa",
+        {
             months: "يناير_فبراير_مارس_أبريل_مايو_يونيو_يوليو_أغسطس_سبتمبر_أكتوبر_نوفمبر_ديسمبر".split("_"),
             monthsShort: "يناير_فبراير_مارس_أبريل_مايو_يونيو_يوليو_أغسطس_سبتمبر_أكتوبر_نوفمبر_ديسمبر".split("_"),
             weekdays: "الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت".split("_"),
@@ -3212,14 +3264,18 @@
                 yy: "%d سنوات"
             },
             preparse: function(string) {
-                return string.replace(/[١٢٣٤٥٦٧٨٩٠]/g, function(match) {
-                    return numberMap[match];
-                }).replace(/،/g, ",");
+                return string.replace(/[١٢٣٤٥٦٧٨٩٠]/g,
+                        function(match) {
+                            return numberMap[match];
+                        })
+                    .replace(/،/g, ",");
             },
             postformat: function(string) {
-                return string.replace(/\d/g, function(match) {
-                    return symbolMap[match];
-                }).replace(/,/g, "،");
+                return string.replace(/\d/g,
+                        function(match) {
+                            return symbolMap[match];
+                        })
+                    .replace(/,/g, "،");
             },
             week: {
                 dow: 6, // Saturday is the first day of the week.
@@ -3233,7 +3289,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("ar-tn", {
+        return moment.defineLocale("ar-tn",
+        {
             months: "جانفي_فيفري_مارس_أفريل_ماي_جوان_جويلية_أوت_سبتمبر_أكتوبر_نوفمبر_ديسمبر".split("_"),
             monthsShort: "جانفي_فيفري_مارس_أفريل_ماي_جوان_جويلية_أوت_سبتمبر_أكتوبر_نوفمبر_ديسمبر".split("_"),
             weekdays: "الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت".split("_"),
@@ -3310,7 +3367,9 @@
                 '٠': "0"
             },
             pluralForm = function(n) {
-                return n === 0 ? 0 : n === 1 ? 1 : n === 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 ? 4 : 5;
+                return n === 0
+                    ? 0
+                    : n === 1 ? 1 : n === 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 ? 4 : 5;
             },
             plurals = {
                 s: ["أقل من ثانية", "ثانية واحدة", ["ثانيتان", "ثانيتين"], "%d ثوان", "%d ثانية", "%d ثانية"],
@@ -3345,7 +3404,8 @@
                 "كانون الأول ديسمبر"
             ];
 
-        return moment.defineLocale("ar", {
+        return moment.defineLocale("ar",
+        {
             months: months,
             monthsShort: months,
             weekdays: "الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت".split("_"),
@@ -3394,14 +3454,18 @@
                 yy: pluralize("y")
             },
             preparse: function(string) {
-                return string.replace(/[١٢٣٤٥٦٧٨٩٠]/g, function(match) {
-                    return numberMap[match];
-                }).replace(/،/g, ",");
+                return string.replace(/[١٢٣٤٥٦٧٨٩٠]/g,
+                        function(match) {
+                            return numberMap[match];
+                        })
+                    .replace(/،/g, ",");
             },
             postformat: function(string) {
-                return string.replace(/\d/g, function(match) {
-                    return symbolMap[match];
-                }).replace(/,/g, "،");
+                return string.replace(/\d/g,
+                        function(match) {
+                            return symbolMap[match];
+                        })
+                    .replace(/,/g, "،");
             },
             week: {
                 dow: 6, // Saturday is the first day of the week.
@@ -3441,7 +3505,8 @@
             60: "-ıncı",
             90: "-ıncı"
         };
-        return moment.defineLocale("az", {
+        return moment.defineLocale("az",
+        {
             months: "yanvar_fevral_mart_aprel_may_iyun_iyul_avqust_sentyabr_oktyabr_noyabr_dekabr".split("_"),
             monthsShort: "yan_fev_mar_apr_may_iyn_iyl_avq_sen_okt_noy_dek".split("_"),
             weekdays: "Bazar_Bazar ertəsi_Çərşənbə axşamı_Çərşənbə_Cümə axşamı_Cümə_Şənbə".split("_"),
@@ -3521,7 +3586,9 @@
     }(function(moment) {
         function plural(word, num) {
             var forms = word.split("_");
-            return num % 10 === 1 && num % 100 !== 11 ? forms[0] : (num % 10 >= 2 && num % 10 <= 4 && (num % 100 < 10 || num % 100 >= 20) ? forms[1] : forms[2]);
+            return num % 10 === 1 && num % 100 !== 11
+                ? forms[0]
+                : (num % 10 >= 2 && num % 10 <= 4 && (num % 100 < 10 || num % 100 >= 20) ? forms[1] : forms[2]);
         }
 
         function relativeTimeWithPlural(number, withoutSuffix, key) {
@@ -3543,13 +3610,13 @@
 
         function monthsCaseReplace(m, format) {
             var months = {
-                    'nominative': "студзень_люты_сакавік_красавік_травень_чэрвень_ліпень_жнівень_верасень_кастрычнік_лістапад_снежань".split("_"),
-                    'accusative': "студзеня_лютага_сакавіка_красавіка_траўня_чэрвеня_ліпеня_жніўня_верасня_кастрычніка_лістапада_снежня".split("_")
+                    'nominative':
+                        "студзень_люты_сакавік_красавік_травень_чэрвень_ліпень_жнівень_верасень_кастрычнік_лістапад_снежань".split("_"),
+                    'accusative':
+                        "студзеня_лютага_сакавіка_красавіка_траўня_чэрвеня_ліпеня_жніўня_верасня_кастрычніка_лістапада_снежня".split("_")
                 },
 
-                nounCase = (/D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/).test(format) ?
-                    "accusative" :
-                    "nominative";
+                nounCase = (/D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/).test(format) ? "accusative" : "nominative";
 
             return months[nounCase][m.month()];
         }
@@ -3560,14 +3627,13 @@
                     'accusative': "нядзелю_панядзелак_аўторак_сераду_чацвер_пятніцу_суботу".split("_")
                 },
 
-                nounCase = (/\[ ?[Вв] ?(?:мінулую|наступную)? ?\] ?dddd/).test(format) ?
-                    "accusative" :
-                    "nominative";
+                nounCase = (/\[ ?[Вв] ?(?:мінулую|наступную)? ?\] ?dddd/).test(format) ? "accusative" : "nominative";
 
             return weekdays[nounCase][m.day()];
         }
 
-        return moment.defineLocale("be", {
+        return moment.defineLocale("be",
+        {
             months: monthsCaseReplace,
             monthsShort: "студ_лют_сак_крас_трав_чэрв_ліп_жнів_вер_каст_ліст_снеж".split("_"),
             weekdays: weekdaysCaseReplace,
@@ -3642,7 +3708,9 @@
                 case "DDD":
                 case "w":
                 case "W":
-                    return (number % 10 === 2 || number % 10 === 3) && (number % 100 !== 12 && number % 100 !== 13) ? number + "-і" : number + "-ы";
+                    return (number % 10 === 2 || number % 10 === 3) && (number % 100 !== 12 && number % 100 !== 13)
+                        ? number + "-і"
+                        : number + "-ы";
                 case "D":
                     return number + "-га";
                 default:
@@ -3663,7 +3731,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("bg", {
+        return moment.defineLocale("bg",
+        {
             months: "януари_февруари_март_април_май_юни_юли_август_септември_октомври_ноември_декември".split("_"),
             monthsShort: "янр_фев_мар_апр_май_юни_юли_авг_сеп_окт_ное_дек".split("_"),
             weekdays: "неделя_понеделник_вторник_сряда_четвъртък_петък_събота".split("_"),
@@ -3770,7 +3839,8 @@
                 '০': "0"
             };
 
-        return moment.defineLocale("bn", {
+        return moment.defineLocale("bn",
+        {
             months: "জানুয়ারী_ফেবুয়ারী_মার্চ_এপ্রিল_মে_জুন_জুলাই_অগাস্ট_সেপ্টেম্বর_অক্টোবর_নভেম্বর_ডিসেম্বর".split("_"),
             monthsShort: "জানু_ফেব_মার্চ_এপর_মে_জুন_জুল_অগ_সেপ্ট_অক্টো_নভ_ডিসেম্".split("_"),
             weekdays: "রবিবার_সোমবার_মঙ্গলবার_বুধবার_বৃহস্পত্তিবার_শুক্রুবার_শনিবার".split("_"),
@@ -3808,14 +3878,16 @@
                 yy: "%d বছর"
             },
             preparse: function(string) {
-                return string.replace(/[১২৩৪৫৬৭৮৯০]/g, function(match) {
-                    return numberMap[match];
-                });
+                return string.replace(/[১২৩৪৫৬৭৮৯০]/g,
+                    function(match) {
+                        return numberMap[match];
+                    });
             },
             postformat: function(string) {
-                return string.replace(/\d/g, function(match) {
-                    return symbolMap[match];
-                });
+                return string.replace(/\d/g,
+                    function(match) {
+                        return symbolMap[match];
+                    });
             },
             meridiemParse: /রাত|শকাল|দুপুর|বিকেল|রাত/,
             isPM: function(input) {
@@ -3875,9 +3947,12 @@
                 '༠': "0"
             };
 
-        return moment.defineLocale("bo", {
-            months: "ཟླ་བ་དང་པོ_ཟླ་བ་གཉིས་པ_ཟླ་བ་གསུམ་པ_ཟླ་བ་བཞི་པ_ཟླ་བ་ལྔ་པ_ཟླ་བ་དྲུག་པ_ཟླ་བ་བདུན་པ_ཟླ་བ་བརྒྱད་པ_ཟླ་བ་དགུ་པ_ཟླ་བ་བཅུ་པ_ཟླ་བ་བཅུ་གཅིག་པ_ཟླ་བ་བཅུ་གཉིས་པ".split("_"),
-            monthsShort: "ཟླ་བ་དང་པོ_ཟླ་བ་གཉིས་པ_ཟླ་བ་གསུམ་པ_ཟླ་བ་བཞི་པ_ཟླ་བ་ལྔ་པ_ཟླ་བ་དྲུག་པ_ཟླ་བ་བདུན་པ_ཟླ་བ་བརྒྱད་པ_ཟླ་བ་དགུ་པ_ཟླ་བ་བཅུ་པ_ཟླ་བ་བཅུ་གཅིག་པ_ཟླ་བ་བཅུ་གཉིས་པ".split("_"),
+        return moment.defineLocale("bo",
+        {
+            months:
+                "ཟླ་བ་དང་པོ_ཟླ་བ་གཉིས་པ_ཟླ་བ་གསུམ་པ_ཟླ་བ་བཞི་པ_ཟླ་བ་ལྔ་པ_ཟླ་བ་དྲུག་པ_ཟླ་བ་བདུན་པ_ཟླ་བ་བརྒྱད་པ_ཟླ་བ་དགུ་པ_ཟླ་བ་བཅུ་པ_ཟླ་བ་བཅུ་གཅིག་པ_ཟླ་བ་བཅུ་གཉིས་པ".split("_"),
+            monthsShort:
+                "ཟླ་བ་དང་པོ_ཟླ་བ་གཉིས་པ_ཟླ་བ་གསུམ་པ_ཟླ་བ་བཞི་པ_ཟླ་བ་ལྔ་པ_ཟླ་བ་དྲུག་པ_ཟླ་བ་བདུན་པ_ཟླ་བ་བརྒྱད་པ_ཟླ་བ་དགུ་པ_ཟླ་བ་བཅུ་པ_ཟླ་བ་བཅུ་གཅིག་པ_ཟླ་བ་བཅུ་གཉིས་པ".split("_"),
             weekdays: "གཟའ་ཉི་མ་_གཟའ་ཟླ་བ་_གཟའ་མིག་དམར་_གཟའ་ལྷག་པ་_གཟའ་ཕུར་བུ_གཟའ་པ་སངས་_གཟའ་སྤེན་པ་".split("_"),
             weekdaysShort: "ཉི་མ་_ཟླ་བ་_མིག་དམར་_ལྷག་པ་_ཕུར་བུ_པ་སངས་_སྤེན་པ་".split("_"),
             weekdaysMin: "ཉི་མ་_ཟླ་བ་_མིག་དམར་_ལྷག་པ་_ཕུར་བུ_པ་སངས་_སྤེན་པ་".split("_"),
@@ -3913,14 +3988,16 @@
                 yy: "%d ལོ"
             },
             preparse: function(string) {
-                return string.replace(/[༡༢༣༤༥༦༧༨༩༠]/g, function(match) {
-                    return numberMap[match];
-                });
+                return string.replace(/[༡༢༣༤༥༦༧༨༩༠]/g,
+                    function(match) {
+                        return numberMap[match];
+                    });
             },
             postformat: function(string) {
-                return string.replace(/\d/g, function(match) {
-                    return symbolMap[match];
-                });
+                return string.replace(/\d/g,
+                    function(match) {
+                        return symbolMap[match];
+                    });
             },
             meridiemParse: /མཚན་མོ|ཞོགས་ཀས|ཉིན་གུང|དགོང་དག|མཚན་མོ/,
             isPM: function(input) {
@@ -4000,7 +4077,8 @@
             return mutationTable[text.charAt(0)] + text.substring(1);
         }
 
-        return moment.defineLocale("br", {
+        return moment.defineLocale("br",
+        {
             months: "Genver_C'hwevrer_Meurzh_Ebrel_Mae_Mezheven_Gouere_Eost_Gwengolo_Here_Du_Kerzu".split("_"),
             monthsShort: "Gen_C'hwe_Meu_Ebr_Mae_Eve_Gou_Eos_Gwe_Her_Du_Ker".split("_"),
             weekdays: "Sul_Lun_Meurzh_Merc'her_Yaou_Gwener_Sadorn".split("_"),
@@ -4109,7 +4187,8 @@
             }
         }
 
-        return moment.defineLocale("bs", {
+        return moment.defineLocale("bs",
+        {
             months: "januar_februar_mart_april_maj_juni_juli_august_septembar_oktobar_novembar_decembar".split("_"),
             monthsShort: "jan._feb._mar._apr._maj._jun._jul._aug._sep._okt._nov._dec.".split("_"),
             weekdays: "nedjelja_ponedjeljak_utorak_srijeda_četvrtak_petak_subota".split("_"),
@@ -4189,7 +4268,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("ca", {
+        return moment.defineLocale("ca",
+        {
             months: "gener_febrer_març_abril_maig_juny_juliol_agost_setembre_octubre_novembre_desembre".split("_"),
             monthsShort: "gen._febr._mar._abr._mai._jun._jul._ag._set._oct._nov._des.".split("_"),
             weekdays: "diumenge_dilluns_dimarts_dimecres_dijous_divendres_dissabte".split("_"),
@@ -4238,10 +4318,9 @@
             },
             ordinalParse: /\d{1,2}(r|n|t|è|a)/,
             ordinal: function(number, period) {
-                var output = (number === 1) ? "r" :
-                (number === 2) ? "n" :
-                (number === 3) ? "r" :
-                (number === 4) ? "t" : "è";
+                var output = (number === 1)
+                    ? "r"
+                    : (number === 2) ? "n" : (number === 3) ? "r" : (number === 4) ? "t" : "è";
                 if (period === "w" || period === "W") {
                     output = "a";
                 }
@@ -4320,7 +4399,8 @@
             }
         }
 
-        return moment.defineLocale("cs", {
+        return moment.defineLocale("cs",
+        {
             months: months,
             monthsShort: monthsShort,
             monthsParse: (function(months, monthsShort) {
@@ -4411,7 +4491,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("cv", {
+        return moment.defineLocale("cv",
+        {
             months: "кăрлач_нарăс_пуш_ака_май_çĕртме_утă_çурла_авăн_юпа_чӳк_раштав".split("_"),
             monthsShort: "кăр_нар_пуш_ака_май_çĕр_утă_çур_ав_юпа_чӳк_раш".split("_"),
             weekdays: "вырсарникун_тунтикун_ытларикун_юнкун_кĕçнерникун_эрнекун_шăматкун".split("_"),
@@ -4466,7 +4547,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("cy", {
+        return moment.defineLocale("cy",
+        {
             months: "Ionawr_Chwefror_Mawrth_Ebrill_Mai_Mehefin_Gorffennaf_Awst_Medi_Hydref_Tachwedd_Rhagfyr".split("_"),
             monthsShort: "Ion_Chwe_Maw_Ebr_Mai_Meh_Gor_Aws_Med_Hyd_Tach_Rhag".split("_"),
             weekdays: "Dydd Sul_Dydd Llun_Dydd Mawrth_Dydd Mercher_Dydd Iau_Dydd Gwener_Dydd Sadwrn".split("_"),
@@ -4539,7 +4621,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("da", {
+        return moment.defineLocale("da",
+        {
             months: "januar_februar_marts_april_maj_juni_juli_august_september_oktober_november_december".split("_"),
             monthsShort: "jan_feb_mar_apr_maj_jun_jul_aug_sep_okt_nov_dec".split("_"),
             weekdays: "søndag_mandag_tirsdag_onsdag_torsdag_fredag_lørdag".split("_"),
@@ -4607,7 +4690,8 @@
             return withoutSuffix ? format[key][0] : format[key][1];
         }
 
-        return moment.defineLocale("de-at", {
+        return moment.defineLocale("de-at",
+        {
             months: "Jänner_Februar_März_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember".split("_"),
             monthsShort: "Jän._Febr._Mrz._Apr._Mai_Jun._Jul._Aug._Sept._Okt._Nov._Dez.".split("_"),
             weekdays: "Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag".split("_"),
@@ -4674,7 +4758,8 @@
             return withoutSuffix ? format[key][0] : format[key][1];
         }
 
-        return moment.defineLocale("de", {
+        return moment.defineLocale("de",
+        {
             months: "Januar_Februar_März_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember".split("_"),
             monthsShort: "Jan._Febr._Mrz._Apr._Mai_Jun._Jul._Aug._Sept._Okt._Nov._Dez.".split("_"),
             weekdays: "Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag".split("_"),
@@ -4726,9 +4811,12 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("el", {
-            monthsNominativeEl: "Ιανουάριος_Φεβρουάριος_Μάρτιος_Απρίλιος_Μάιος_Ιούνιος_Ιούλιος_Αύγουστος_Σεπτέμβριος_Οκτώβριος_Νοέμβριος_Δεκέμβριος".split("_"),
-            monthsGenitiveEl: "Ιανουαρίου_Φεβρουαρίου_Μαρτίου_Απριλίου_Μαΐου_Ιουνίου_Ιουλίου_Αυγούστου_Σεπτεμβρίου_Οκτωβρίου_Νοεμβρίου_Δεκεμβρίου".split("_"),
+        return moment.defineLocale("el",
+        {
+            monthsNominativeEl:
+                "Ιανουάριος_Φεβρουάριος_Μάρτιος_Απρίλιος_Μάιος_Ιούνιος_Ιούλιος_Αύγουστος_Σεπτέμβριος_Οκτώβριος_Νοέμβριος_Δεκέμβριος".split("_"),
+            monthsGenitiveEl:
+                "Ιανουαρίου_Φεβρουαρίου_Μαρτίου_Απριλίου_Μαΐου_Ιουνίου_Ιουλίου_Αυγούστου_Σεπτεμβρίου_Οκτωβρίου_Νοεμβρίου_Δεκεμβρίου".split("_"),
             months: function(momentToFormat, format) {
                 if (/D/.test(format.substring(0, format.indexOf("MMMM")))) { // if there is a day number before 'MMMM'
                     return this._monthsGenitiveEl[momentToFormat.month()];
@@ -4813,7 +4901,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("en-au", {
+        return moment.defineLocale("en-au",
+        {
             months: "January_February_March_April_May_June_July_August_September_October_November_December".split("_"),
             monthsShort: "Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),
             weekdays: "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),
@@ -4853,10 +4942,9 @@
             ordinalParse: /\d{1,2}(st|nd|rd|th)/,
             ordinal: function(number) {
                 var b = number % 10,
-                    output = (~~(number % 100 / 10) === 1) ? "th" :
-                    (b === 1) ? "st" :
-                    (b === 2) ? "nd" :
-                    (b === 3) ? "rd" : "th";
+                    output = (~~(number % 100 / 10) === 1)
+                        ? "th"
+                        : (b === 1) ? "st" : (b === 2) ? "nd" : (b === 3) ? "rd" : "th";
                 return number + output;
             },
             week: {
@@ -4872,7 +4960,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("en-ca", {
+        return moment.defineLocale("en-ca",
+        {
             months: "January_February_March_April_May_June_July_August_September_October_November_December".split("_"),
             monthsShort: "Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),
             weekdays: "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),
@@ -4912,10 +5001,9 @@
             ordinalParse: /\d{1,2}(st|nd|rd|th)/,
             ordinal: function(number) {
                 var b = number % 10,
-                    output = (~~(number % 100 / 10) === 1) ? "th" :
-                    (b === 1) ? "st" :
-                    (b === 2) ? "nd" :
-                    (b === 3) ? "rd" : "th";
+                    output = (~~(number % 100 / 10) === 1)
+                        ? "th"
+                        : (b === 1) ? "st" : (b === 2) ? "nd" : (b === 3) ? "rd" : "th";
                 return number + output;
             }
         });
@@ -4927,7 +5015,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("en-gb", {
+        return moment.defineLocale("en-gb",
+        {
             months: "January_February_March_April_May_June_July_August_September_October_November_December".split("_"),
             monthsShort: "Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),
             weekdays: "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),
@@ -4967,10 +5056,9 @@
             ordinalParse: /\d{1,2}(st|nd|rd|th)/,
             ordinal: function(number) {
                 var b = number % 10,
-                    output = (~~(number % 100 / 10) === 1) ? "th" :
-                    (b === 1) ? "st" :
-                    (b === 2) ? "nd" :
-                    (b === 3) ? "rd" : "th";
+                    output = (~~(number % 100 / 10) === 1)
+                        ? "th"
+                        : (b === 1) ? "st" : (b === 2) ? "nd" : (b === 3) ? "rd" : "th";
                 return number + output;
             },
             week: {
@@ -4988,8 +5076,10 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("eo", {
-            months: "januaro_februaro_marto_aprilo_majo_junio_julio_aŭgusto_septembro_oktobro_novembro_decembro".split("_"),
+        return moment.defineLocale("eo",
+        {
+            months: "januaro_februaro_marto_aprilo_majo_junio_julio_aŭgusto_septembro_oktobro_novembro_decembro"
+                .split("_"),
             monthsShort: "jan_feb_mar_apr_maj_jun_jul_aŭg_sep_okt_nov_dec".split("_"),
             weekdays: "Dimanĉo_Lundo_Mardo_Merkredo_Ĵaŭdo_Vendredo_Sabato".split("_"),
             weekdaysShort: "Dim_Lun_Mard_Merk_Ĵaŭ_Ven_Sab".split("_"),
@@ -5054,8 +5144,10 @@
         var monthsShortDot = "ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.".split("_"),
             monthsShort = "ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic".split("_");
 
-        return moment.defineLocale("es", {
-            months: "enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre".split("_"),
+        return moment.defineLocale("es",
+        {
+            months: "enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre"
+                .split("_"),
             monthsShort: function(m, format) {
                 if (/-MMM-/.test(format)) {
                     return monthsShort[m.month()];
@@ -5142,8 +5234,10 @@
             return isFuture ? format[key][0] : format[key][1];
         }
 
-        return moment.defineLocale("et", {
-            months: "jaanuar_veebruar_märts_aprill_mai_juuni_juuli_august_september_oktoober_november_detsember".split("_"),
+        return moment.defineLocale("et",
+        {
+            months: "jaanuar_veebruar_märts_aprill_mai_juuni_juuli_august_september_oktoober_november_detsember"
+                .split("_"),
             monthsShort: "jaan_veebr_märts_apr_mai_juuni_juuli_aug_sept_okt_nov_dets".split("_"),
             weekdays: "pühapäev_esmaspäev_teisipäev_kolmapäev_neljapäev_reede_laupäev".split("_"),
             weekdaysShort: "P_E_T_K_N_R_L".split("_"),
@@ -5194,8 +5288,10 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("eu", {
-            months: "urtarrila_otsaila_martxoa_apirila_maiatza_ekaina_uztaila_abuztua_iraila_urria_azaroa_abendua".split("_"),
+        return moment.defineLocale("eu",
+        {
+            months: "urtarrila_otsaila_martxoa_apirila_maiatza_ekaina_uztaila_abuztua_iraila_urria_azaroa_abendua"
+                .split("_"),
             monthsShort: "urt._ots._mar._api._mai._eka._uzt._abu._ira._urr._aza._abe.".split("_"),
             weekdays: "igandea_astelehena_asteartea_asteazkena_osteguna_ostirala_larunbata".split("_"),
             weekdaysShort: "ig._al._ar._az._og._ol._lr.".split("_"),
@@ -5275,7 +5371,8 @@
                 '۰': "0"
             };
 
-        return moment.defineLocale("fa", {
+        return moment.defineLocale("fa",
+        {
             months: "ژانویه_فوریه_مارس_آوریل_مه_ژوئن_ژوئیه_اوت_سپتامبر_اکتبر_نوامبر_دسامبر".split("_"),
             monthsShort: "ژانویه_فوریه_مارس_آوریل_مه_ژوئن_ژوئیه_اوت_سپتامبر_اکتبر_نوامبر_دسامبر".split("_"),
             weekdays: "یک\u200cشنبه_دوشنبه_سه\u200cشنبه_چهارشنبه_پنج\u200cشنبه_جمعه_شنبه".split("_"),
@@ -5324,14 +5421,18 @@
                 yy: "%d سال"
             },
             preparse: function(string) {
-                return string.replace(/[۰-۹]/g, function(match) {
-                    return numberMap[match];
-                }).replace(/،/g, ",");
+                return string.replace(/[۰-۹]/g,
+                        function(match) {
+                            return numberMap[match];
+                        })
+                    .replace(/،/g, ",");
             },
             postformat: function(string) {
-                return string.replace(/\d/g, function(match) {
-                    return symbolMap[match];
-                }).replace(/,/g, "،");
+                return string.replace(/\d/g,
+                        function(match) {
+                            return symbolMap[match];
+                        })
+                    .replace(/,/g, "،");
             },
             ordinalParse: /\d{1,2}م/,
             ordinal: "%dم",
@@ -5393,8 +5494,10 @@
             return number < 10 ? (isFuture ? numbersFuture[number] : numbersPast[number]) : number;
         }
 
-        return moment.defineLocale("fi", {
-            months: "tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu".split("_"),
+        return moment.defineLocale("fi",
+        {
+            months:
+                "tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu".split("_"),
             monthsShort: "tammi_helmi_maalis_huhti_touko_kesä_heinä_elo_syys_loka_marras_joulu".split("_"),
             weekdays: "sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai".split("_"),
             weekdaysShort: "su_ma_ti_ke_to_pe_la".split("_"),
@@ -5449,7 +5552,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("fo", {
+        return moment.defineLocale("fo",
+        {
             months: "januar_februar_mars_apríl_mai_juni_juli_august_september_oktober_november_desember".split("_"),
             monthsShort: "jan_feb_mar_apr_mai_jun_jul_aug_sep_okt_nov_des".split("_"),
             weekdays: "sunnudagur_mánadagur_týsdagur_mikudagur_hósdagur_fríggjadagur_leygardagur".split("_"),
@@ -5501,7 +5605,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("fr-ca", {
+        return moment.defineLocale("fr-ca",
+        {
             months: "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split("_"),
             monthsShort: "janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),
             weekdays: "dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),
@@ -5551,7 +5656,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("fr", {
+        return moment.defineLocale("fr",
+        {
             months: "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split("_"),
             monthsShort: "janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),
             weekdays: "dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),
@@ -5608,8 +5714,10 @@
         var monthsShortWithDots = "jan._feb._mrt._apr._mai_jun._jul._aug._sep._okt._nov._des.".split("_"),
             monthsShortWithoutDots = "jan_feb_mrt_apr_mai_jun_jul_aug_sep_okt_nov_des".split("_");
 
-        return moment.defineLocale("fy", {
-            months: "jannewaris_febrewaris_maart_april_maaie_juny_july_augustus_septimber_oktober_novimber_desimber".split("_"),
+        return moment.defineLocale("fy",
+        {
+            months: "jannewaris_febrewaris_maart_april_maaie_juny_july_augustus_septimber_oktober_novimber_desimber"
+                .split("_"),
             monthsShort: function(m, format) {
                 if (/-MMM-/.test(format)) {
                     return monthsShortWithoutDots[m.month()];
@@ -5668,7 +5776,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("gl", {
+        return moment.defineLocale("gl",
+        {
             months: "Xaneiro_Febreiro_Marzo_Abril_Maio_Xuño_Xullo_Agosto_Setembro_Outubro_Novembro_Decembro".split("_"),
             monthsShort: "Xan._Feb._Mar._Abr._Mai._Xuñ._Xul._Ago._Set._Out._Nov._Dec.".split("_"),
             weekdays: "Domingo_Luns_Martes_Mércores_Xoves_Venres_Sábado".split("_"),
@@ -5737,7 +5846,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("he", {
+        return moment.defineLocale("he",
+        {
             months: "ינואר_פברואר_מרץ_אפריל_מאי_יוני_יולי_אוגוסט_ספטמבר_אוקטובר_נובמבר_דצמבר".split("_"),
             monthsShort: "ינו׳_פבר׳_מרץ_אפר׳_מאי_יוני_יולי_אוג׳_ספט׳_אוק׳_נוב׳_דצמ׳".split("_"),
             weekdays: "ראשון_שני_שלישי_רביעי_חמישי_שישי_שבת".split("_"),
@@ -5834,7 +5944,8 @@
                 '०': "0"
             };
 
-        return moment.defineLocale("hi", {
+        return moment.defineLocale("hi",
+        {
             months: "जनवरी_फ़रवरी_मार्च_अप्रैल_मई_जून_जुलाई_अगस्त_सितम्बर_अक्टूबर_नवम्बर_दिसम्बर".split("_"),
             monthsShort: "जन._फ़र._मार्च_अप्रै._मई_जून_जुल._अग._सित._अक्टू._नव._दिस.".split("_"),
             weekdays: "रविवार_सोमवार_मंगलवार_बुधवार_गुरूवार_शुक्रवार_शनिवार".split("_"),
@@ -5872,14 +5983,16 @@
                 yy: "%d वर्ष"
             },
             preparse: function(string) {
-                return string.replace(/[१२३४५६७८९०]/g, function(match) {
-                    return numberMap[match];
-                });
+                return string.replace(/[१२३४५६७८९०]/g,
+                    function(match) {
+                        return numberMap[match];
+                    });
             },
             postformat: function(string) {
-                return string.replace(/\d/g, function(match) {
-                    return symbolMap[match];
-                });
+                return string.replace(/\d/g,
+                    function(match) {
+                        return symbolMap[match];
+                    });
             },
             // Hindi notation for meridiems are quite fuzzy in practice. While there exists
             // a rigid notion of a 'Pahar' it is not used as rigidly in modern Hindi.
@@ -5979,8 +6092,10 @@
             }
         }
 
-        return moment.defineLocale("hr", {
-            months: "sječanj_veljača_ožujak_travanj_svibanj_lipanj_srpanj_kolovoz_rujan_listopad_studeni_prosinac".split("_"),
+        return moment.defineLocale("hr",
+        {
+            months: "sječanj_veljača_ožujak_travanj_svibanj_lipanj_srpanj_kolovoz_rujan_listopad_studeni_prosinac"
+                .split("_"),
             monthsShort: "sje._vel._ožu._tra._svi._lip._srp._kol._ruj._lis._stu._pro.".split("_"),
             weekdays: "nedjelja_ponedjeljak_utorak_srijeda_četvrtak_petak_subota".split("_"),
             weekdaysShort: "ned._pon._uto._sri._čet._pet._sub.".split("_"),
@@ -6097,8 +6212,10 @@
             return (isFuture ? "" : "[múlt] ") + "[" + weekEndings[this.day()] + "] LT[-kor]";
         }
 
-        return moment.defineLocale("hu", {
-            months: "január_február_március_április_május_június_július_augusztus_szeptember_október_november_december".split("_"),
+        return moment.defineLocale("hu",
+        {
+            months: "január_február_március_április_május_június_július_augusztus_szeptember_október_november_december"
+                .split("_"),
             monthsShort: "jan_feb_márc_ápr_máj_jún_júl_aug_szept_okt_nov_dec".split("_"),
             weekdays: "vasárnap_hétfő_kedd_szerda_csütörtök_péntek_szombat".split("_"),
             weekdaysShort: "vas_hét_kedd_sze_csüt_pén_szo".split("_"),
@@ -6166,13 +6283,14 @@
     }(function(moment) {
         function monthsCaseReplace(m, format) {
             var months = {
-                    'nominative': "հունվար_փետրվար_մարտ_ապրիլ_մայիս_հունիս_հուլիս_օգոստոս_սեպտեմբեր_հոկտեմբեր_նոյեմբեր_դեկտեմբեր".split("_"),
-                    'accusative': "հունվարի_փետրվարի_մարտի_ապրիլի_մայիսի_հունիսի_հուլիսի_օգոստոսի_սեպտեմբերի_հոկտեմբերի_նոյեմբերի_դեկտեմբերի".split("_")
+                    'nominative':
+                        "հունվար_փետրվար_մարտ_ապրիլ_մայիս_հունիս_հուլիս_օգոստոս_սեպտեմբեր_հոկտեմբեր_նոյեմբեր_դեկտեմբեր"
+                            .split("_"),
+                    'accusative':
+                        "հունվարի_փետրվարի_մարտի_ապրիլի_մայիսի_հունիսի_հուլիսի_օգոստոսի_սեպտեմբերի_հոկտեմբերի_նոյեմբերի_դեկտեմբերի".split("_")
                 },
 
-                nounCase = (/D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/).test(format) ?
-                    "accusative" :
-                    "nominative";
+                nounCase = (/D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/).test(format) ? "accusative" : "nominative";
 
             return months[nounCase][m.month()];
         }
@@ -6189,7 +6307,8 @@
             return weekdays[m.day()];
         }
 
-        return moment.defineLocale("hy-am", {
+        return moment.defineLocale("hy-am",
+        {
             months: monthsCaseReplace,
             monthsShort: monthsShortCaseReplace,
             weekdays: weekdaysCaseReplace,
@@ -6277,7 +6396,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("id", {
+        return moment.defineLocale("id",
+        {
             months: "Januari_Februari_Maret_April_Mei_Juni_Juli_Agustus_September_Oktober_November_Desember".split("_"),
             monthsShort: "Jan_Feb_Mar_Apr_Mei_Jun_Jul_Ags_Sep_Okt_Nov_Des".split("_"),
             weekdays: "Minggu_Senin_Selasa_Rabu_Kamis_Jumat_Sabtu".split("_"),
@@ -6419,7 +6539,8 @@
             }
         }
 
-        return moment.defineLocale("is", {
+        return moment.defineLocale("is",
+        {
             months: "janúar_febrúar_mars_apríl_maí_júní_júlí_ágúst_september_október_nóvember_desember".split("_"),
             monthsShort: "jan_feb_mar_apr_maí_jún_júl_ágú_sep_okt_nóv_des".split("_"),
             weekdays: "sunnudagur_mánudagur_þriðjudagur_miðvikudagur_fimmtudagur_föstudagur_laugardagur".split("_"),
@@ -6472,8 +6593,10 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("it", {
-            months: "gennaio_febbraio_marzo_aprile_maggio_giugno_luglio_agosto_settembre_ottobre_novembre_dicembre".split("_"),
+        return moment.defineLocale("it",
+        {
+            months: "gennaio_febbraio_marzo_aprile_maggio_giugno_luglio_agosto_settembre_ottobre_novembre_dicembre"
+                .split("_"),
             monthsShort: "gen_feb_mar_apr_mag_giu_lug_ago_set_ott_nov_dic".split("_"),
             weekdays: "Domenica_Lunedì_Martedì_Mercoledì_Giovedì_Venerdì_Sabato".split("_"),
             weekdaysShort: "Dom_Lun_Mar_Mer_Gio_Ven_Sab".split("_"),
@@ -6533,7 +6656,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("ja", {
+        return moment.defineLocale("ja",
+        {
             months: "1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月".split("_"),
             monthsShort: "1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月".split("_"),
             weekdays: "日曜日_月曜日_火曜日_水曜日_木曜日_金曜日_土曜日".split("_"),
@@ -6592,13 +6716,13 @@
     }(function(moment) {
         function monthsCaseReplace(m, format) {
             var months = {
-                    'nominative': "იანვარი_თებერვალი_მარტი_აპრილი_მაისი_ივნისი_ივლისი_აგვისტო_სექტემბერი_ოქტომბერი_ნოემბერი_დეკემბერი".split("_"),
-                    'accusative': "იანვარს_თებერვალს_მარტს_აპრილის_მაისს_ივნისს_ივლისს_აგვისტს_სექტემბერს_ოქტომბერს_ნოემბერს_დეკემბერს".split("_")
+                    'nominative':
+                        "იანვარი_თებერვალი_მარტი_აპრილი_მაისი_ივნისი_ივლისი_აგვისტო_სექტემბერი_ოქტომბერი_ნოემბერი_დეკემბერი".split("_"),
+                    'accusative':
+                        "იანვარს_თებერვალს_მარტს_აპრილის_მაისს_ივნისს_ივლისს_აგვისტს_სექტემბერს_ოქტომბერს_ნოემბერს_დეკემბერს".split("_")
                 },
 
-                nounCase = (/D[oD] *MMMM?/).test(format) ?
-                    "accusative" :
-                    "nominative";
+                nounCase = (/D[oD] *MMMM?/).test(format) ? "accusative" : "nominative";
 
             return months[nounCase][m.month()];
         }
@@ -6609,14 +6733,13 @@
                     'accusative': "კვირას_ორშაბათს_სამშაბათს_ოთხშაბათს_ხუთშაბათს_პარასკევს_შაბათს".split("_")
                 },
 
-                nounCase = (/(წინა|შემდეგ)/).test(format) ?
-                    "accusative" :
-                    "nominative";
+                nounCase = (/(წინა|შემდეგ)/).test(format) ? "accusative" : "nominative";
 
             return weekdays[nounCase][m.day()];
         }
 
-        return moment.defineLocale("ka", {
+        return moment.defineLocale("ka",
+        {
             months: monthsCaseReplace,
             monthsShort: "იან_თებ_მარ_აპრ_მაი_ივნ_ივლ_აგვ_სექ_ოქტ_ნოე_დეკ".split("_"),
             weekdays: weekdaysCaseReplace,
@@ -6640,9 +6763,7 @@
             },
             relativeTime: {
                 future: function(s) {
-                    return (/(წამი|წუთი|საათი|წელი)/).test(s) ?
-                        s.replace(/ი$/, "ში") :
-                        s + "ში";
+                    return (/(წამი|წუთი|საათი|წელი)/).test(s) ? s.replace(/ი$/, "ში") : s + "ში";
                 },
                 past: function(s) {
                     if ((/(წამი|წუთი|საათი|დღე|თვე)/).test(s)) {
@@ -6693,7 +6814,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("km", {
+        return moment.defineLocale("km",
+        {
             months: "មករា_កុម្ភៈ_មិនា_មេសា_ឧសភា_មិថុនា_កក្កដា_សីហា_កញ្ញា_តុលា_វិច្ឆិកា_ធ្នូ".split("_"),
             monthsShort: "មករា_កុម្ភៈ_មិនា_មេសា_ឧសភា_មិថុនា_កក្កដា_សីហា_កញ្ញា_តុលា_វិច្ឆិកា_ធ្នូ".split("_"),
             weekdays: "អាទិត្យ_ច័ន្ទ_អង្គារ_ពុធ_ព្រហស្បតិ៍_សុក្រ_សៅរ៍".split("_"),
@@ -6746,7 +6868,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("ko", {
+        return moment.defineLocale("ko",
+        {
             months: "1월_2월_3월_4월_5월_6월_7월_8월_9월_10월_11월_12월".split("_"),
             monthsShort: "1월_2월_3월_4월_5월_6월_7월_8월_9월_10월_11월_12월".split("_"),
             weekdays: "일요일_월요일_화요일_수요일_목요일_금요일_토요일".split("_"),
@@ -6874,7 +6997,8 @@
             }
         }
 
-        return moment.defineLocale("lb", {
+        return moment.defineLocale("lb",
+        {
             months: "Januar_Februar_Mäerz_Abrëll_Mee_Juni_Juli_August_September_Oktober_November_Dezember".split("_"),
             monthsShort: "Jan._Febr._Mrz._Abr._Mee_Jun._Jul._Aug._Sept._Okt._Nov._Dez.".split("_"),
             weekdays: "Sonndeg_Méindeg_Dënschdeg_Mëttwoch_Donneschdeg_Freideg_Samschdeg".split("_"),
@@ -6947,7 +7071,8 @@
                 'y': "metai_metų_metus",
                 'yy': "metai_metų_metus"
             },
-            weekDays = "sekmadienis_pirmadienis_antradienis_trečiadienis_ketvirtadienis_penktadienis_šeštadienis".split("_");
+            weekDays = "sekmadienis_pirmadienis_antradienis_trečiadienis_ketvirtadienis_penktadienis_šeštadienis"
+                .split("_");
 
         function translateSeconds(number, withoutSuffix, key, isFuture) {
             if (withoutSuffix) {
@@ -6991,8 +7116,10 @@
             return nominative ? weekDay : weekDay.substring(0, weekDay.length - 2) + "į";
         }
 
-        return moment.defineLocale("lt", {
-            months: "sausio_vasario_kovo_balandžio_gegužės_birželio_liepos_rugpjūčio_rugsėjo_spalio_lapkričio_gruodžio".split("_"),
+        return moment.defineLocale("lt",
+        {
+            months: "sausio_vasario_kovo_balandžio_gegužės_birželio_liepos_rugpjūčio_rugsėjo_spalio_lapkričio_gruodžio"
+                .split("_"),
             monthsShort: "sau_vas_kov_bal_geg_bir_lie_rgp_rgs_spa_lap_grd".split("_"),
             weekdays: relativeWeekDay,
             weekdaysShort: "Sek_Pir_Ant_Tre_Ket_Pen_Šeš".split("_"),
@@ -7070,8 +7197,11 @@
             return number + " " + format(units[key], number, withoutSuffix);
         }
 
-        return moment.defineLocale("lv", {
-            months: "janvāris_februāris_marts_aprīlis_maijs_jūnijs_jūlijs_augusts_septembris_oktobris_novembris_decembris".split("_"),
+        return moment.defineLocale("lv",
+        {
+            months:
+                "janvāris_februāris_marts_aprīlis_maijs_jūnijs_jūlijs_augusts_septembris_oktobris_novembris_decembris"
+                    .split("_"),
             monthsShort: "jan_feb_mar_apr_mai_jūn_jūl_aug_sep_okt_nov_dec".split("_"),
             weekdays: "svētdiena_pirmdiena_otrdiena_trešdiena_ceturtdiena_piektdiena_sestdiena".split("_"),
             weekdaysShort: "Sv_P_O_T_C_Pk_S".split("_"),
@@ -7122,7 +7252,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("mk", {
+        return moment.defineLocale("mk",
+        {
             months: "јануари_февруари_март_април_мај_јуни_јули_август_септември_октомври_ноември_декември".split("_"),
             monthsShort: "јан_фев_мар_апр_мај_јун_јул_авг_сеп_окт_ное_дек".split("_"),
             weekdays: "недела_понеделник_вторник_среда_четврток_петок_сабота".split("_"),
@@ -7204,7 +7335,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("ml", {
+        return moment.defineLocale("ml",
+        {
             months: "ജനുവരി_ഫെബ്രുവരി_മാർച്ച്_ഏപ്രിൽ_മേയ്_ജൂൺ_ജൂലൈ_ഓഗസ്റ്റ്_സെപ്റ്റംബർ_ഒക്ടോബർ_നവംബർ_ഡിസംബർ".split("_"),
             monthsShort: "ജനു._ഫെബ്രു._മാർ._ഏപ്രി._മേയ്_ജൂൺ_ജൂലൈ._ഓഗ._സെപ്റ്റ._ഒക്ടോ._നവം._ഡിസം.".split("_"),
             weekdays: "ഞായറാഴ്ച_തിങ്കളാഴ്ച_ചൊവ്വാഴ്ച_ബുധനാഴ്ച_വ്യാഴാഴ്ച_വെള്ളിയാഴ്ച_ശനിയാഴ്ച".split("_"),
@@ -7292,7 +7424,8 @@
                 '०': "0"
             };
 
-        return moment.defineLocale("mr", {
+        return moment.defineLocale("mr",
+        {
             months: "जानेवारी_फेब्रुवारी_मार्च_एप्रिल_मे_जून_जुलै_ऑगस्ट_सप्टेंबर_ऑक्टोबर_नोव्हेंबर_डिसेंबर".split("_"),
             monthsShort: "जाने._फेब्रु._मार्च._एप्रि._मे._जून._जुलै._ऑग._सप्टें._ऑक्टो._नोव्हें._डिसें.".split("_"),
             weekdays: "रविवार_सोमवार_मंगळवार_बुधवार_गुरूवार_शुक्रवार_शनिवार".split("_"),
@@ -7330,14 +7463,16 @@
                 yy: "%d वर्षे"
             },
             preparse: function(string) {
-                return string.replace(/[१२३४५६७८९०]/g, function(match) {
-                    return numberMap[match];
-                });
+                return string.replace(/[१२३४५६७८९०]/g,
+                    function(match) {
+                        return numberMap[match];
+                    });
             },
             postformat: function(string) {
-                return string.replace(/\d/g, function(match) {
-                    return symbolMap[match];
-                });
+                return string.replace(/\d/g,
+                    function(match) {
+                        return symbolMap[match];
+                    });
             },
             meridiemParse: /रात्री|सकाळी|दुपारी|सायंकाळी/,
             meridiemHour: function(hour, meridiem) {
@@ -7380,7 +7515,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("ms-my", {
+        return moment.defineLocale("ms-my",
+        {
             months: "Januari_Februari_Mac_April_Mei_Jun_Julai_Ogos_September_Oktober_November_Disember".split("_"),
             monthsShort: "Jan_Feb_Mac_Apr_Mei_Jun_Jul_Ogs_Sep_Okt_Nov_Dis".split("_"),
             weekdays: "Ahad_Isnin_Selasa_Rabu_Khamis_Jumaat_Sabtu".split("_"),
@@ -7478,8 +7614,10 @@
                 '၉': "9",
                 '၀': "0"
             };
-        return moment.defineLocale("my", {
-            months: "ဇန်နဝါရီ_ဖေဖော်ဝါရီ_မတ်_ဧပြီ_မေ_ဇွန်_ဇူလိုင်_သြဂုတ်_စက်တင်ဘာ_အောက်တိုဘာ_နိုဝင်ဘာ_ဒီဇင်ဘာ".split("_"),
+        return moment.defineLocale("my",
+        {
+            months: "ဇန်နဝါရီ_ဖေဖော်ဝါရီ_မတ်_ဧပြီ_မေ_ဇွန်_ဇူလိုင်_သြဂုတ်_စက်တင်ဘာ_အောက်တိုဘာ_နိုဝင်ဘာ_ဒီဇင်ဘာ"
+                .split("_"),
             monthsShort: "ဇန်_ဖေ_မတ်_ပြီ_မေ_ဇွန်_လိုင်_သြ_စက်_အောက်_နို_ဒီ".split("_"),
             weekdays: "တနင်္ဂနွေ_တနင်္လာ_အင်္ဂါ_ဗုဒ္ဓဟူး_ကြာသပတေး_သောကြာ_စနေ".split("_"),
             weekdaysShort: "နွေ_လာ_င်္ဂါ_ဟူး_ကြာ_သော_နေ".split("_"),
@@ -7516,14 +7654,16 @@
                 yy: "%d နှစ်"
             },
             preparse: function(string) {
-                return string.replace(/[၁၂၃၄၅၆၇၈၉၀]/g, function(match) {
-                    return numberMap[match];
-                });
+                return string.replace(/[၁၂၃၄၅၆၇၈၉၀]/g,
+                    function(match) {
+                        return numberMap[match];
+                    });
             },
             postformat: function(string) {
-                return string.replace(/\d/g, function(match) {
-                    return symbolMap[match];
-                });
+                return string.replace(/\d/g,
+                    function(match) {
+                        return symbolMap[match];
+                    });
             },
             week: {
                 dow: 1, // Monday is the first day of the week.
@@ -7539,7 +7679,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("nb", {
+        return moment.defineLocale("nb",
+        {
             months: "januar_februar_mars_april_mai_juni_juli_august_september_oktober_november_desember".split("_"),
             monthsShort: "jan_feb_mar_apr_mai_jun_jul_aug_sep_okt_nov_des".split("_"),
             weekdays: "søndag_mandag_tirsdag_onsdag_torsdag_fredag_lørdag".split("_"),
@@ -7616,7 +7757,8 @@
                 '०': "0"
             };
 
-        return moment.defineLocale("ne", {
+        return moment.defineLocale("ne",
+        {
             months: "जनवरी_फेब्रुवरी_मार्च_अप्रिल_मई_जुन_जुलाई_अगष्ट_सेप्टेम्बर_अक्टोबर_नोभेम्बर_डिसेम्बर".split("_"),
             monthsShort: "जन._फेब्रु._मार्च_अप्रि._मई_जुन_जुलाई._अग._सेप्ट._अक्टो._नोभे._डिसे.".split("_"),
             weekdays: "आइतबार_सोमबार_मङ्गलबार_बुधबार_बिहिबार_शुक्रबार_शनिबार".split("_"),
@@ -7631,14 +7773,16 @@
                 LLLL: "dddd, D MMMM YYYY, LT"
             },
             preparse: function(string) {
-                return string.replace(/[१२३४५६७८९०]/g, function(match) {
-                    return numberMap[match];
-                });
+                return string.replace(/[१२३४५६७८९०]/g,
+                    function(match) {
+                        return numberMap[match];
+                    });
             },
             postformat: function(string) {
-                return string.replace(/\d/g, function(match) {
-                    return symbolMap[match];
-                });
+                return string.replace(/\d/g,
+                    function(match) {
+                        return symbolMap[match];
+                    });
             },
             meridiemParse: /राती|बिहान|दिउँसो|बेलुका|साँझ|राती/,
             meridiemHour: function(hour, meridiem) {
@@ -7709,8 +7853,10 @@
         var monthsShortWithDots = "jan._feb._mrt._apr._mei_jun._jul._aug._sep._okt._nov._dec.".split("_"),
             monthsShortWithoutDots = "jan_feb_mrt_apr_mei_jun_jul_aug_sep_okt_nov_dec".split("_");
 
-        return moment.defineLocale("nl", {
-            months: "januari_februari_maart_april_mei_juni_juli_augustus_september_oktober_november_december".split("_"),
+        return moment.defineLocale("nl",
+        {
+            months: "januari_februari_maart_april_mei_juni_juli_augustus_september_oktober_november_december"
+                .split("_"),
             monthsShort: function(m, format) {
                 if (/-MMM-/.test(format)) {
                     return monthsShortWithoutDots[m.month()];
@@ -7769,7 +7915,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("nn", {
+        return moment.defineLocale("nn",
+        {
             months: "januar_februar_mars_april_mai_juni_juli_august_september_oktober_november_desember".split("_"),
             monthsShort: "jan_feb_mar_apr_mai_jun_jul_aug_sep_okt_nov_des".split("_"),
             weekdays: "sundag_måndag_tysdag_onsdag_torsdag_fredag_laurdag".split("_"),
@@ -7821,8 +7968,12 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        var monthsNominative = "styczeń_luty_marzec_kwiecień_maj_czerwiec_lipiec_sierpień_wrzesień_październik_listopad_grudzień".split("_"),
-            monthsSubjective = "stycznia_lutego_marca_kwietnia_maja_czerwca_lipca_sierpnia_września_października_listopada_grudnia".split("_");
+        var monthsNominative =
+                "styczeń_luty_marzec_kwiecień_maj_czerwiec_lipiec_sierpień_wrzesień_październik_listopad_grudzień"
+                    .split("_"),
+            monthsSubjective =
+                "stycznia_lutego_marca_kwietnia_maja_czerwca_lipca_sierpnia_września_października_listopada_grudnia"
+                    .split("_");
 
         function plural(n) {
             return (n % 10 < 5) && (n % 10 > 1) && ((~~(n / 10) % 10) !== 1);
@@ -7846,7 +7997,8 @@
             }
         }
 
-        return moment.defineLocale("pl", {
+        return moment.defineLocale("pl",
+        {
             months: function(momentToFormat, format) {
                 if (/D MMMM/.test(format)) {
                     return monthsSubjective[momentToFormat.month()];
@@ -7915,8 +8067,10 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("pt-br", {
-            months: "janeiro_fevereiro_março_abril_maio_junho_julho_agosto_setembro_outubro_novembro_dezembro".split("_"),
+        return moment.defineLocale("pt-br",
+        {
+            months: "janeiro_fevereiro_março_abril_maio_junho_julho_agosto_setembro_outubro_novembro_dezembro"
+                .split("_"),
             monthsShort: "jan_fev_mar_abr_mai_jun_jul_ago_set_out_nov_dez".split("_"),
             weekdays: "domingo_segunda-feira_terça-feira_quarta-feira_quinta-feira_sexta-feira_sábado".split("_"),
             weekdaysShort: "dom_seg_ter_qua_qui_sex_sáb".split("_"),
@@ -7935,8 +8089,9 @@
                 nextWeek: "dddd [às] LT",
                 lastDay: "[Ontem às] LT",
                 lastWeek: function() {
-                    return (this.day() === 0 || this.day() === 6) ?
-                        "[Último] dddd [às] LT" : // Saturday + Sunday
+                    return (this.day() === 0 || this.day() === 6)
+                        ? "[Último] dddd [às] LT"
+                        : // Saturday + Sunday
                         "[Última] dddd [às] LT"; // Monday - Friday
                 },
                 sameElse: "L"
@@ -7967,8 +8122,10 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("pt", {
-            months: "janeiro_fevereiro_março_abril_maio_junho_julho_agosto_setembro_outubro_novembro_dezembro".split("_"),
+        return moment.defineLocale("pt",
+        {
+            months: "janeiro_fevereiro_março_abril_maio_junho_julho_agosto_setembro_outubro_novembro_dezembro"
+                .split("_"),
             monthsShort: "jan_fev_mar_abr_mai_jun_jul_ago_set_out_nov_dez".split("_"),
             weekdays: "domingo_segunda-feira_terça-feira_quarta-feira_quinta-feira_sexta-feira_sábado".split("_"),
             weekdaysShort: "dom_seg_ter_qua_qui_sex_sáb".split("_"),
@@ -7987,8 +8144,9 @@
                 nextWeek: "dddd [às] LT",
                 lastDay: "[Ontem às] LT",
                 lastWeek: function() {
-                    return (this.day() === 0 || this.day() === 6) ?
-                        "[Último] dddd [às] LT" : // Saturday + Sunday
+                    return (this.day() === 0 || this.day() === 6)
+                        ? "[Último] dddd [às] LT"
+                        : // Saturday + Sunday
                         "[Última] dddd [às] LT"; // Monday - Friday
                 },
                 sameElse: "L"
@@ -8040,8 +8198,10 @@
             return number + separator + format[key];
         }
 
-        return moment.defineLocale("ro", {
-            months: "ianuarie_februarie_martie_aprilie_mai_iunie_iulie_august_septembrie_octombrie_noiembrie_decembrie".split("_"),
+        return moment.defineLocale("ro",
+        {
+            months: "ianuarie_februarie_martie_aprilie_mai_iunie_iulie_august_septembrie_octombrie_noiembrie_decembrie"
+                .split("_"),
             monthsShort: "ian._febr._mart._apr._mai_iun._iul._aug._sept._oct._nov._dec.".split("_"),
             weekdays: "duminică_luni_marți_miercuri_joi_vineri_sâmbătă".split("_"),
             weekdaysShort: "Dum_Lun_Mar_Mie_Joi_Vin_Sâm".split("_"),
@@ -8093,7 +8253,9 @@
     }(function(moment) {
         function plural(word, num) {
             var forms = word.split("_");
-            return num % 10 === 1 && num % 100 !== 11 ? forms[0] : (num % 10 >= 2 && num % 10 <= 4 && (num % 100 < 10 || num % 100 >= 20) ? forms[1] : forms[2]);
+            return num % 10 === 1 && num % 100 !== 11
+                ? forms[0]
+                : (num % 10 >= 2 && num % 10 <= 4 && (num % 100 < 10 || num % 100 >= 20) ? forms[1] : forms[2]);
         }
 
         function relativeTimeWithPlural(number, withoutSuffix, key) {
@@ -8113,13 +8275,13 @@
 
         function monthsCaseReplace(m, format) {
             var months = {
-                    'nominative': "январь_февраль_март_апрель_май_июнь_июль_август_сентябрь_октябрь_ноябрь_декабрь".split("_"),
-                    'accusative': "января_февраля_марта_апреля_мая_июня_июля_августа_сентября_октября_ноября_декабря".split("_")
+                    'nominative': "январь_февраль_март_апрель_май_июнь_июль_август_сентябрь_октябрь_ноябрь_декабрь"
+                        .split("_"),
+                    'accusative': "января_февраля_марта_апреля_мая_июня_июля_августа_сентября_октября_ноября_декабря"
+                        .split("_")
                 },
 
-                nounCase = (/D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/).test(format) ?
-                    "accusative" :
-                    "nominative";
+                nounCase = (/D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/).test(format) ? "accusative" : "nominative";
 
             return months[nounCase][m.month()];
         }
@@ -8130,9 +8292,7 @@
                     'accusative': "янв_фев_мар_апр_мая_июня_июля_авг_сен_окт_ноя_дек".split("_")
                 },
 
-                nounCase = (/D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/).test(format) ?
-                    "accusative" :
-                    "nominative";
+                nounCase = (/D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/).test(format) ? "accusative" : "nominative";
 
             return monthsShort[nounCase][m.month()];
         }
@@ -8143,20 +8303,25 @@
                     'accusative': "воскресенье_понедельник_вторник_среду_четверг_пятницу_субботу".split("_")
                 },
 
-                nounCase = (/\[ ?[Вв] ?(?:прошлую|следующую|эту)? ?\] ?dddd/).test(format) ?
-                    "accusative" :
-                    "nominative";
+                nounCase = (/\[ ?[Вв] ?(?:прошлую|следующую|эту)? ?\] ?dddd/)
+                    .test(format)
+                    ? "accusative"
+                    : "nominative";
 
             return weekdays[nounCase][m.day()];
         }
 
-        return moment.defineLocale("ru", {
+        return moment.defineLocale("ru",
+        {
             months: monthsCaseReplace,
             monthsShort: monthsShortCaseReplace,
             weekdays: weekdaysCaseReplace,
             weekdaysShort: "вс_пн_вт_ср_чт_пт_сб".split("_"),
             weekdaysMin: "вс_пн_вт_ср_чт_пт_сб".split("_"),
-            monthsParse: [/^янв/i, /^фев/i, /^мар/i, /^апр/i, /^ма[й|я]/i, /^июн/i, /^июл/i, /^авг/i, /^сен/i, /^окт/i, /^ноя/i, /^дек/i],
+            monthsParse: [
+                /^янв/i, /^фев/i, /^мар/i, /^апр/i, /^ма[й|я]/i, /^июн/i, /^июл/i, /^авг/i, /^сен/i, /^окт/i, /^ноя/i,
+                /^дек/i
+            ],
             longDateFormat: {
                 LT: "HH:mm",
                 LTS: "LT:ss",
@@ -8320,7 +8485,8 @@
             }
         }
 
-        return moment.defineLocale("sk", {
+        return moment.defineLocale("sk",
+        {
             months: months,
             monthsShort: monthsShort,
             monthsParse: (function(months, monthsShort) {
@@ -8472,7 +8638,8 @@
             }
         }
 
-        return moment.defineLocale("sl", {
+        return moment.defineLocale("sl",
+        {
             months: "januar_februar_marec_april_maj_junij_julij_avgust_september_oktober_november_december".split("_"),
             monthsShort: "jan._feb._mar._apr._maj._jun._jul._avg._sep._okt._nov._dec.".split("_"),
             weekdays: "nedelja_ponedeljek_torek_sreda_četrtek_petek_sobota".split("_"),
@@ -8553,7 +8720,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("sq", {
+        return moment.defineLocale("sq",
+        {
             months: "Janar_Shkurt_Mars_Prill_Maj_Qershor_Korrik_Gusht_Shtator_Tetor_Nëntor_Dhjetor".split("_"),
             monthsShort: "Jan_Shk_Mar_Pri_Maj_Qer_Kor_Gus_Sht_Tet_Nën_Dhj".split("_"),
             weekdays: "E Diel_E Hënë_E Martë_E Mërkurë_E Enjte_E Premte_E Shtunë".split("_"),
@@ -8636,8 +8804,12 @@
             }
         };
 
-        return moment.defineLocale("sr-cyrl", {
-            months: ["јануар", "фебруар", "март", "април", "мај", "јун", "јул", "август", "септембар", "октобар", "новембар", "децембар"],
+        return moment.defineLocale("sr-cyrl",
+        {
+            months: [
+                "јануар", "фебруар", "март", "април", "мај", "јун", "јул", "август", "септембар", "октобар", "новембар",
+                "децембар"
+            ],
             monthsShort: ["јан.", "феб.", "мар.", "апр.", "мај", "јун", "јул", "авг.", "сеп.", "окт.", "нов.", "дец."],
             weekdays: ["недеља", "понедељак", "уторак", "среда", "четвртак", "петак", "субота"],
             weekdaysShort: ["нед.", "пон.", "уто.", "сре.", "чет.", "пет.", "суб."],
@@ -8738,8 +8910,12 @@
             }
         };
 
-        return moment.defineLocale("sr", {
-            months: ["januar", "februar", "mart", "april", "maj", "jun", "jul", "avgust", "septembar", "oktobar", "novembar", "decembar"],
+        return moment.defineLocale("sr",
+        {
+            months: [
+                "januar", "februar", "mart", "april", "maj", "jun", "jul", "avgust", "septembar", "oktobar", "novembar",
+                "decembar"
+            ],
             monthsShort: ["jan.", "feb.", "mar.", "apr.", "maj", "jun", "jul", "avg.", "sep.", "okt.", "nov.", "dec."],
             weekdays: ["nedelja", "ponedeljak", "utorak", "sreda", "četvrtak", "petak", "subota"],
             weekdaysShort: ["ned.", "pon.", "uto.", "sre.", "čet.", "pet.", "sub."],
@@ -8816,7 +8992,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("sv", {
+        return moment.defineLocale("sv",
+        {
             months: "januari_februari_mars_april_maj_juni_juli_augusti_september_oktober_november_december".split("_"),
             monthsShort: "jan_feb_mar_apr_maj_jun_jul_aug_sep_okt_nov_dec".split("_"),
             weekdays: "söndag_måndag_tisdag_onsdag_torsdag_fredag_lördag".split("_"),
@@ -8856,10 +9033,9 @@
             ordinalParse: /\d{1,2}(e|a)/,
             ordinal: function(number) {
                 var b = number % 10,
-                    output = (~~(number % 100 / 10) === 1) ? "e" :
-                    (b === 1) ? "a" :
-                    (b === 2) ? "a" :
-                    (b === 3) ? "e" : "e";
+                    output = (~~(number % 100 / 10) === 1)
+                        ? "e"
+                        : (b === 1) ? "a" : (b === 2) ? "a" : (b === 3) ? "e" : "e";
                 return number + output;
             },
             week: {
@@ -8900,10 +9076,14 @@
             '௦': '0'
         }; */
 
-        return moment.defineLocale("ta", {
-            months: "ஜனவரி_பிப்ரவரி_மார்ச்_ஏப்ரல்_மே_ஜூன்_ஜூலை_ஆகஸ்ட்_செப்டெம்பர்_அக்டோபர்_நவம்பர்_டிசம்பர்".split("_"),
-            monthsShort: "ஜனவரி_பிப்ரவரி_மார்ச்_ஏப்ரல்_மே_ஜூன்_ஜூலை_ஆகஸ்ட்_செப்டெம்பர்_அக்டோபர்_நவம்பர்_டிசம்பர்".split("_"),
-            weekdays: "ஞாயிற்றுக்கிழமை_திங்கட்கிழமை_செவ்வாய்கிழமை_புதன்கிழமை_வியாழக்கிழமை_வெள்ளிக்கிழமை_சனிக்கிழமை".split("_"),
+        return moment.defineLocale("ta",
+        {
+            months: "ஜனவரி_பிப்ரவரி_மார்ச்_ஏப்ரல்_மே_ஜூன்_ஜூலை_ஆகஸ்ட்_செப்டெம்பர்_அக்டோபர்_நவம்பர்_டிசம்பர்"
+                .split("_"),
+            monthsShort: "ஜனவரி_பிப்ரவரி_மார்ச்_ஏப்ரல்_மே_ஜூன்_ஜூலை_ஆகஸ்ட்_செப்டெம்பர்_அக்டோபர்_நவம்பர்_டிசம்பர்"
+                .split("_"),
+            weekdays: "ஞாயிற்றுக்கிழமை_திங்கட்கிழமை_செவ்வாய்கிழமை_புதன்கிழமை_வியாழக்கிழமை_வெள்ளிக்கிழமை_சனிக்கிழமை"
+                .split("_"),
             weekdaysShort: "ஞாயிறு_திங்கள்_செவ்வாய்_புதன்_வியாழன்_வெள்ளி_சனி".split("_"),
             weekdaysMin: "ஞா_தி_செ_பு_வி_வெ_ச".split("_"),
             longDateFormat: {
@@ -8999,8 +9179,10 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("th", {
-            months: "มกราคม_กุมภาพันธ์_มีนาคม_เมษายน_พฤษภาคม_มิถุนายน_กรกฎาคม_สิงหาคม_กันยายน_ตุลาคม_พฤศจิกายน_ธันวาคม".split("_"),
+        return moment.defineLocale("th",
+        {
+            months: "มกราคม_กุมภาพันธ์_มีนาคม_เมษายน_พฤษภาคม_มิถุนายน_กรกฎาคม_สิงหาคม_กันยายน_ตุลาคม_พฤศจิกายน_ธันวาคม"
+                .split("_"),
             monthsShort: "มกรา_กุมภา_มีนา_เมษา_พฤษภา_มิถุนา_กรกฎา_สิงหา_กันยา_ตุลา_พฤศจิกา_ธันวา".split("_"),
             weekdays: "อาทิตย์_จันทร์_อังคาร_พุธ_พฤหัสบดี_ศุกร์_เสาร์".split("_"),
             weekdaysShort: "อาทิตย์_จันทร์_อังคาร_พุธ_พฤหัส_ศุกร์_เสาร์".split("_"), // yes, three characters difference
@@ -9056,8 +9238,10 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("tl-ph", {
-            months: "Enero_Pebrero_Marso_Abril_Mayo_Hunyo_Hulyo_Agosto_Setyembre_Oktubre_Nobyembre_Disyembre".split("_"),
+        return moment.defineLocale("tl-ph",
+        {
+            months: "Enero_Pebrero_Marso_Abril_Mayo_Hunyo_Hulyo_Agosto_Setyembre_Oktubre_Nobyembre_Disyembre"
+                .split("_"),
             monthsShort: "Ene_Peb_Mar_Abr_May_Hun_Hul_Ago_Set_Okt_Nob_Dis".split("_"),
             weekdays: "Linggo_Lunes_Martes_Miyerkules_Huwebes_Biyernes_Sabado".split("_"),
             weekdaysShort: "Lin_Lun_Mar_Miy_Huw_Biy_Sab".split("_"),
@@ -9137,7 +9321,8 @@
             90: "'ıncı"
         };
 
-        return moment.defineLocale("tr", {
+        return moment.defineLocale("tr",
+        {
             months: "Ocak_Şubat_Mart_Nisan_Mayıs_Haziran_Temmuz_Ağustos_Eylül_Ekim_Kasım_Aralık".split("_"),
             monthsShort: "Oca_Şub_Mar_Nis_May_Haz_Tem_Ağu_Eyl_Eki_Kas_Ara".split("_"),
             weekdays: "Pazar_Pazartesi_Salı_Çarşamba_Perşembe_Cuma_Cumartesi".split("_"),
@@ -9198,9 +9383,11 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("tzm-latn", {
+        return moment.defineLocale("tzm-latn",
+        {
             months: "innayr_brˤayrˤ_marˤsˤ_ibrir_mayyw_ywnyw_ywlywz_ɣwšt_šwtanbir_ktˤwbrˤ_nwwanbir_dwjnbir".split("_"),
-            monthsShort: "innayr_brˤayrˤ_marˤsˤ_ibrir_mayyw_ywnyw_ywlywz_ɣwšt_šwtanbir_ktˤwbrˤ_nwwanbir_dwjnbir".split("_"),
+            monthsShort: "innayr_brˤayrˤ_marˤsˤ_ibrir_mayyw_ywnyw_ywlywz_ɣwšt_šwtanbir_ktˤwbrˤ_nwwanbir_dwjnbir"
+                .split("_"),
             weekdays: "asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas".split("_"),
             weekdaysShort: "asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas".split("_"),
             weekdaysMin: "asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas".split("_"),
@@ -9248,7 +9435,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("tzm", {
+        return moment.defineLocale("tzm",
+        {
             months: "ⵉⵏⵏⴰⵢⵔ_ⴱⵕⴰⵢⵕ_ⵎⴰⵕⵚ_ⵉⴱⵔⵉⵔ_ⵎⴰⵢⵢⵓ_ⵢⵓⵏⵢⵓ_ⵢⵓⵍⵢⵓⵣ_ⵖⵓⵛⵜ_ⵛⵓⵜⴰⵏⴱⵉⵔ_ⴽⵟⵓⴱⵕ_ⵏⵓⵡⴰⵏⴱⵉⵔ_ⴷⵓⵊⵏⴱⵉⵔ".split("_"),
             monthsShort: "ⵉⵏⵏⴰⵢⵔ_ⴱⵕⴰⵢⵕ_ⵎⴰⵕⵚ_ⵉⴱⵔⵉⵔ_ⵎⴰⵢⵢⵓ_ⵢⵓⵏⵢⵓ_ⵢⵓⵍⵢⵓⵣ_ⵖⵓⵛⵜ_ⵛⵓⵜⴰⵏⴱⵉⵔ_ⴽⵟⵓⴱⵕ_ⵏⵓⵡⴰⵏⴱⵉⵔ_ⴷⵓⵊⵏⴱⵉⵔ".split("_"),
             weekdays: "ⴰⵙⴰⵎⴰⵙ_ⴰⵢⵏⴰⵙ_ⴰⵙⵉⵏⴰⵙ_ⴰⴽⵔⴰⵙ_ⴰⴽⵡⴰⵙ_ⴰⵙⵉⵎⵡⴰⵙ_ⴰⵙⵉⴹⵢⴰⵙ".split("_"),
@@ -9301,7 +9489,9 @@
     }(function(moment) {
         function plural(word, num) {
             var forms = word.split("_");
-            return num % 10 === 1 && num % 100 !== 11 ? forms[0] : (num % 10 >= 2 && num % 10 <= 4 && (num % 100 < 10 || num % 100 >= 20) ? forms[1] : forms[2]);
+            return num % 10 === 1 && num % 100 !== 11
+                ? forms[0]
+                : (num % 10 >= 2 && num % 10 <= 4 && (num % 100 < 10 || num % 100 >= 20) ? forms[1] : forms[2]);
         }
 
         function relativeTimeWithPlural(number, withoutSuffix, key) {
@@ -9323,13 +9513,15 @@
 
         function monthsCaseReplace(m, format) {
             var months = {
-                    'nominative': "січень_лютий_березень_квітень_травень_червень_липень_серпень_вересень_жовтень_листопад_грудень".split("_"),
-                    'accusative': "січня_лютого_березня_квітня_травня_червня_липня_серпня_вересня_жовтня_листопада_грудня".split("_")
+                    'nominative':
+                        "січень_лютий_березень_квітень_травень_червень_липень_серпень_вересень_жовтень_листопад_грудень"
+                            .split("_"),
+                    'accusative':
+                        "січня_лютого_березня_квітня_травня_червня_липня_серпня_вересня_жовтня_листопада_грудня"
+                            .split("_")
                 },
 
-                nounCase = (/D[oD]? *MMMM?/).test(format) ?
-                    "accusative" :
-                    "nominative";
+                nounCase = (/D[oD]? *MMMM?/).test(format) ? "accusative" : "nominative";
 
             return months[nounCase][m.month()];
         }
@@ -9341,11 +9533,9 @@
                     'genitive': "неділі_понеділка_вівторка_середи_четверга_п’ятниці_суботи".split("_")
                 },
 
-                nounCase = (/(\[[ВвУу]\]) ?dddd/).test(format) ?
-                    "accusative" :
-                    ((/\[?(?:минулої|наступної)? ?\] ?dddd/).test(format) ?
-                        "genitive" :
-                        "nominative");
+                nounCase = (/(\[[ВвУу]\]) ?dddd/).test(format)
+                    ? "accusative"
+                    : ((/\[?(?:минулої|наступної)? ?\] ?dddd/).test(format) ? "genitive" : "nominative");
 
             return weekdays[nounCase][m.day()];
         }
@@ -9356,7 +9546,8 @@
             };
         }
 
-        return moment.defineLocale("uk", {
+        return moment.defineLocale("uk",
+        {
             months: monthsCaseReplace,
             monthsShort: "січ_лют_бер_квіт_трав_черв_лип_серп_вер_жовт_лист_груд".split("_"),
             weekdays: weekdaysCaseReplace,
@@ -9453,7 +9644,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("uz", {
+        return moment.defineLocale("uz",
+        {
             months: "январь_февраль_март_апрель_май_июнь_июль_август_сентябрь_октябрь_ноябрь_декабрь".split("_"),
             monthsShort: "янв_фев_мар_апр_май_июн_июл_авг_сен_окт_ноя_дек".split("_"),
             weekdays: "Якшанба_Душанба_Сешанба_Чоршанба_Пайшанба_Жума_Шанба".split("_"),
@@ -9503,8 +9695,10 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("vi", {
-            months: "tháng 1_tháng 2_tháng 3_tháng 4_tháng 5_tháng 6_tháng 7_tháng 8_tháng 9_tháng 10_tháng 11_tháng 12".split("_"),
+        return moment.defineLocale("vi",
+        {
+            months: "tháng 1_tháng 2_tháng 3_tháng 4_tháng 5_tháng 6_tháng 7_tháng 8_tháng 9_tháng 10_tháng 11_tháng 12"
+                .split("_"),
             monthsShort: "Th01_Th02_Th03_Th04_Th05_Th06_Th07_Th08_Th09_Th10_Th11_Th12".split("_"),
             weekdays: "chủ nhật_thứ hai_thứ ba_thứ tư_thứ năm_thứ sáu_thứ bảy".split("_"),
             weekdaysShort: "CN_T2_T3_T4_T5_T6_T7".split("_"),
@@ -9562,7 +9756,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("zh-cn", {
+        return moment.defineLocale("zh-cn",
+        {
             months: "一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月".split("_"),
             monthsShort: "1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月".split("_"),
             weekdays: "星期日_星期一_星期二_星期三_星期四_星期五_星期六".split("_"),
@@ -9585,7 +9780,8 @@
                 if (hour === 12) {
                     hour = 0;
                 }
-                if (meridiem === "凌晨" || meridiem === "早上" ||
+                if (meridiem === "凌晨" ||
+                    meridiem === "早上" ||
                     meridiem === "上午") {
                     return hour;
                 } else if (meridiem === "下午" || meridiem === "晚上") {
@@ -9680,7 +9876,8 @@
     (function(factory) {
         factory(moment);
     }(function(moment) {
-        return moment.defineLocale("zh-tw", {
+        return moment.defineLocale("zh-tw",
+        {
             months: "一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月".split("_"),
             monthsShort: "1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月".split("_"),
             weekdays: "星期日_星期一_星期二_星期三_星期四_星期五_星期六".split("_"),

@@ -1,9 +1,8 @@
+using System;
+
 namespace personal_pages
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class Schedule
+    public class Schedule
     {
         public Guid ScheduleId { get; set; }
 
@@ -14,7 +13,7 @@ namespace personal_pages
         public DateTime StartDate { get; set; }
 
         public string Class_Nr { get; set; }
-    
+
         public virtual Course Course { get; set; }
 
         public virtual User User { get; set; }

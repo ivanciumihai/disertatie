@@ -1,18 +1,19 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
+
 namespace personal_pages
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
-    public partial class Course
+    public class Course
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Course()
         {
-            this.ClassBooks = new HashSet<ClassBook>();
-            this.Schedules = new HashSet<Schedule>();
+            ClassBooks = new HashSet<ClassBook>();
+            Schedules = new HashSet<Schedule>();
         }
-    
+
         public Guid CourseId { get; set; }
 
         [Required(ErrorMessage = "Course Name cannot be empty")]
@@ -25,15 +26,15 @@ namespace personal_pages
         public Guid DepartamentId { get; set; }
 
         public string TeacherId { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ClassBook> ClassBooks { get; set; }
 
         public virtual Departament Departament { get; set; }
 
         public virtual User User { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Schedule> Schedules { get; set; }
     }
 }

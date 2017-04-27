@@ -9,9 +9,10 @@
     else
         select.find("option:gt(0)").remove();
 
-    $.each(data, function () {
-        select.append($("<option></option>").text(this.FirstName).val(this.UserId));
-    });
+    $.each(data,
+        function() {
+            select.append($("<option></option>").text(this.FirstName).val(this.UserId));
+        });
     if (selID)
         select.find("option[value='" + selID + "']").prop("selected", true);
     else if (typeof defaultValue != "undefined") {
@@ -24,44 +25,44 @@
     select.trigger("chosen:updated");
 }
 
-$(document).ready(function () {
-    $("#DepartamentId")
-        .change(
-            function () {
-                var id = $("#DepartamentId").val();
-                var url = "/Courses/GetTeacher?depId=" + id;
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    data: { depId: id },
-                    success: function (result) {
-                        console.log(result); // show response from the script.                 
-                        fillSelect($("#DepartamentId").closest("form").find("#TeacherId"), result, false);
-                    },
-                    error: function (xhr, status, error) {
-                        var err = eval("(" + xhr.responseText + ")");
-                        console.log(error);
-                    }
+$(document)
+    .ready(function() {
+        $("#DepartamentId")
+            .change(
+                function() {
+                    var id = $("#DepartamentId").val();
+                    var url = "/Courses/GetTeacher?depId=" + id;
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        data: { depId: id },
+                        success: function(result) {
+                            console.log(result); // show response from the script.                 
+                            fillSelect($("#DepartamentId").closest("form").find("#TeacherId"), result, false);
+                        },
+                        error: function(xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            console.log(error);
+                        }
+                    });
                 });
-            });
-});
+    });
 
 
-window.onload = function () {
+window.onload = function() {
     var id = $("#UniversityId").val();
     var url = "/UsersProfile/GetFaculty?universityId=" + id;
     $.ajax({
         type: "GET",
         url: url,
         data: { universityId: id },
-        success: function (result) {
+        success: function(result) {
             console.log(result); // show response from the script.                 
             fillSelect($("#UniversityId").closest("form").find("#FacultyId"), result, false);
         },
-        error: function (xhr, status, error) {
+        error: function(xhr, status, error) {
             var err = eval("(" + xhr.responseText + ")");
             console.log(error);
         }
     });
 };
-

@@ -1,5 +1,4 @@
-﻿@using personal_pages.Helpers
-@model User
+﻿@model User
 
 @{
     ViewBag.Title = "Edit";
@@ -7,106 +6,106 @@
 
 <h2>Edit</h2>
 
-@using (Html.BeginForm("Edit", "UsersProfile", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Edit", "UsersProfile", FormMethod.Post, new {enctype = "multipart/form-data"}))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
         <h4>User</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <hr/>
+        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
         @Html.HiddenFor(model => model.UserId)
 
         <div class="form-group">
-            @Html.Label("First Name", new { @class = "control-label col-md-2" })
+            @Html.Label("First Name", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.FirstName, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.FirstName, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.Label("Last name", new { @class = "control-label col-md-2" })
+            @Html.Label("Last name", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.LastName, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.LastName, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.Label("Educational Form", new { @class = "control-label col-md-2" })
+            @Html.Label("Educational Form", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.DropDownList("Ed_Form", null, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Ed_Form, "", new { @class = "text-danger" })
+                @Html.DropDownList("Ed_Form", null, new {@class = "form-control"})
+                @Html.ValidationMessageFor(model => model.Ed_Form, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.Label("Father Name", new { @class = "control-label col-md-2" })
+            @Html.Label("Father Name", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.FatherName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FatherName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.FatherName, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.FatherName, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.Label("Department", new { @class = "control-label col-md-2" })
+            @Html.Label("Department", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.DropDownList("DepID", null, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.DepID, "", new { @class = "text-danger" })
+                @Html.DropDownList("DepID", null, new {@class = "form-control"})
+                @Html.ValidationMessageFor(model => model.DepID, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.Label("Group Number", new { @class = "control-label col-md-2" })
+            @Html.Label("Group Number", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.GroupNumber, new { htmlAttributes = new { @class = "form-control", @type = "number", @onkeypress = "ValidateGroup(event);" } })
-                @Html.ValidationMessageFor(model => model.GroupNumber, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.GroupNumber, new {htmlAttributes = new {@class = "form-control", type = "number", onkeypress = "ValidateGroup(event);"}})
+                @Html.ValidationMessageFor(model => model.GroupNumber, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.Label("University", new { @class = "control-label col-md-2" })
+            @Html.Label("University", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.DropDownListFor(x => x.UniversityId, null, new { @class = "form-control", getUniversityUrl = @Url.Action("GetFaculty") })
-                @Html.ValidationMessageFor(model => model.Faculty.UniversityId, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(x => x.UniversityId, null, new {@class = "form-control", getUniversityUrl = Url.Action("GetFaculty")})
+                @Html.ValidationMessageFor(model => model.Faculty.UniversityId, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.Label("Faculty", new { @class = "control-label col-md-2" })
+            @Html.Label("Faculty", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.DropDownListFor(x => x.FacultyId, null, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.FacultyId, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(x => x.FacultyId, null, new {@class = "form-control"})
+                @Html.ValidationMessageFor(model => model.FacultyId, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.Label("Role", new { @class = "control-label col-md-2" })
+            @Html.Label("Role", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.DropDownListFor(x => x.RoleId, null, new { @class = "form-control", @id = "non" })
-                @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(x => x.RoleId, null, new {@class = "form-control", id = "non"})
+                @Html.ValidationMessageFor(model => model.RoleId, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group" hidden>
-            @Html.Label("Image Path", new { @class = "control-label col-md-2" })
+            @Html.Label("Image Path", new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ImagePath, new { htmlAttributes = new { @class = "form-control", } })
-                @Html.ValidationMessageFor(model => model.ImagePath, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.ImagePath, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.ImagePath, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.Label("Image Upload", new { @class = "control-label col-md-2", @visiblity = "hidden" })
+            @Html.Label("Image Upload", new {@class = "control-label col-md-2", visiblity = "hidden"})
             <div class="col-md-10">
-                <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.tif" class="form-group" />
+                <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.tif" class="form-group"/>
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-default"/>
             </div>
         </div>
     </div>
@@ -122,4 +121,3 @@
     <script type="text/javascript" src="~/Scripts/datepickerready.js"></script>
     <script type="text/javascript" src="~/Scripts/dropdownT.js"></script>
 }
-

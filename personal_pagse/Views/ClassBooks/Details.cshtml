@@ -8,7 +8,7 @@
 
 <div>
     <h4>ClassBook</h4>
-    <hr />
+    <hr/>
     <dl class="dl-horizontal">
         <dt>
             Student First Name
@@ -25,7 +25,7 @@
         <dd>
             @Html.DisplayFor(model => model.User.LastName)
         </dd>
-        
+
         <dt>
             University Name
         </dt>
@@ -33,7 +33,7 @@
         <dd>
             @Html.DisplayFor(model => model.User.Faculty.University.Name)
         </dd>
-        
+
         <dt>
             Faculty Name
         </dt>
@@ -99,6 +99,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ClassBookId }) |
+    @Html.ActionLink("Edit", "Edit", new {id = Model.ClassBookId}) |
     @Html.ActionLink("Back to List", "Index")
 </p>

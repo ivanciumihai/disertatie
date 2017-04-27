@@ -1,6 +1,6 @@
-﻿@model PagedList.IPagedList<ClassBook>
-@using PagedList.Mvc;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<ClassBook>
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css"/>
 
 @{
     ViewBag.Title = "Index";
@@ -17,74 +17,74 @@
     using (Html.BeginForm("Index", "ClassBooks", FormMethod.Get))
     {
         <div class="form-inline">
-            Find by name: @Html.TextBox("SearchString", ViewBag.Currentfilter as string, new { @class = "form-control" })
-            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+            Find by name: @Html.TextBox("SearchString", ViewBag.Currentfilter as string, new {@class = "form-control"})
+            <button type="submit" class="btn btn-default">
+                <span class="glyphicon glyphicon-search"></span></button>
         </div>
     }
-
 }
-<br />
+<br/>
 
 <table class="table table-hover">
     <thead>
-        <tr>
-            <th>
-                @Html.ActionLink("Student Full Name", "Index", new { sortOrder = ViewBag.FullNameSortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th>
-                @Html.ActionLink("Teacher", "Index", new { sortOrder = ViewBag.TeacherSortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th>
-                Course
-            </th>
-            <th>
-                @Html.ActionLink("Grade", "Index", new { sortOrder = ViewBag.GradeSortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th>
-                @Html.ActionLink("Promoted", "Index", new { sortOrder = ViewBag.PromotedSortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.ActionLink("Student Full Name", "Index", new {sortOrder = ViewBag.FullNameSortParm, currentFilter = ViewBag.CurrentFilter})
+        </th>
+        <th>
+            @Html.ActionLink("Teacher", "Index", new {sortOrder = ViewBag.TeacherSortParm, currentFilter = ViewBag.CurrentFilter})
+        </th>
+        <th>
+            Course
+        </th>
+        <th>
+            @Html.ActionLink("Grade", "Index", new {sortOrder = ViewBag.GradeSortParm, currentFilter = ViewBag.CurrentFilter})
+        </th>
+        <th>
+            @Html.ActionLink("Promoted", "Index", new {sortOrder = ViewBag.PromotedSortParm, currentFilter = ViewBag.CurrentFilter})
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.FullName)
-                </td>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.FullName)
+            </td>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.TeacherId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Course.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Grade)
-                </td>
-                <td>
-                    @if (item.Promoted == true)
+            <td>
+                @Html.DisplayFor(modelItem => item.TeacherId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Course.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Grade)
+            </td>
+            <td>
+                @if (item.Promoted == true)
                 {
-                        <button type="button" class="btn btn-success">Promoted</button>
-                    }
-                    else
-                    {
-                        <button type="button" class="btn btn-danger">Failed</button>
-                    }
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ClassBookId }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.ClassBookId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ClassBookId })
-                </td>
-            </tr>
-        }
+                    <button type="button" class="btn btn-success">Promoted</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-danger">Failed</button>
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {id = item.ClassBookId}) |
+                @Html.ActionLink("Details", "Details", new {id = item.ClassBookId}) |
+                @Html.ActionLink("Delete", "Delete", new {id = item.ClassBookId})
+            </td>
+        </tr>
+    }
     </tbody>
 </table>
 
-<br />
+<br/>
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
 @Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    new {page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))

@@ -21,14 +21,10 @@ namespace Personal_Pages.Controllers
         public async Task<ActionResult> Details(Guid? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             var educationForm = await _db.Education_Form.FindAsync(id);
             if (educationForm == null)
-            {
                 return HttpNotFound();
-            }
             return View(educationForm);
         }
 
@@ -56,14 +52,10 @@ namespace Personal_Pages.Controllers
         public async Task<ActionResult> Edit(Guid? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             var educationForm = await _db.Education_Form.FindAsync(id);
             if (educationForm == null)
-            {
                 return HttpNotFound();
-            }
             return View(educationForm);
         }
 
@@ -84,19 +76,16 @@ namespace Personal_Pages.Controllers
         public async Task<ActionResult> Delete(Guid? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             var educationForm = await _db.Education_Form.FindAsync(id);
             if (educationForm == null)
-            {
                 return HttpNotFound();
-            }
             return View(educationForm);
         }
 
         // POST: Education_Form/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
@@ -109,9 +98,7 @@ namespace Personal_Pages.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 _db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }

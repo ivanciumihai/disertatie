@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -17,6 +16,7 @@ namespace personal_pages.Helpers
             strArray[0] = Ci.TextInfo.ToTitleCase(strArray[0]);
             return string.Join(" ", strArray);
         }
+
         public static string ToTitleCase(this string str, TitleCase tcase)
         {
             str = str.ToLower();
@@ -37,6 +37,7 @@ namespace personal_pages.Helpers
             }
             return Ci.TextInfo.ToTitleCase(str);
         }
+
         public static string CutWhiteSpace(string s)
         {
             const RegexOptions options = RegexOptions.None;
@@ -48,9 +49,10 @@ namespace personal_pages.Helpers
         {
             var r = new Regex(@"[A-Z]", RegexOptions.IgnorePatternWhitespace);
             var result = r.Matches(s);
-            return result.Cast<Match>().Aggregate(string.Empty, (current, match) => current + (match.Value + "."));
+            return result.Cast<Match>().Aggregate(string.Empty, (current, match) => current + match.Value + ".");
         }
     }
+
     public enum TitleCase
     {
         First,

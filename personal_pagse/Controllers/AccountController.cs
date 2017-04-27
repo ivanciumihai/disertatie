@@ -15,9 +15,9 @@ namespace personal_pages.Controllers
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly personal_pageEntities _db = new personal_pageEntities();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private readonly personal_pageEntities _db = new personal_pageEntities();
 
         public AccountController()
         {
@@ -57,9 +57,7 @@ namespace personal_pages.Controllers
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
-            {
                 return View(model);
-            }
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
@@ -87,9 +85,7 @@ namespace personal_pages.Controllers
         {
             // Require that the user has already logged in via username/password or external login
             if (!await SignInManager.HasBeenVerifiedAsync())
-            {
                 return View("Error");
-            }
             return View(new VerifyCodeViewModel {Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe});
         }
 
@@ -101,9 +97,7 @@ namespace personal_pages.Controllers
         public async Task<ActionResult> VerifyCode(VerifyCodeViewModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return View(model);
-            }
 
             // The following code protects for brute force attacks against the two factor codes. 
             // If a user enters incorrect codes for a specified amount of time then the user account 
@@ -149,7 +143,7 @@ namespace personal_pages.Controllers
             var role = new IdentityRole();
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(_context));
             var chkUser = UserManager.Create(user, model.Password);
-         //   var user2 = new User();
+            //   var user2 = new User();
 //
 
             var result1 = UserManager.AddToRole(user.Id, model.UserRoles);
@@ -158,10 +152,7 @@ namespace personal_pages.Controllers
             //  var result = await UserManager.CreateAsync(user, model.Password);
 
             if (result1.Succeeded)
-            {
-                //return RedirectToAction("Register", "Account");
-                return RedirectToAction("Create","UsersProfile");
-            }
+                return RedirectToAction("Create", "UsersProfile");
             ViewBag.Name = new SelectList(_context.Roles.Where(u => !u.Name.Contains("Admin"))
                 .ToList(), "Name", "Name");
 
@@ -175,10 +166,8 @@ namespace personal_pages.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
-            if (userId == null || code == null)
-            {
+            if ((userId == null) || (code == null))
                 return View("Error");
-            }
             IdentityResult result;
             try
             {
@@ -192,9 +181,7 @@ namespace personal_pages.Controllers
             }
 
             if (result.Succeeded)
-            {
                 return View();
-            }
 
             // If we got this far, something failed.
             AddErrors(result);
@@ -218,15 +205,12 @@ namespace personal_pages.Controllers
             if (!ModelState.IsValid) return View(model);
             var user = _db.AspNetUsers.FirstOrDefault(x => x.Email == model.Email);
             // var user = await UserManager.FindByNameAsync(model.Email);
-            if (user == null )
-            {
-                // Don't reveal that the user does not exist or is not confirmed
+            if (user == null)
                 return View("ForgotPasswordConfirmation");
-            }
 
             var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
             var callbackUrl = Url.Action("ResetPassword", "Account",
-                new { UserId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                new {UserId = user.Id, code}, Request.Url.Scheme);
             await UserManager.SendEmailAsync(user.Id, "Reset Password",
                 "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
             return View("ForgotPasswordConfirmation");
@@ -255,20 +239,13 @@ namespace personal_pages.Controllers
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return View(model);
-            }
             var user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
-            {
-                // Don't reveal that the user does not exist
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
-            }
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
-            {
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
-            }
             AddErrors(result);
             return View();
         }
@@ -297,9 +274,7 @@ namespace personal_pages.Controllers
         {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
             if (userId == null)
-            {
                 return View("Error");
-            }
             var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
             var factorOptions =
                 userFactors.Select(purpose => new SelectListItem {Text = purpose, Value = purpose}).ToList();
@@ -314,15 +289,11 @@ namespace personal_pages.Controllers
         public async Task<ActionResult> SendCode(SendCodeViewModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return View();
-            }
 
             // Generate the token and send it
             if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
-            {
                 return View("Error");
-            }
             return RedirectToAction("VerifyCode",
                 new {Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe});
         }
@@ -333,9 +304,7 @@ namespace personal_pages.Controllers
         {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
-            {
                 return RedirectToAction("Login");
-            }
 
             // Sign in the user with this external login provider if the user already has a login
             var result = await SignInManager.ExternalSignInAsync(loginInfo, false);
@@ -365,18 +334,14 @@ namespace personal_pages.Controllers
             string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
-            {
                 return RedirectToAction("Index", "Manage");
-            }
 
             if (ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider
                 var info = await AuthenticationManager.GetExternalLoginInfoAsync();
                 if (info == null)
-                {
                     return View("ExternalLoginFailure");
-                }
                 var user = new ApplicationUser {UserName = model.Email, Email = model.Email};
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
@@ -395,7 +360,7 @@ namespace personal_pages.Controllers
             return View(model);
         }
 
-        
+
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -442,17 +407,13 @@ namespace personal_pages.Controllers
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
-            {
                 ModelState.AddModelError("", error);
-            }
         }
 
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
-            {
                 return Redirect(returnUrl);
-            }
             return RedirectToAction("Index", "Home");
         }
 
@@ -478,9 +439,7 @@ namespace personal_pages.Controllers
             {
                 var properties = new AuthenticationProperties {RedirectUri = RedirectUri};
                 if (UserId != null)
-                {
                     properties.Dictionary[XsrfKey] = UserId;
-                }
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }

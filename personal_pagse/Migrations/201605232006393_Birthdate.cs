@@ -7,22 +7,22 @@ namespace personal_pages.Migrations
         public override void Up()
         {
             CreateTable(
-                "dbo.AspNetRoles",
-                c => new
-                {
-                    Id = c.String(false, 128),
-                    Name = c.String(false, 256)
-                })
+                    "dbo.AspNetRoles",
+                    c => new
+                    {
+                        Id = c.String(false, 128),
+                        Name = c.String(false, 256)
+                    })
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.Name, unique: true, name: "RoleNameIndex");
 
             CreateTable(
-                "dbo.AspNetUserRoles",
-                c => new
-                {
-                    UserId = c.String(false, 128),
-                    RoleId = c.String(false, 128)
-                })
+                    "dbo.AspNetUserRoles",
+                    c => new
+                    {
+                        UserId = c.String(false, 128),
+                        RoleId = c.String(false, 128)
+                    })
                 .PrimaryKey(t => new {t.UserId, t.RoleId})
                 .ForeignKey("dbo.AspNetRoles", t => t.RoleId, true)
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, true)
@@ -30,53 +30,53 @@ namespace personal_pages.Migrations
                 .Index(t => t.RoleId);
 
             CreateTable(
-                "dbo.AspNetUsers",
-                c => new
-                {
-                    Id = c.String(false, 128),
-                    Reg_Date = c.DateTime(),
-                    Ed_Form = c.Boolean(),
-                    FatherName = c.String(),
-                    DepId = c.Guid(),
-                    GroupNumber = c.Int(),
-                    FacultyId = c.Guid(),
-                    UniversityId = c.Guid(),
-                    Email = c.String(maxLength: 256),
-                    EmailConfirmed = c.Boolean(false),
-                    PasswordHash = c.String(),
-                    SecurityStamp = c.String(),
-                    PhoneNumber = c.String(),
-                    PhoneNumberConfirmed = c.Boolean(false),
-                    TwoFactorEnabled = c.Boolean(false),
-                    LockoutEndDateUtc = c.DateTime(),
-                    LockoutEnabled = c.Boolean(false),
-                    AccessFailedCount = c.Int(false),
-                    UserName = c.String(false, 256)
-                })
+                    "dbo.AspNetUsers",
+                    c => new
+                    {
+                        Id = c.String(false, 128),
+                        Reg_Date = c.DateTime(),
+                        Ed_Form = c.Boolean(),
+                        FatherName = c.String(),
+                        DepId = c.Guid(),
+                        GroupNumber = c.Int(),
+                        FacultyId = c.Guid(),
+                        UniversityId = c.Guid(),
+                        Email = c.String(maxLength: 256),
+                        EmailConfirmed = c.Boolean(false),
+                        PasswordHash = c.String(),
+                        SecurityStamp = c.String(),
+                        PhoneNumber = c.String(),
+                        PhoneNumberConfirmed = c.Boolean(false),
+                        TwoFactorEnabled = c.Boolean(false),
+                        LockoutEndDateUtc = c.DateTime(),
+                        LockoutEnabled = c.Boolean(false),
+                        AccessFailedCount = c.Int(false),
+                        UserName = c.String(false, 256)
+                    })
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.UserName, unique: true, name: "UserNameIndex");
 
             CreateTable(
-                "dbo.AspNetUserClaims",
-                c => new
-                {
-                    Id = c.Int(false, true),
-                    UserId = c.String(false, 128),
-                    ClaimType = c.String(),
-                    ClaimValue = c.String()
-                })
+                    "dbo.AspNetUserClaims",
+                    c => new
+                    {
+                        Id = c.Int(false, true),
+                        UserId = c.String(false, 128),
+                        ClaimType = c.String(),
+                        ClaimValue = c.String()
+                    })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, true)
                 .Index(t => t.UserId);
 
             CreateTable(
-                "dbo.AspNetUserLogins",
-                c => new
-                {
-                    LoginProvider = c.String(false, 128),
-                    ProviderKey = c.String(false, 128),
-                    UserId = c.String(false, 128)
-                })
+                    "dbo.AspNetUserLogins",
+                    c => new
+                    {
+                        LoginProvider = c.String(false, 128),
+                        ProviderKey = c.String(false, 128),
+                        UserId = c.String(false, 128)
+                    })
                 .PrimaryKey(t => new {t.LoginProvider, t.ProviderKey, t.UserId})
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, true)
                 .Index(t => t.UserId);

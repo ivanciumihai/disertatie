@@ -1,6 +1,6 @@
-﻿@model PagedList.IPagedList<User>
-@using PagedList.Mvc;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<User>
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css"/>
 
 @{
     ViewBag.Title = "Index";
@@ -14,42 +14,42 @@
         @Html.ActionLink("Create New", "Create")
     </p>
 
-    using (Html.BeginForm("Index","UsersProfile",FormMethod.Get))
+    using (Html.BeginForm("Index", "UsersProfile", FormMethod.Get))
     {
         <div class="form-inline">
-             Find by name: @Html.TextBox("SearchString", ViewBag.Currentfilter as string, new { @class = "form-control" })
-            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+            Find by name: @Html.TextBox("SearchString", ViewBag.Currentfilter as string, new {@class = "form-control"})
+            <button type="submit" class="btn btn-default">
+                <span class="glyphicon glyphicon-search"></span></button>
         </div>
     }
-
 }
 <br/>
 
 <table class="table table-hover">
     <tr>
         <th>
-            @Html.ActionLink("First Name", "Index", new { sortOrder = ViewBag.FirstNameSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("First Name", "Index", new {sortOrder = ViewBag.FirstNameSortParm, currentFilter = ViewBag.CurrentFilter})
         </th>
         <th>
-            @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.LastNameSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>      
+            @Html.ActionLink("Last Name", "Index", new {sortOrder = ViewBag.LastNameSortParm, currentFilter = ViewBag.CurrentFilter})
+        </th>
         <th>
             Father Name
         </th>
         <th>
-            @Html.ActionLink("Group Number", "Index", new { sortOrder = ViewBag.GroupSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Group Number", "Index", new {sortOrder = ViewBag.GroupSortParm, currentFilter = ViewBag.CurrentFilter})
         </th>
         <th>
-            @Html.ActionLink("Department", "Index", new { sortOrder = ViewBag.DepSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Department", "Index", new {sortOrder = ViewBag.DepSortParm, currentFilter = ViewBag.CurrentFilter})
         </th>
         <th>
             Educational Form
         </th>
         <th>
-            @Html.ActionLink("University", "Index", new { sortOrder = ViewBag.UnivSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("University", "Index", new {sortOrder = ViewBag.UnivSortParm, currentFilter = ViewBag.CurrentFilter})
         </th>
         <th>
-            @Html.ActionLink("Faculty", "Index", new { sortOrder = ViewBag.FacSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Faculty", "Index", new {sortOrder = ViewBag.FacSortParm, currentFilter = ViewBag.CurrentFilter})
         </th>
         <th>
             Role
@@ -65,7 +65,7 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LastName)
-            </td>        
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FatherName)
             </td>
@@ -90,15 +90,15 @@
             @if (User.IsInRole("Admin") || User.IsInRole("Secretary"))
             {
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.UserId }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.UserId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.UserId })
+                    @Html.ActionLink("Edit", "Edit", new {id = item.UserId}) |
+                    @Html.ActionLink("Details", "Details", new {id = item.UserId}) |
+                    @Html.ActionLink("Delete", "Delete", new {id = item.UserId})
                 </td>
             }
             else if (User.IsInRole("Teacher"))
             {
                 <td>
-                    @Html.ActionLink("Details", "Details", new { id = item.UserId })
+                    @Html.ActionLink("Details", "Details", new {id = item.UserId})
                 </td>
             }
         </tr>
@@ -106,8 +106,8 @@
 
 </table>
 
-<br />
+<br/>
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
 @Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    new {page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))

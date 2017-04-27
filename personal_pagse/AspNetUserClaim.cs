@@ -1,9 +1,6 @@
 namespace personal_pages
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class AspNetUserClaim
+    public class AspNetUserClaim
     {
         public int Id { get; set; }
 
@@ -12,7 +9,7 @@ namespace personal_pages
         public string ClaimType { get; set; }
 
         public string ClaimValue { get; set; }
-    
+
         public virtual AspNetUser AspNetUser { get; set; }
     }
 }

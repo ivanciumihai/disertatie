@@ -13,7 +13,7 @@ namespace personal_pages
             AspNetUserLogins = new HashSet<AspNetUserLogin>();
             AspNetRoles = new HashSet<AspNetRole>();
         }
-    
+
         public string Id { get; set; }
 
         public DateTime? Reg_Date { get; set; }
@@ -39,7 +39,7 @@ namespace personal_pages
         public int AccessFailedCount { get; set; }
 
         public string UserName { get; set; }
-    
+
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
 

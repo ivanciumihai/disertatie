@@ -165,11 +165,18 @@
             getDatePickerTemplate = function() {
                 var headTemplate = $("<thead>")
                         .append($("<tr>")
-                            .append($("<th>").addClass("prev").attr("data-action", "previous")
+                            .append($("<th>")
+                                .addClass("prev")
+                                .attr("data-action", "previous")
                                 .append($("<span>").addClass(options.icons.previous))
                             )
-                            .append($("<th>").addClass("picker-switch").attr("data-action", "pickerSwitch").attr("colspan", (options.calendarWeeks ? "6" : "5")))
-                            .append($("<th>").addClass("next").attr("data-action", "next")
+                            .append($("<th>")
+                                .addClass("picker-switch")
+                                .attr("data-action", "pickerSwitch")
+                                .attr("colspan", (options.calendarWeeks ? "6" : "5")))
+                            .append($("<th>")
+                                .addClass("next")
+                                .attr("data-action", "next")
                                 .append($("<span>").addClass(options.icons.next))
                             )
                         ),
@@ -179,23 +186,31 @@
                         );
 
                 return [
-                    $("<div>").addClass("datepicker-days")
-                    .append($("<table>").addClass("table-condensed")
+                    $("<div>")
+                    .addClass("datepicker-days")
+                    .append($("<table>")
+                        .addClass("table-condensed")
                         .append(headTemplate)
                         .append($("<tbody>"))
                     ),
-                    $("<div>").addClass("datepicker-months")
-                    .append($("<table>").addClass("table-condensed")
+                    $("<div>")
+                    .addClass("datepicker-months")
+                    .append($("<table>")
+                        .addClass("table-condensed")
                         .append(headTemplate.clone())
                         .append(contTemplate.clone())
                     ),
-                    $("<div>").addClass("datepicker-years")
-                    .append($("<table>").addClass("table-condensed")
+                    $("<div>")
+                    .addClass("datepicker-years")
+                    .append($("<table>")
+                        .addClass("table-condensed")
                         .append(headTemplate.clone())
                         .append(contTemplate.clone())
                     ),
-                    $("<div>").addClass("datepicker-decades")
-                    .append($("<table>").addClass("table-condensed")
+                    $("<div>")
+                    .addClass("datepicker-decades")
+                    .append($("<table>")
+                        .addClass("table-condensed")
                         .append(headTemplate.clone())
                         .append(contTemplate.clone())
                     )
@@ -209,12 +224,21 @@
 
                 if (isEnabled("h")) {
                     topRow.append($("<td>")
-                        .append($("<a>").attr({ href: "#", tabindex: "-1", 'title': "Increment Hour" }).addClass("btn").attr("data-action", "incrementHours")
+                        .append($("<a>")
+                            .attr({ href: "#", tabindex: "-1", 'title': "Increment Hour" })
+                            .addClass("btn")
+                            .attr("data-action", "incrementHours")
                             .append($("<span>").addClass(options.icons.up))));
                     middleRow.append($("<td>")
-                        .append($("<span>").addClass("timepicker-hour").attr({ 'data-time-component': "hours", 'title': "Pick Hour" }).attr("data-action", "showHours")));
+                        .append($("<span>")
+                            .addClass("timepicker-hour")
+                            .attr({ 'data-time-component': "hours", 'title': "Pick Hour" })
+                            .attr("data-action", "showHours")));
                     bottomRow.append($("<td>")
-                        .append($("<a>").attr({ href: "#", tabindex: "-1", 'title': "Decrement Hour" }).addClass("btn").attr("data-action", "decrementHours")
+                        .append($("<a>")
+                            .attr({ href: "#", tabindex: "-1", 'title': "Decrement Hour" })
+                            .addClass("btn")
+                            .attr("data-action", "decrementHours")
                             .append($("<span>").addClass(options.icons.down))));
                 }
                 if (isEnabled("m")) {
@@ -224,12 +248,21 @@
                         bottomRow.append($("<td>").addClass("separator"));
                     }
                     topRow.append($("<td>")
-                        .append($("<a>").attr({ href: "#", tabindex: "-1", 'title': "Increment Minute" }).addClass("btn").attr("data-action", "incrementMinutes")
+                        .append($("<a>")
+                            .attr({ href: "#", tabindex: "-1", 'title': "Increment Minute" })
+                            .addClass("btn")
+                            .attr("data-action", "incrementMinutes")
                             .append($("<span>").addClass(options.icons.up))));
                     middleRow.append($("<td>")
-                        .append($("<span>").addClass("timepicker-minute").attr({ 'data-time-component': "minutes", 'title': "Pick Minute" }).attr("data-action", "showMinutes")));
+                        .append($("<span>")
+                            .addClass("timepicker-minute")
+                            .attr({ 'data-time-component': "minutes", 'title': "Pick Minute" })
+                            .attr("data-action", "showMinutes")));
                     bottomRow.append($("<td>")
-                        .append($("<a>").attr({ href: "#", tabindex: "-1", 'title': "Decrement Minute" }).addClass("btn").attr("data-action", "decrementMinutes")
+                        .append($("<a>")
+                            .attr({ href: "#", tabindex: "-1", 'title': "Decrement Minute" })
+                            .addClass("btn")
+                            .attr("data-action", "decrementMinutes")
                             .append($("<span>").addClass(options.icons.down))));
                 }
                 if (isEnabled("s")) {
@@ -239,33 +272,49 @@
                         bottomRow.append($("<td>").addClass("separator"));
                     }
                     topRow.append($("<td>")
-                        .append($("<a>").attr({ href: "#", tabindex: "-1", 'title': "Increment Second" }).addClass("btn").attr("data-action", "incrementSeconds")
+                        .append($("<a>")
+                            .attr({ href: "#", tabindex: "-1", 'title': "Increment Second" })
+                            .addClass("btn")
+                            .attr("data-action", "incrementSeconds")
                             .append($("<span>").addClass(options.icons.up))));
                     middleRow.append($("<td>")
-                        .append($("<span>").addClass("timepicker-second").attr({ 'data-time-component': "seconds", 'title': "Pick Second" }).attr("data-action", "showSeconds")));
+                        .append($("<span>")
+                            .addClass("timepicker-second")
+                            .attr({ 'data-time-component': "seconds", 'title': "Pick Second" })
+                            .attr("data-action", "showSeconds")));
                     bottomRow.append($("<td>")
-                        .append($("<a>").attr({ href: "#", tabindex: "-1", 'title': "Decrement Second" }).addClass("btn").attr("data-action", "decrementSeconds")
+                        .append($("<a>")
+                            .attr({ href: "#", tabindex: "-1", 'title': "Decrement Second" })
+                            .addClass("btn")
+                            .attr("data-action", "decrementSeconds")
                             .append($("<span>").addClass(options.icons.down))));
                 }
 
                 if (!use24Hours) {
                     topRow.append($("<td>").addClass("separator"));
                     middleRow.append($("<td>")
-                        .append($("<button>").addClass("btn btn-primary").attr({ 'data-action': "togglePeriod", tabindex: "-1", 'title': "Toggle Period" })));
+                        .append($("<button>")
+                            .addClass("btn btn-primary")
+                            .attr({ 'data-action': "togglePeriod", tabindex: "-1", 'title': "Toggle Period" })));
                     bottomRow.append($("<td>").addClass("separator"));
                 }
 
-                return $("<div>").addClass("timepicker-picker")
-                    .append($("<table>").addClass("table-condensed")
+                return $("<div>")
+                    .addClass("timepicker-picker")
+                    .append($("<table>")
+                        .addClass("table-condensed")
                         .append([topRow, middleRow, bottomRow]));
             },
 
             getTimePickerTemplate = function() {
-                var hoursView = $("<div>").addClass("timepicker-hours")
+                var hoursView = $("<div>")
+                        .addClass("timepicker-hours")
                         .append($("<table>").addClass("table-condensed")),
-                    minutesView = $("<div>").addClass("timepicker-minutes")
+                    minutesView = $("<div>")
+                        .addClass("timepicker-minutes")
                         .append($("<table>").addClass("table-condensed")),
-                    secondsView = $("<div>").addClass("timepicker-seconds")
+                    secondsView = $("<div>")
+                        .addClass("timepicker-seconds")
                         .append($("<table>").addClass("table-condensed")),
                     ret = [getTimePickerMainTemplate()];
 
@@ -285,16 +334,28 @@
             getToolbar = function() {
                 var row = [];
                 if (options.showTodayButton) {
-                    row.push($("<td>").append($("<a>").attr({ 'data-action': "today", 'title': options.tooltips.today }).append($("<span>").addClass(options.icons.today))));
+                    row.push($("<td>")
+                        .append($("<a>")
+                            .attr({ 'data-action': "today", 'title': options.tooltips.today })
+                            .append($("<span>").addClass(options.icons.today))));
                 }
                 if (!options.sideBySide && hasDate() && hasTime()) {
-                    row.push($("<td>").append($("<a>").attr({ 'data-action': "togglePicker", 'title': "Select Time" }).append($("<span>").addClass(options.icons.time))));
+                    row.push($("<td>")
+                        .append($("<a>")
+                            .attr({ 'data-action': "togglePicker", 'title': "Select Time" })
+                            .append($("<span>").addClass(options.icons.time))));
                 }
                 if (options.showClear) {
-                    row.push($("<td>").append($("<a>").attr({ 'data-action': "clear", 'title': options.tooltips.clear }).append($("<span>").addClass(options.icons.clear))));
+                    row.push($("<td>")
+                        .append($("<a>")
+                            .attr({ 'data-action': "clear", 'title': options.tooltips.clear })
+                            .append($("<span>").addClass(options.icons.clear))));
                 }
                 if (options.showClose) {
-                    row.push($("<td>").append($("<a>").attr({ 'data-action': "close", 'title': options.tooltips.close }).append($("<span>").addClass(options.icons.close))));
+                    row.push($("<td>")
+                        .append($("<a>")
+                            .attr({ 'data-action': "close", 'title': options.tooltips.close })
+                            .append($("<span>").addClass(options.icons.close))));
                 }
                 return $("<table>").addClass("table-condensed").append($("<tbody>").append($("<tr>").append(row)));
             },
@@ -304,7 +365,9 @@
                     dateView = $("<div>").addClass("datepicker").append(getDatePickerTemplate()),
                     timeView = $("<div>").addClass("timepicker").append(getTimePickerTemplate()),
                     content = $("<ul>").addClass("list-unstyled"),
-                    toolbar = $("<li>").addClass("picker-switch" + (options.collapse ? " accordion-toggle" : "")).append(getToolbar());
+                    toolbar = $("<li>")
+                        .addClass("picker-switch" + (options.collapse ? " accordion-toggle" : ""))
+                        .append(getToolbar());
 
                 if (options.inline) {
                     template.removeClass("dropdown-menu");
@@ -323,7 +386,8 @@
                         template.append(toolbar);
                     }
                     template.append(
-                        $("<div>").addClass("row")
+                        $("<div>")
+                        .addClass("row")
                         .append(dateView.addClass("col-md-6"))
                         .append(timeView.addClass("col-md-6"))
                     );
@@ -337,13 +401,17 @@
                     content.append(toolbar);
                 }
                 if (hasDate()) {
-                    content.append($("<li>").addClass((options.collapse && hasTime() ? "collapse in" : "")).append(dateView));
+                    content.append($("<li>")
+                        .addClass((options.collapse && hasTime() ? "collapse in" : ""))
+                        .append(dateView));
                 }
                 if (options.toolbarPlacement === "default") {
                     content.append(toolbar);
                 }
                 if (hasTime()) {
-                    content.append($("<li>").addClass((options.collapse && hasDate() ? "collapse" : "")).append(timeView));
+                    content.append($("<li>")
+                        .addClass((options.collapse && hasDate() ? "collapse" : ""))
+                        .append(timeView));
                 }
                 if (options.toolbarPlacement === "bottom") {
                     content.append(toolbar);
@@ -365,12 +433,13 @@
                     dataOptions = $.extend(true, dataOptions, eData.dateOptions);
                 }
 
-                $.each(options, function(key) {
-                    var attributeName = "date" + key.charAt(0).toUpperCase() + key.slice(1);
-                    if (eData[attributeName] !== undefined) {
-                        dataOptions[key] = eData[attributeName];
-                    }
-                });
+                $.each(options,
+                    function(key) {
+                        var attributeName = "date" + key.charAt(0).toUpperCase() + key.slice(1);
+                        if (eData[attributeName] !== undefined) {
+                            dataOptions[key] = eData[attributeName];
+                        }
+                    });
                 return dataOptions;
             },
 
@@ -427,9 +496,11 @@
 
                 // find the first parent element that has a relative css positioning
                 if (parent.css("position") !== "relative") {
-                    parent = parent.parents().filter(function() {
-                        return $(this).css("position") === "relative";
-                    }).first();
+                    parent = parent.parents()
+                        .filter(function() {
+                            return $(this).css("position") === "relative";
+                        })
+                        .first();
                 }
 
                 if (parent.length === 0) {
@@ -440,7 +511,9 @@
                     top: vertical === "top" ? "auto" : position.top + element.outerHeight(),
                     bottom: vertical === "top" ? position.top + element.outerHeight() : "auto",
                     left: horizontal === "left" ? (parent === element ? 0 : position.left) : "auto",
-                    right: horizontal === "left" ? "auto" : parent.outerWidth() - element.outerWidth() - (parent === element ? 0 : position.left)
+                    right: horizontal === "left"
+                        ? "auto"
+                        : parent.outerWidth() - element.outerWidth() - (parent === element ? 0 : position.left)
                 });
             },
 
@@ -469,7 +542,10 @@
                 if (dir) {
                     currentViewMode = Math.max(minViewModeNumber, Math.min(3, currentViewMode + dir));
                 }
-                widget.find(".datepicker > div").hide().filter(".datepicker-" + datePickerModes[currentViewMode].clsName).show();
+                widget.find(".datepicker > div")
+                    .hide()
+                    .filter(".datepicker-" + datePickerModes[currentViewMode].clsName)
+                    .show();
             },
 
             fillDow = function() {
@@ -519,23 +595,32 @@
                 if (options.maxDate && targetMoment.isAfter(options.maxDate, granularity)) {
                     return false;
                 }
-                if (options.daysOfWeekDisabled && granularity === "d" && options.daysOfWeekDisabled.indexOf(targetMoment.day()) !== -1) {
+                if (options.daysOfWeekDisabled &&
+                    granularity === "d" &&
+                    options.daysOfWeekDisabled.indexOf(targetMoment.day()) !== -1) {
                     return false;
                 }
-                if (options.disabledHours && (granularity === "h" || granularity === "m" || granularity === "s") && isInDisabledHours(targetMoment)) {
+                if (options.disabledHours &&
+                    (granularity === "h" || granularity === "m" || granularity === "s") &&
+                    isInDisabledHours(targetMoment)) {
                     return false;
                 }
-                if (options.enabledHours && (granularity === "h" || granularity === "m" || granularity === "s") && !isInEnabledHours(targetMoment)) {
+                if (options.enabledHours &&
+                    (granularity === "h" || granularity === "m" || granularity === "s") &&
+                    !isInEnabledHours(targetMoment)) {
                     return false;
                 }
-                if (options.disabledTimeIntervals && (granularity === "h" || granularity === "m" || granularity === "s")) {
+                if (options
+                    .disabledTimeIntervals &&
+                    (granularity === "h" || granularity === "m" || granularity === "s")) {
                     var found = false;
-                    $.each(options.disabledTimeIntervals, function() {
-                        if (targetMoment.isBetween(this[0], this[1])) {
-                            found = true;
-                            return false;
-                        }
-                    });
+                    $.each(options.disabledTimeIntervals,
+                        function() {
+                            if (targetMoment.isBetween(this[0], this[1])) {
+                                found = true;
+                                return false;
+                            }
+                        });
                     if (found) {
                         return false;
                     }
@@ -547,7 +632,10 @@
                 var spans = [],
                     monthsShort = viewDate.clone().startOf("y").startOf("d");
                 while (monthsShort.isSame(viewDate, "y")) {
-                    spans.push($("<span>").attr("data-action", "selectMonth").addClass("month").text(monthsShort.format("MMM")));
+                    spans.push($("<span>")
+                        .attr("data-action", "selectMonth")
+                        .addClass("month")
+                        .text(monthsShort.format("MMM")));
                     monthsShort.add(1, "M");
                 }
                 widget.find(".datepicker-months td").empty().append(spans);
@@ -610,7 +698,12 @@
                 }
 
                 while (!startYear.isAfter(endYear, "y")) {
-                    html += "<span data-action=\"selectYear\" class=\"year" + (startYear.isSame(date, "y") && !unset ? " active" : "") + (!isValid(startYear, "y") ? " disabled" : "") + "\">" + startYear.year() + "</span>";
+                    html += "<span data-action=\"selectYear\" class=\"year" +
+                        (startYear.isSame(date, "y") && !unset ? " active" : "") +
+                        (!isValid(startYear, "y") ? " disabled" : "") +
+                        "\">" +
+                        startYear.year() +
+                        "</span>";
                     startYear.add(1, "y");
                 }
 
@@ -629,22 +722,33 @@
 
                 decadesView.find(".disabled").removeClass("disabled");
 
-                if (startDecade.isSame(moment({ y: 1900 })) || (options.minDate && options.minDate.isAfter(startDecade, "y"))) {
+                if (startDecade.isSame(moment({ y: 1900 })) ||
+                    (options.minDate && options.minDate.isAfter(startDecade, "y"))) {
                     decadesViewHeader.eq(0).addClass("disabled");
                 }
 
                 decadesViewHeader.eq(1).text(startDecade.year() + "-" + endDecade.year());
 
-                if (startDecade.isSame(moment({ y: 2000 })) || (options.maxDate && options.maxDate.isBefore(endDecade, "y"))) {
+                if (startDecade.isSame(moment({ y: 2000 })) ||
+                    (options.maxDate && options.maxDate.isBefore(endDecade, "y"))) {
                     decadesViewHeader.eq(2).addClass("disabled");
                 }
 
                 while (!startDecade.isAfter(endDecade, "y")) {
-                    html += "<span data-action=\"selectDecade\" class=\"decade" + (startDecade.isSame(date, "y") ? " active" : "") +
-                    (!isValid(startDecade, "y") ? " disabled" : "") + "\" data-selection=\"" + (startDecade.year() + 6) + "\">" + (startDecade.year() + 1) + " - " + (startDecade.year() + 12) + "</span>";
+                    html += "<span data-action=\"selectDecade\" class=\"decade" +
+                        (startDecade.isSame(date, "y") ? " active" : "") +
+                        (!isValid(startDecade, "y") ? " disabled" : "") +
+                        "\" data-selection=\"" +
+                        (startDecade.year() + 6) +
+                        "\">" +
+                        (startDecade.year() + 1) +
+                        " - " +
+                        (startDecade.year() + 12) +
+                        "</span>";
                     startDecade.add(12, "y");
                 }
-                html += "<span></span><span></span><span></span>"; //push the dangling block over, at least this way it's even
+                html += "<span></span><span></span><span></span>";
+//push the dangling block over, at least this way it's even
 
                 decadesView.find("td").html(html);
             },
@@ -705,7 +809,13 @@
                     if (currentDate.day() === 0 || currentDate.day() === 6) {
                         clsName += " weekend";
                     }
-                    row.append("<td data-action=\"selectDay\" data-day=\"" + currentDate.format("L") + "\" class=\"day" + clsName + "\">" + currentDate.date() + "</td>");
+                    row.append("<td data-action=\"selectDay\" data-day=\"" +
+                        currentDate.format("L") +
+                        "\" class=\"day" +
+                        clsName +
+                        "\">" +
+                        currentDate.date() +
+                        "</td>");
                     currentDate.add(1, "d");
                 }
 
@@ -727,12 +837,17 @@
                 if (viewDate.hour() > 11 && !use24Hours) {
                     currentHour.hour(12);
                 }
-                while (currentHour.isSame(viewDate, "d") && (use24Hours || (viewDate.hour() < 12 && currentHour.hour() < 12) || viewDate.hour() > 11)) {
+                while (currentHour.isSame(viewDate, "d") &&
+                    (use24Hours || (viewDate.hour() < 12 && currentHour.hour() < 12) || viewDate.hour() > 11)) {
                     if (currentHour.hour() % 4 === 0) {
                         row = $("<tr>");
                         html.push(row);
                     }
-                    row.append("<td data-action=\"selectHour\" class=\"hour" + (!isValid(currentHour, "h") ? " disabled" : "") + "\">" + currentHour.format(use24Hours ? "HH" : "hh") + "</td>");
+                    row.append("<td data-action=\"selectHour\" class=\"hour" +
+                        (!isValid(currentHour, "h") ? " disabled" : "") +
+                        "\">" +
+                        currentHour.format(use24Hours ? "HH" : "hh") +
+                        "</td>");
                     currentHour.add(1, "h");
                 }
                 table.empty().append(html);
@@ -750,7 +865,11 @@
                         row = $("<tr>");
                         html.push(row);
                     }
-                    row.append("<td data-action=\"selectMinute\" class=\"minute" + (!isValid(currentMinute, "m") ? " disabled" : "") + "\">" + currentMinute.format("mm") + "</td>");
+                    row.append("<td data-action=\"selectMinute\" class=\"minute" +
+                        (!isValid(currentMinute, "m") ? " disabled" : "") +
+                        "\">" +
+                        currentMinute.format("mm") +
+                        "</td>");
                     currentMinute.add(step, "m");
                 }
                 table.empty().append(html);
@@ -767,7 +886,11 @@
                         row = $("<tr>");
                         html.push(row);
                     }
-                    row.append("<td data-action=\"selectSecond\" class=\"second" + (!isValid(currentSecond, "s") ? " disabled" : "") + "\">" + currentSecond.format("ss") + "</td>");
+                    row.append("<td data-action=\"selectSecond\" class=\"second" +
+                        (!isValid(currentSecond, "s") ? " disabled" : "") +
+                        "\">" +
+                        currentSecond.format("ss") +
+                        "</td>");
                     currentSecond.add(5, "s");
                 }
 
@@ -826,7 +949,12 @@
                 targetMoment = targetMoment.clone().locale(options.locale);
 
                 if (options.stepping !== 1) {
-                    targetMoment.minutes((Math.round(targetMoment.minutes() / options.stepping) * options.stepping) % 60).seconds(0);
+                    targetMoment.minutes((Math.round(targetMoment
+                                    .minutes() /
+                                    options.stepping) *
+                                options.stepping) %
+                            60)
+                        .seconds(0);
                 }
 
                 if (isValid(targetMoment)) {
@@ -859,14 +987,15 @@
                     return picker;
                 }
                 // Ignore event if in the middle of a picker transition
-                widget.find(".collapse").each(function() {
-                    var collapseData = $(this).data("collapse");
-                    if (collapseData && collapseData.transitioning) {
-                        transitioning = true;
-                        return false;
-                    }
-                    return true;
-                });
+                widget.find(".collapse")
+                    .each(function() {
+                        var collapseData = $(this).data("collapse");
+                        if (collapseData && collapseData.transitioning) {
+                            transitioning = true;
+                            return false;
+                        }
+                        return true;
+                    });
                 if (transitioning) {
                     return picker;
                 }
@@ -1150,7 +1279,9 @@
                 }
                 if (input.val() !== undefined && input.val().trim().length !== 0) {
                     setValue(parseInputDate(input.val().trim()));
-                } else if (options.useCurrent && unset && ((input.is("input") && input.val().trim().length === 0) || options.inline)) {
+                } else if (options.useCurrent &&
+                    unset &&
+                    ((input.is("input") && input.val().trim().length === 0) || options.inline)) {
                     currentMoment = moment();
                     if (typeof options.useCurrent === "string") {
                         currentMoment = useCurrentGranularity[options.useCurrent](currentMoment);
@@ -1234,7 +1365,8 @@
                 for (index in options.keyBinds) {
                     if (options.keyBinds.hasOwnProperty(index) && typeof (options.keyBinds[index]) === "function") {
                         keyBindKeys = index.split(" ");
-                        if (keyBindKeys.length === pressedKeys.length && keyMap[currentKey] === keyBindKeys[keyBindKeys.length - 1]) {
+                        if (keyBindKeys.length === pressedKeys.length &&
+                            keyMap[currentKey] === keyBindKeys[keyBindKeys.length - 1]) {
                             allModifiersPressed = true;
                             for (index2 = keyBindKeys.length - 2; index2 >= 0; index2--) {
                                 if (!(keyMap[keyBindKeys[index2]] in pressedModifiers)) {
@@ -1314,12 +1446,13 @@
                 // This way we can check their existence in O(1) time instead of looping through whole array.
                 // (for example: options.enabledDates['2014-02-27'] === true)
                 var givenDatesIndexed = {};
-                $.each(givenDatesArray, function() {
-                    var dDate = parseInputDate(this);
-                    if (dDate.isValid()) {
-                        givenDatesIndexed[dDate.format("YYYY-MM-DD")] = true;
-                    }
-                });
+                $.each(givenDatesArray,
+                    function() {
+                        var dDate = parseInputDate(this);
+                        if (dDate.isValid()) {
+                            givenDatesIndexed[dDate.format("YYYY-MM-DD")] = true;
+                        }
+                    });
                 return (Object.keys(givenDatesIndexed).length) ? givenDatesIndexed : false;
             },
 
@@ -1328,21 +1461,24 @@
                 // This way we can check their existence in O(1) time instead of looping through whole array.
                 // (for example: options.enabledHours['2014-02-27'] === true)
                 var givenHoursIndexed = {};
-                $.each(givenHoursArray, function() {
-                    givenHoursIndexed[this] = true;
-                });
+                $.each(givenHoursArray,
+                    function() {
+                        givenHoursIndexed[this] = true;
+                    });
                 return (Object.keys(givenHoursIndexed).length) ? givenHoursIndexed : false;
             },
 
             initFormatting = function() {
                 var format = options.format || "L LT";
 
-                actualFormat = format.replace(/(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g, function(formatInput) {
-                    var newinput = date.localeData().longDateFormat(formatInput) || formatInput;
-                    return newinput.replace(/(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g, function(formatInput2) { //temp fix for #740
-                        return date.localeData().longDateFormat(formatInput2) || formatInput2;
+                actualFormat = format.replace(/(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g,
+                    function(formatInput) {
+                        var newinput = date.localeData().longDateFormat(formatInput) || formatInput;
+                        return newinput.replace(/(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g,
+                            function(formatInput2) { //temp fix for #740
+                                return date.localeData().longDateFormat(formatInput2) || formatInput2;
+                            });
                     });
-                });
 
 
                 parseFormats = options.extraFormats ? options.extraFormats.slice() : [];
@@ -1350,7 +1486,8 @@
                     parseFormats.push(actualFormat);
                 }
 
-                use24Hours = (actualFormat.toLowerCase().indexOf("a") < 1 && actualFormat.replace(/\[.*?\]/g, "").indexOf("h") < 1);
+                use24Hours = (actualFormat.toLowerCase().indexOf("a") < 1 &&
+                    actualFormat.replace(/\[.*?\]/g, "").indexOf("h") < 1);
 
                 if (isEnabled("y")) {
                     minViewModeNumber = 2;
@@ -1435,13 +1572,14 @@
                 throw new TypeError("options() options parameter should be an object");
             }
             $.extend(true, options, newOptions);
-            $.each(options, function(key, value) {
-                if (picker[key] !== undefined) {
-                    picker[key](value);
-                } else {
-                    throw new TypeError("option " + key + " is not recognized!");
-                }
-            });
+            $.each(options,
+                function(key, value) {
+                    if (picker[key] !== undefined) {
+                        picker[key](value);
+                    } else {
+                        throw new TypeError("option " + key + " is not recognized!");
+                    }
+                });
             return picker;
         };
 
@@ -1465,7 +1603,10 @@
                 return date.clone();
             }
 
-            if (newDate !== null && typeof newDate !== "string" && !moment.isMoment(newDate) && !(newDate instanceof Date)) {
+            if (newDate !== null &&
+                typeof newDate !== "string" &&
+                !moment.isMoment(newDate) &&
+                !(newDate instanceof Date)) {
                 throw new TypeError("date() parameter must be one of [null, string, moment or Date]");
             }
 
@@ -1603,15 +1744,17 @@
                 throw new TypeError("daysOfWeekDisabled() expects an array parameter");
             }
             options.daysOfWeekDisabled = daysOfWeekDisabled.reduce(function(previousValue, currentValue) {
-                currentValue = parseInt(currentValue, 10);
-                if (currentValue > 6 || currentValue < 0 || isNaN(currentValue)) {
-                    return previousValue;
-                }
-                if (previousValue.indexOf(currentValue) === -1) {
-                    previousValue.push(currentValue);
-                }
-                return previousValue;
-            }, []).sort();
+                        currentValue = parseInt(currentValue, 10);
+                        if (currentValue > 6 || currentValue < 0 || isNaN(currentValue)) {
+                            return previousValue;
+                        }
+                        if (previousValue.indexOf(currentValue) === -1) {
+                            previousValue.push(currentValue);
+                        }
+                        return previousValue;
+                    },
+                    [])
+                .sort();
             if (options.useCurrent && !options.keepInvalid) {
                 var tries = 0;
                 while (!isValid(date, "d")) {
@@ -1650,7 +1793,8 @@
                 throw new TypeError("maxDate() Could not parse date parameter: " + maxDate);
             }
             if (options.minDate && parsedDate.isBefore(options.minDate)) {
-                throw new TypeError("maxDate() date parameter is before options.minDate: " + parsedDate.format(actualFormat));
+                throw new TypeError("maxDate() date parameter is before options.minDate: " +
+                    parsedDate.format(actualFormat));
             }
             options.maxDate = parsedDate;
             if (options.useCurrent && !options.keepInvalid && date.isAfter(maxDate)) {
@@ -1686,7 +1830,8 @@
                 throw new TypeError("minDate() Could not parse date parameter: " + minDate);
             }
             if (options.maxDate && parsedDate.isAfter(options.maxDate)) {
-                throw new TypeError("minDate() date parameter is after options.maxDate: " + parsedDate.format(actualFormat));
+                throw new TypeError("minDate() date parameter is after options.maxDate: " +
+                    parsedDate.format(actualFormat));
             }
             options.minDate = parsedDate;
             if (options.useCurrent && !options.keepInvalid && date.isBefore(minDate)) {
@@ -1738,7 +1883,8 @@
 
             options.defaultDate = parsedDate;
 
-            if (options.defaultDate && options.inline || (input.val().trim() === "" && input.attr("placeholder") === undefined)) {
+            if (options.defaultDate && options.inline ||
+                (input.val().trim() === "" && input.attr("placeholder") === undefined)) {
                 setValue(options.defaultDate);
             }
             return picker;
@@ -1904,7 +2050,9 @@
                 throw new TypeError("toolbarPlacement() expects a string parameter");
             }
             if (toolbarPlacements.indexOf(toolbarPlacement) === -1) {
-                throw new TypeError("toolbarPlacement() parameter must be one of (" + toolbarPlacements.join(", ") + ") value");
+                throw new TypeError("toolbarPlacement() parameter must be one of (" +
+                    toolbarPlacements.join(", ") +
+                    ") value");
             }
             options.toolbarPlacement = toolbarPlacement;
 
@@ -1929,7 +2077,9 @@
                 }
                 widgetPositioning.horizontal = widgetPositioning.horizontal.toLowerCase();
                 if (horizontalModes.indexOf(widgetPositioning.horizontal) === -1) {
-                    throw new TypeError("widgetPositioning() expects horizontal parameter to be one of (" + horizontalModes.join(", ") + ")");
+                    throw new TypeError("widgetPositioning() expects horizontal parameter to be one of (" +
+                        horizontalModes.join(", ") +
+                        ")");
                 }
                 options.widgetPositioning.horizontal = widgetPositioning.horizontal;
             }
@@ -1939,7 +2089,9 @@
                 }
                 widgetPositioning.vertical = widgetPositioning.vertical.toLowerCase();
                 if (verticalModes.indexOf(widgetPositioning.vertical) === -1) {
-                    throw new TypeError("widgetPositioning() expects vertical parameter to be one of (" + verticalModes.join(", ") + ")");
+                    throw new TypeError("widgetPositioning() expects vertical parameter to be one of (" +
+                        verticalModes.join(", ") +
+                        ")");
                 }
                 options.widgetPositioning.vertical = widgetPositioning.vertical;
             }
@@ -2156,7 +2308,9 @@
             ///     </param>
             /// </signature>
             if (arguments.length === 0) {
-                return (options.disabledTimeIntervals ? $.extend({}, options.disabledTimeIntervals) : options.disabledTimeIntervals);
+                return (options.disabledTimeIntervals
+                    ? $.extend({}, options.disabledTimeIntervals)
+                    : options.disabledTimeIntervals);
             }
 
             if (!disabledTimeIntervals) {

@@ -17,29 +17,23 @@ namespace Personal_Pages.Controllers
     {
         private readonly personal_pageEntities _db = new personal_pageEntities();
         // GET: Courses
-        public  ViewResult Index(string sortOrder, string searchString, string currentFilter, int? page)
+        public ViewResult Index(string sortOrder, string searchString, string currentFilter, int? page)
         {
             ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.NameDepSortParm = string.IsNullOrEmpty(sortOrder) ? "depname_desc" : "";
 
             if (searchString != null)
-            {
                 page = 1;
-            }
             else
-            {
                 searchString = currentFilter;
-            }
 
             ViewBag.CurrentFilter = searchString;
 
             var courses = _db.Courses.Include(c => c.Departament).Include(c => c.User);
 
             if (!string.IsNullOrEmpty(searchString))
-            {
                 courses = courses.Where(s => s.User.FirstName.Contains(searchString)
-                                       || s.User.LastName.Contains(searchString));
-            }
+                                             || s.User.LastName.Contains(searchString));
 
             switch (sortOrder)
             {
@@ -55,7 +49,7 @@ namespace Personal_Pages.Controllers
             }
 
             const int pageSize = 10;
-            var pageNumber = (page ?? 1);
+            var pageNumber = page ?? 1;
 
             return View(courses.ToPagedList(pageNumber, pageSize));
         }
@@ -64,14 +58,10 @@ namespace Personal_Pages.Controllers
         public async Task<ActionResult> Details(Guid? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             var course = await _db.Courses.FindAsync(id);
             if (course == null)
-            {
                 return HttpNotFound();
-            }
             return View(course);
         }
 
@@ -109,14 +99,10 @@ namespace Personal_Pages.Controllers
         public async Task<ActionResult> Edit(Guid? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             var course = await _db.Courses.FindAsync(id);
             if (course == null)
-            {
                 return HttpNotFound();
-            }
             ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name", course.DepartamentId);
             ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
                 "FirstName");
@@ -146,19 +132,16 @@ namespace Personal_Pages.Controllers
         public async Task<ActionResult> Delete(Guid? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             var course = await _db.Courses.FindAsync(id);
             if (course == null)
-            {
                 return HttpNotFound();
-            }
             return View(course);
         }
 
         // POST: Courses/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
@@ -171,9 +154,7 @@ namespace Personal_Pages.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 _db.Dispose();
-            }
             base.Dispose(disposing);
         }
 
@@ -184,11 +165,13 @@ namespace Personal_Pages.Controllers
             IQueryable<User> users = null;
 
             foreach (var plm in role)
-            {
-                 users = _db.Users.Where(x => x.RoleId == plm.RoleId && x.DepID==depId);
-            }
+                users = _db.Users.Where(x => (x.RoleId == plm.RoleId) && (x.DepID == depId));
 
-            return new JsonResult { Data = users.Select(x => new { x.UserId, x.FirstName }).ToList(), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new JsonResult
+            {
+                Data = users.Select(x => new {x.UserId, x.FirstName}).ToList(),
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
         }
     }
 }

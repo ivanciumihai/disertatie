@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -6,6 +7,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
+using personal_pages.ASPSMSX2;
 using personal_pages.Models;
 
 namespace personal_pages
@@ -23,17 +25,15 @@ namespace personal_pages
     {
         public Task SendAsync(IdentityMessage message)
         {
-
-             var soapSms = new ASPSMSX2.ASPSMSX2SoapClient("ASPSMSX2Soap");
+            var soapSms = new ASPSMSX2SoapClient("ASPSMSX2Soap");
             soapSms.SendSimpleTextSMS(
-              System.Configuration.ConfigurationManager.AppSettings["SMSAccountIdentification"],
-              System.Configuration.ConfigurationManager.AppSettings["SMSAccountPassword"],
-              message.Destination,
-              System.Configuration.ConfigurationManager.AppSettings["SMSAccountFrom"],
-              message.Body);
+                ConfigurationManager.AppSettings["SMSAccountIdentification"],
+                ConfigurationManager.AppSettings["SMSAccountPassword"],
+                message.Destination,
+                ConfigurationManager.AppSettings["SMSAccountFrom"],
+                message.Body);
             soapSms.Close();
             return Task.FromResult(0);
-
         }
     }
 
@@ -86,13 +86,11 @@ namespace personal_pages
             manager.SmsService = new SmsService();
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
-            {
                 manager.UserTokenProvider =
                     new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"))
                     {
-                        TokenLifespan=TimeSpan.FromHours(3)
+                        TokenLifespan = TimeSpan.FromHours(3)
                     };
-            }
             return manager;
         }
     }

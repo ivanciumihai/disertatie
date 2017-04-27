@@ -1,19 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
+using personal_pages.Helpers;
+
 namespace personal_pages
 {
-    using Helpers;
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
-    public partial class User
+    public class User
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.ClassBooks = new HashSet<ClassBook>();
-            this.Courses = new HashSet<Course>();
-            this.Requests = new HashSet<Request>();
-            this.Schedules = new HashSet<Schedule>();
+            ClassBooks = new HashSet<ClassBook>();
+            Courses = new HashSet<Course>();
+            Requests = new HashSet<Request>();
+            Schedules = new HashSet<Schedule>();
         }
 
         public string FullName => StringHelper.CutWhiteSpace(
@@ -28,7 +29,7 @@ namespace personal_pages
         public string LastName { get; set; }
 
         [DataType(DataType.Date)]
-        public System.DateTime Reg_date { get; set; }
+        public DateTime Reg_date { get; set; }
 
         public Guid? Ed_Form { get; set; }
 
@@ -40,9 +41,9 @@ namespace personal_pages
         [Range(0, 9999, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public int? GroupNumber { get; set; }
 
-        public System.Guid FacultyId { get; set; }
+        public Guid FacultyId { get; set; }
 
-        public System.Guid UniversityId { get; set; }
+        public Guid UniversityId { get; set; }
 
         public string RoleId { get; set; }
 
@@ -50,10 +51,10 @@ namespace personal_pages
 
         public virtual AspNetRole AspNetRole { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ClassBook> ClassBooks { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Course> Courses { get; set; }
 
         public virtual Departament Departament { get; set; }
@@ -62,10 +63,10 @@ namespace personal_pages
 
         public virtual Faculty Faculty { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Request> Requests { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Schedule> Schedules { get; set; }
 
         public virtual AspNetUser AspNetUser { get; set; }

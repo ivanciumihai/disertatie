@@ -3,7 +3,6 @@ namespace personal_pages
     using System;
     using System.ComponentModel.DataAnnotations;
 
-
     public partial class ClassBook
     {
         public Guid ClassBookId { get; set; }
@@ -23,7 +22,7 @@ namespace personal_pages
         public DateTime? Grade_Date { get; set; }
 
         public DateTime? Grade_modified { get; set; }
-    
+
         public virtual Course Course { get; set; }
         public virtual User User { get; set; }
     }

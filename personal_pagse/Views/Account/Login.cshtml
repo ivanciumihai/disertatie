@@ -1,5 +1,5 @@
 ﻿@using personal_pages.Models
-@model LoginViewModel
+@model personal_pages.Models.LoginViewModel
 @{
     ViewBag.Title = "Log in";
 }
@@ -41,10 +41,10 @@
                         <input type="submit" value="Log in" class="btn btn-default"/>
                     </div>
                 </div>
-               
-                    <p>
-                        @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                    </p>
+
+                <p>
+                    @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                </p>
             }
         </section>
     </div>

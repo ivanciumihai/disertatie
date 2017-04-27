@@ -1,9 +1,6 @@
 namespace personal_pages
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class sysdiagram
+    public class sysdiagram
     {
         public string name { get; set; }
 

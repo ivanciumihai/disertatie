@@ -46,14 +46,10 @@ namespace personal_pages.Controllers
         public async Task<ActionResult> Edit(Guid? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             var faculty = await _db.Faculties.FindAsync(id);
             if (faculty == null)
-            {
                 return HttpNotFound();
-            }
             ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name", faculty.UniversityId);
             return View(faculty);
         }
@@ -78,19 +74,16 @@ namespace personal_pages.Controllers
         public async Task<ActionResult> Delete(Guid? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             var faculty = await _db.Faculties.FindAsync(id);
             if (faculty == null)
-            {
                 return HttpNotFound();
-            }
             return View(faculty);
         }
 
         // POST: Faculties/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
@@ -103,9 +96,7 @@ namespace personal_pages.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 _db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }

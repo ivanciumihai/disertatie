@@ -12,7 +12,9 @@
     var moment,
         VERSION = "2.9.0",
         // the global-scope this is NOT the global object in Node.js
-        globalScope = (typeof global !== "undefined" && (typeof window === "undefined" || window === global.window)) ? global : this,
+        globalScope = (typeof global !== "undefined" && (typeof window === "undefined" || window === global.window))
+            ? global
+            : this,
         oldGlobalMoment,
         round = Math.round,
         hasOwnProperty = Object.prototype.hasOwnProperty,
@@ -41,10 +43,12 @@
 
         // from http://docs.closure-library.googlecode.com/git/closure_goog_date_date.js.source.html
         // somewhat more in line with 4.4.3.2 2004 spec, but allows decimal anywhere
-        isoDurationRegex = /^(-)?P(?:(?:([0-9,.]*)Y)?(?:([0-9,.]*)M)?(?:([0-9,.]*)D)?(?:T(?:([0-9,.]*)H)?(?:([0-9,.]*)M)?(?:([0-9,.]*)S)?)?|([0-9,.]*)W)$/,
+        isoDurationRegex =
+            /^(-)?P(?:(?:([0-9,.]*)Y)?(?:([0-9,.]*)M)?(?:([0-9,.]*)D)?(?:T(?:([0-9,.]*)H)?(?:([0-9,.]*)M)?(?:([0-9,.]*)S)?)?|([0-9,.]*)W)$/,
 
         // format tokens
-        formattingTokens = /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Q|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|mm?|ss?|S{1,4}|x|X|zz?|ZZ?|.)/g,
+        formattingTokens =
+            /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Q|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|mm?|ss?|S{1,4}|x|X|zz?|ZZ?|.)/g,
         localFormattingTokens = /(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g,
 
         // parsing token regexes
@@ -53,7 +57,8 @@
         parseTokenOneToFourDigits = /\d{1,4}/, // 0 - 9999
         parseTokenOneToSixDigits = /[+\-]?\d{1,6}/, // -999,999 - 999,999
         parseTokenDigits = /\d+/, // nonzero number of digits
-        parseTokenWord = /[0-9]*['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+|[\u0600-\u06FF\/]+(\s*?[\u0600-\u06FF]+){1,2}/i, // any word (or two) characters or numbers including two/three word month in arabic.
+        parseTokenWord =
+            /[0-9]*['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+|[\u0600-\u06FF\/]+(\s*?[\u0600-\u06FF]+){1,2}/i, // any word (or two) characters or numbers including two/three word month in arabic.
         parseTokenTimezone = /Z|[\+\-]\d\d:?\d\d/gi, // +00:00 -00:00 +0000 -0000 or Z
         parseTokenT = /T/i, // T (ISO separator)
         parseTokenOffsetMs = /[\+\-]?\d+/, // 1234567890123
@@ -69,7 +74,8 @@
 
         // iso 8601 regex
         // 0000-00-00 0000-W00 or 0000-W00-0 + T + 00 or 00:00 or 00:00:00 or 00:00:00.000 + +00:00 or +0000 or +00)
-        isoRegex = /^\s*(?:[+-]\d{6}|\d{4})-(?:(\d\d-\d\d)|(W\d\d$)|(W\d\d-\d)|(\d\d\d))((T| )(\d\d(:\d\d(:\d\d(\.\d+)?)?)?)?([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/,
+        isoRegex =
+            /^\s*(?:[+-]\d{6}|\d{4})-(?:(\d\d-\d\d)|(W\d\d$)|(W\d\d-\d)|(\d\d\d))((T| )(\d\d(:\d\d(:\d\d(\.\d+)?)?)?)?([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/,
 
         isoFormat = "YYYY-MM-DDTHH:mm:ssZ",
 
@@ -325,7 +331,8 @@
 
     function printMsg(msg) {
         if (moment.suppressDeprecationWarnings === false &&
-            typeof console !== "undefined" && console.warn) {
+            typeof console !== "undefined" &&
+            console.warn) {
             console.warn("Deprecation warning: " + msg);
         }
     }
@@ -333,12 +340,13 @@
     function deprecate(msg, fn) {
         var firstTime = true;
         return extend(function() {
-            if (firstTime) {
-                printMsg(msg);
-                firstTime = false;
-            }
-            return fn.apply(this, arguments);
-        }, fn);
+                if (firstTime) {
+                    printMsg(msg);
+                    firstTime = false;
+                }
+                return fn.apply(this, arguments);
+            },
+            fn);
     }
 
     function deprecateSimple(name, msg) {
@@ -569,8 +577,9 @@
     function positiveMomentsDifference(base, other) {
         var res = { milliseconds: 0, months: 0 };
 
-        res.months = other.month() - base.month() +
-        (other.year() - base.year()) * 12;
+        res.months = other.month() -
+            base.month() +
+            (other.year() - base.year()) * 12;
         if (base.clone().add(res.months, "M").isAfter(other)) {
             --res.months;
         }
@@ -600,7 +609,12 @@
             var dur, tmp;
             //invert the arguments, but complain about it
             if (period !== null && !isNaN(+period)) {
-                deprecateSimple(name, "moment()." + name + "(period, number) is deprecated. Please use moment()." + name + "(number, period).");
+                deprecateSimple(name,
+                    "moment()." +
+                    name +
+                    "(period, number) is deprecated. Please use moment()." +
+                    name +
+                    "(number, period).");
                 tmp = val;
                 val = period;
                 period = tmp;
@@ -651,7 +665,7 @@
             i;
         for (i = 0; i < len; i++) {
             if ((dontConvert && array1[i] !== array2[i]) ||
-            (!dontConvert && toInt(array1[i]) !== toInt(array2[i]))) {
+                (!dontConvert && toInt(array1[i]) !== toInt(array2[i]))) {
                 diffs++;
             }
         }
@@ -758,16 +772,22 @@
         var overflow;
         if (m._a && m._pf.overflow === -2) {
             overflow =
-                m._a[MONTH] < 0 || m._a[MONTH] > 11 ? MONTH :
-                m._a[DATE] < 1 || m._a[DATE] > daysInMonth(m._a[YEAR], m._a[MONTH]) ? DATE :
-                m._a[HOUR] < 0 || m._a[HOUR] > 24 ||
-                (m._a[HOUR] === 24 && (m._a[MINUTE] !== 0 ||
+                m._a[MONTH] < 0 || m._a[MONTH] > 11
+                ? MONTH
+                : m._a[DATE] < 1 || m._a[DATE] > daysInMonth(m._a[YEAR], m._a[MONTH])
+                ? DATE
+                : m._a[HOUR] < 0 ||
+                m._a[HOUR] > 24 ||
+                (m._a[HOUR] === 24 &&
+                (m._a[MINUTE] !== 0 ||
                     m._a[SECOND] !== 0 ||
-                    m._a[MILLISECOND] !== 0)) ? HOUR :
-                m._a[MINUTE] < 0 || m._a[MINUTE] > 59 ? MINUTE :
-                m._a[SECOND] < 0 || m._a[SECOND] > 59 ? SECOND :
-                m._a[MILLISECOND] < 0 || m._a[MILLISECOND] > 999 ? MILLISECOND :
-                -1;
+                    m._a[MILLISECOND] !== 0))
+                ? HOUR
+                : m._a[MINUTE] < 0 || m._a[MINUTE] > 59
+                ? MINUTE
+                : m._a[SECOND] < 0 || m._a[SECOND] > 59
+                ? SECOND
+                : m._a[MILLISECOND] < 0 || m._a[MILLISECOND] > 999 ? MILLISECOND : -1;
 
             if (m._pf._overflowDayOfYear && (overflow < YEAR || overflow > DATE)) {
                 overflow = DATE;
@@ -848,8 +868,7 @@
         var res, diff;
         if (model._isUTC) {
             res = model.clone();
-            diff = (moment.isMoment(input) || isDate(input) ?
-                +input : +moment(input)) - (+res);
+            diff = (moment.isMoment(input) || isDate(input) ? +input : +moment(input)) - (+res);
             // Use low-level api, because this fn is low-level api.
             res._d.setTime(+res._d + diff);
             moment.updateOffset(res, false);
@@ -864,7 +883,8 @@
     ************************************/
 
 
-    extend(Locale.prototype, {
+    extend(Locale.prototype,
+    {
         set: function(config) {
             var prop, i;
             for (i in config) {
@@ -947,7 +967,12 @@
                 // make the regex if we don't have it already
                 if (!this._weekdaysParse[i]) {
                     mom = moment([2000, 1]).day(i);
-                    regex = "^" + this.weekdays(mom, "") + "|^" + this.weekdaysShort(mom, "") + "|^" + this.weekdaysMin(mom, "");
+                    regex = "^" +
+                        this.weekdays(mom, "") +
+                        "|^" +
+                        this.weekdaysShort(mom, "") +
+                        "|^" +
+                        this.weekdaysMin(mom, "");
                     this._weekdaysParse[i] = new RegExp(regex.replace(".", ""), "i");
                 }
                 // test the regex
@@ -968,9 +993,10 @@
         longDateFormat: function(key) {
             var output = this._longDateFormat[key];
             if (!output && this._longDateFormat[key.toUpperCase()]) {
-                output = this._longDateFormat[key.toUpperCase()].replace(/MMMM|MM|DD|dddd/g, function(val) {
-                    return val.slice(1);
-                });
+                output = this._longDateFormat[key.toUpperCase()].replace(/MMMM|MM|DD|dddd/g,
+                    function(val) {
+                        return val.slice(1);
+                    });
                 this._longDateFormat[key] = output;
             }
             return output;
@@ -1023,9 +1049,9 @@
 
         relativeTime: function(number, withoutSuffix, string, isFuture) {
             var output = this._relativeTime[string];
-            return (typeof output === "function") ?
-                output(number, withoutSuffix, string, isFuture) :
-                output.replace(/%d/i, number);
+            return (typeof output === "function")
+                ? output(number, withoutSuffix, string, isFuture)
+                : output.replace(/%d/i, number);
         },
 
         pastFuture: function(diff, output) {
@@ -1278,7 +1304,8 @@
         case "Do":
             if (input != null) {
                 datePartArray[DATE] = toInt(parseInt(
-                    input.match(/\d{1,2}/)[0], 10));
+                    input.match(/\d{1,2}/)[0],
+                    10));
             }
             break;
         // DAY OF YEAR
@@ -1582,16 +1609,18 @@
             config._pf.bigHour = undefined;
         }
         // handle meridiem
-        config._a[HOUR] = meridiemFixWrap(config._locale, config._a[HOUR],
+        config._a[HOUR] = meridiemFixWrap(config._locale,
+            config._a[HOUR],
             config._meridiem);
         dateFromConfig(config);
         checkOverflow(config);
     }
 
     function unescapeFormat(s) {
-        return s.replace(/\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g, function(matched, p1, p2, p3, p4) {
-            return p1 || p2 || p3 || p4;
-        });
+        return s.replace(/\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g,
+            function(matched, p1, p2, p3, p4) {
+                return p1 || p2 || p3 || p4;
+            });
     }
 
     // Code from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
@@ -1704,9 +1733,10 @@
         } else if (typeof input === "string") {
             makeDateFromString(config);
         } else if (isArray(input)) {
-            config._a = map(input.slice(0), function(obj) {
-                return parseInt(obj, 10);
-            });
+            config._a = map(input.slice(0),
+                function(obj) {
+                    return parseInt(obj, 10);
+                });
             dateFromConfig(config);
         } else if (typeof(input) === "object") {
             dateFromObject(config);
@@ -1780,7 +1810,8 @@
                 days < relativeTimeThresholds.d && ["dd", days] ||
                 months === 1 && ["M"] ||
                 months < relativeTimeThresholds.M && ["MM", months] ||
-                years === 1 && ["y"] || ["yy", years];
+                years === 1 && ["y"] ||
+                ["yy", years];
 
         args[2] = withoutSuffix;
         args[3] = +posNegDuration > 0;
@@ -2028,7 +2059,7 @@
         } else if (duration == null) { // checks for null or undefined
             duration = {};
         } else if (typeof duration === "object" &&
-        ("from" in duration || "to" in duration)) {
+            ("from" in duration || "to" in duration)) {
             diffRes = momentsDifference(moment(duration.from), moment(duration.to));
 
             duration = {};
@@ -2154,7 +2185,7 @@
     // compare moment object
     moment.isMoment = function(obj) {
         return obj instanceof Moment ||
-        (obj != null && hasOwnProp(obj, "_isAMomentObject"));
+            (obj != null && hasOwnProp(obj, "_isAMomentObject"));
     };
 
     // for typechecking Duration objects
@@ -2196,7 +2227,8 @@
     ************************************/
 
 
-    extend(moment.fn = Moment.prototype, {
+    extend(moment.fn = Moment.prototype,
+    {
         clone: function() {
             return moment(this);
         },
@@ -2250,7 +2282,8 @@
 
         isDSTShifted: function() {
             if (this._a) {
-                return this.isValid() && compareArrays(this._a, (this._isUTC ? moment.utc(this._a) : moment(this._a)).toArray()) > 0;
+                return this.isValid() &&
+                    compareArrays(this._a, (this._isUTC ? moment.utc(this._a) : moment(this._a)).toArray()) > 0;
             }
 
             return false;
@@ -2308,11 +2341,21 @@
                 }
             } else {
                 diff = this - that;
-                output = units === "second" ? diff / 1e3 : // 1000
-                    units === "minute" ? diff / 6e4 : // 1000 * 60
-                    units === "hour" ? diff / 36e5 : // 1000 * 60 * 60
-                    units === "day" ? (diff - zoneDiff) / 864e5 : // 1000 * 60 * 60 * 24, negate dst
-                    units === "week" ? (diff - zoneDiff) / 6048e5 : // 1000 * 60 * 60 * 24 * 7, negate dst
+                output = units === "second"
+                    ? diff / 1e3
+                    : // 1000
+                    units === "minute"
+                    ? diff / 6e4
+                    : // 1000 * 60
+                    units === "hour"
+                    ? diff / 36e5
+                    : // 1000 * 60 * 60
+                    units === "day"
+                    ? (diff - zoneDiff) / 864e5
+                    : // 1000 * 60 * 60 * 24, negate dst
+                    units === "week"
+                    ? (diff - zoneDiff) / 6048e5
+                    : // 1000 * 60 * 60 * 24 * 7, negate dst
                     diff;
             }
             return asFloat ? output : absRound(output);
@@ -2333,12 +2376,13 @@
             var now = time || moment(),
                 sod = makeAs(now, this).startOf("day"),
                 diff = this.diff(sod, "days", true),
-                format = diff < -6 ? "sameElse" :
-                    diff < -1 ? "lastWeek" :
-                    diff < 0 ? "lastDay" :
-                    diff < 1 ? "sameDay" :
-                    diff < 2 ? "nextDay" :
-                    diff < 7 ? "nextWeek" : "sameElse";
+                format = diff < -6
+                    ? "sameElse"
+                    : diff < -1
+                    ? "lastWeek"
+                    : diff < 0
+                    ? "lastDay"
+                    : diff < 1 ? "sameDay" : diff < 2 ? "nextDay" : diff < 7 ? "nextWeek" : "sameElse";
             return this.format(this.localeData().calendar(format, this, moment(now)));
         },
 
@@ -2519,7 +2563,9 @@
                 if (offset !== input) {
                     if (!keepLocalTime || this._changeInProgress) {
                         addOrSubtractDurationFromMoment(this,
-                            moment.duration(input - offset, "m"), 1, false);
+                            moment.duration(input - offset, "m"),
+                            1,
+                            false);
                     } else if (!this._changeInProgress) {
                         this._changeInProgress = true;
                         moment.updateOffset(this, true);
@@ -2771,7 +2817,8 @@
         return years * 146097 / 400;
     }
 
-    extend(moment.duration.fn = Duration.prototype, {
+    extend(moment.duration.fn = Duration.prototype,
+    {
         _bubble: function() {
             var milliseconds = this._milliseconds,
                 days = this._days,
@@ -3003,14 +3050,14 @@
 
 
     // Set default locale, other locale will inherit from English.
-    moment.locale("en", {
+    moment.locale("en",
+    {
         ordinalParse: /\d{1,2}(th|st|nd|rd)/,
         ordinal: function(number) {
             var b = number % 10,
-                output = (toInt(number % 100 / 10) === 1) ? "th" :
-                (b === 1) ? "st" :
-                (b === 2) ? "nd" :
-                (b === 3) ? "rd" : "th";
+                output = (toInt(number % 100 / 10) === 1)
+                    ? "th"
+                    : (b === 1) ? "st" : (b === 2) ? "nd" : (b === 3) ? "rd" : "th";
             return number + output;
         }
     });

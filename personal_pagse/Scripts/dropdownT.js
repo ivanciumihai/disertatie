@@ -9,9 +9,10 @@
     else
         select.find("option:gt(0)").remove();
 
-    $.each(data, function () {
-        select.append($("<option></option>").text(this.Name).val(this.FacultyId));
-    });
+    $.each(data,
+        function() {
+            select.append($("<option></option>").text(this.Name).val(this.FacultyId));
+        });
     if (selID)
         select.find("option[value='" + selID + "']").prop("selected", true);
     else if (typeof defaultValue != "undefined") {
@@ -24,42 +25,43 @@
     select.trigger("chosen:updated");
 }
 
-$(document).ready(function () {
-    $("#UniversityId")
-        .change(
-            function () {
-                var id = $("#UniversityId").val();
-                var url = "/UsersProfile/GetFaculty?universityId=" + id;
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    data: { universityId: id },
-                    success: function (result) {
-                        console.log(result); // show response from the script.                 
-                        fillSelect($("#UniversityId").closest("form").find("#FacultyId"), result, false);
+$(document)
+    .ready(function() {
+        $("#UniversityId")
+            .change(
+                function() {
+                    var id = $("#UniversityId").val();
+                    var url = "/UsersProfile/GetFaculty?universityId=" + id;
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        data: { universityId: id },
+                        success: function(result) {
+                            console.log(result); // show response from the script.                 
+                            fillSelect($("#UniversityId").closest("form").find("#FacultyId"), result, false);
 
-                    },
-                    error: function (xhr, status, error) {
-                        var err = eval("(" + xhr.responseText + ")");
-                        console.log(error);
-                    }
+                        },
+                        error: function(xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            console.log(error);
+                        }
+                    });
                 });
-            });
-});
+    });
 
 
-window.onload = function () {
+window.onload = function() {
     var id = $("#UniversityId").val();
     var url = "/UsersProfile/GetFaculty?universityId=" + id;
     $.ajax({
         type: "GET",
         url: url,
         data: { universityId: id },
-        success: function (result) {
+        success: function(result) {
             console.log(result); // show response from the script.                 
             fillSelect($("#UniversityId").closest("form").find("#FacultyId"), result, false);
         },
-        error: function (xhr, status, error) {
+        error: function(xhr, status, error) {
             var err = eval("(" + xhr.responseText + ")");
             console.log(error);
         }
@@ -67,15 +69,14 @@ window.onload = function () {
 };
 
 
-
-window.onload = function () {
+window.onload = function() {
     var id = $("#UserId").val();
     var url = "/UsersProfile/GetUserNameRole?id=" + id;
     $.ajax({
         type: "GET",
         url: url,
         data: { id: id },
-        success: function (result) {
+        success: function(result) {
             console.log(result); // show response from the script.                 
             if (result === true) {
                 $("#RoleId").hide();
@@ -85,7 +86,7 @@ window.onload = function () {
                 $("#RoleHide").show();
             }
         },
-        error: function (xhr, status, error) {
+        error: function(xhr, status, error) {
             var err = eval("(" + xhr.responseText + ")");
             console.log(error);
         }
@@ -93,31 +94,32 @@ window.onload = function () {
 };
 
 
-$(document).ready(function () {
-    $("#UserId")
-        .change(
-            function () {
-                var id = $("#UserId").val();
-                var url = "/UsersProfile/GetUserNameRole?id=" + id;
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    data: { id: id },
-                    success: function (result) {
-                        console.log(result); // show response from the script.
-                        if (result === true) {
-                            $("#RoleId").hide();
-                            $("#RoleHide").hide();
-                        } else {
-                            $("#RoleId").show();
-                            $("#RoleHide").show();
-                        }
+$(document)
+    .ready(function() {
+        $("#UserId")
+            .change(
+                function() {
+                    var id = $("#UserId").val();
+                    var url = "/UsersProfile/GetUserNameRole?id=" + id;
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        data: { id: id },
+                        success: function(result) {
+                            console.log(result); // show response from the script.
+                            if (result === true) {
+                                $("#RoleId").hide();
+                                $("#RoleHide").hide();
+                            } else {
+                                $("#RoleId").show();
+                                $("#RoleHide").show();
+                            }
 
-                    },
-                    error: function (xhr, status, error) {
-                        var err = eval("(" + xhr.responseText + ")");
-                        console.log(error);
-                    }
+                        },
+                        error: function(xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            console.log(error);
+                        }
+                    });
                 });
-            });
-});
+    });

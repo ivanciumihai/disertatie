@@ -1,87 +1,103 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body class="bg-warning">
 
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/js")
-    @RenderSection("scripts", false)
-  
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/js")
+@RenderSection("scripts", false)
+
 
 <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
 
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                User Administration
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="">@Html.ActionLink("Account", "Register", "Account")</a></li>
-                                <li><a href="">@Html.ActionLink("User Profile", "Index", "UsersProfile")</a></li>
-                                <li><a href="">@Html.ActionLink("Roles", "Index", "Roles")</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                University Administration
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="">@Html.ActionLink("Universities", "Index", "Universities")</a></li>
-                                <li><a href="">@Html.ActionLink("Faculties", "Index", "Faculties")</a></li>
-                                <li><a href="">@Html.ActionLink("Educational Form", "Index", "Education_Form")</a></li>
-                                <li><a href="">@Html.ActionLink("Departaments", "Index", "Departaments")</a></li>
-                                <li><a href="">@Html.ActionLink("Courses", "Index", "Courses")</a></li>
-                            </ul>
-                        </li>
-                        <li>@Html.ActionLink("Class Book", "Index", "ClassBooks")</li>
-                        <li>@Html.ActionLink("Schedules", "Index", "Schedules")</li>
-                    }
-                    else if (User.IsInRole("Teacher"))
-                    {
-                        <li>@Html.ActionLink("User Profile", "Index", "UsersProfile")</li>
-                        <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
-                        <li>@Html.ActionLink("Class Book", "Index", "ClassBooks")</li>
-                        <li>@Html.ActionLink("Schedules", "Index", "Schedules")</li>
-                    }
-                    else if (User.IsInRole("Secretary"))
-                    {
-                        <li>@Html.ActionLink("Educational Form", "Index", "Education_Form")</li>
-                        <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
-                        <li>@Html.ActionLink("Class Book", "Index", "ClassBooks")</li>
-                        <li>@Html.ActionLink("Schedules", "Index", "Schedules")</li>
-                    }
-                    else if (User.IsInRole("Student"))
-                    {
-                    }
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            User Administration
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="">@Html.ActionLink("Account", "Register", "Account")</a>
+                            </li>
+                            <li>
+                                <a href="">@Html.ActionLink("User Profile", "Index", "UsersProfile")</a>
+                            </li>
+                            <li>
+                                <a href="">@Html.ActionLink("Roles", "Index", "Roles")</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            University Administration
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="">@Html.ActionLink("Universities", "Index", "Universities")</a>
+                            </li>
+                            <li>
+                                <a href="">@Html.ActionLink("Faculties", "Index", "Faculties")</a>
+                            </li>
+                            <li>
+                                <a href="">@Html.ActionLink("Educational Form", "Index", "Education_Form")</a>
+                            </li>
+                            <li>
+                                <a href="">@Html.ActionLink("Departaments", "Index", "Departaments")</a>
+                            </li>
+                            <li>
+                                <a href="">@Html.ActionLink("Courses", "Index", "Courses")</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>@Html.ActionLink("Class Book", "Index", "ClassBooks")</li>
+                    <li>@Html.ActionLink("Schedules", "Index", "Schedules")</li>
+                }
+                else if (User.IsInRole("Teacher"))
+                {
+                    <li>@Html.ActionLink("User Profile", "Index", "UsersProfile")</li>
+                    <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
+                    <li>@Html.ActionLink("Class Book", "Index", "ClassBooks")</li>
+                    <li>@Html.ActionLink("Schedules", "Index", "Schedules")</li>
+                }
+                else if (User.IsInRole("Secretary"))
+                {
+                    <li>@Html.ActionLink("Educational Form", "Index", "Education_Form")</li>
+                    <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
+                    <li>@Html.ActionLink("Class Book", "Index", "ClassBooks")</li>
+                    <li>@Html.ActionLink("Schedules", "Index", "Schedules")</li>
+                }
+                else if (User.IsInRole("Student"))
+                {
+                }
 
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
+            </ul>
+            @Html.Partial("_LoginPartial")
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now - Personal Page</p>
-        </footer>
-    </div>
+</div>
+<div class="container body-content">
+    @RenderBody()
+    <hr/>
+    <footer>
+        <p>&copy; @DateTime.Now - Personal Page</p>
+    </footer>
+</div>
 </body>
 </html>

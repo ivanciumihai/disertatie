@@ -7,7 +7,7 @@
 
 <div>
     <h4>User</h4>
-    <hr />
+    <hr/>
 </div>
 <table>
     <tr>
@@ -20,7 +20,7 @@
             @if (User.IsInRole("Admin") || User.IsInRole("Secretary"))
             {
                 <p>
-                    @Html.ActionLink("Edit", "Edit", new { id = Model.UserId }) |
+                    @Html.ActionLink("Edit", "Edit", new {id = Model.UserId}) |
                     @Html.ActionLink("Back to List", "Index")
                 </p>
             }
