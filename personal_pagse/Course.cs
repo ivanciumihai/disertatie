@@ -27,6 +27,9 @@ namespace personal_pages
 
         public string TeacherId { get; set; }
 
+        [Required(ErrorMessage = "Exam date cannot be empty")]
+        public DateTime? ExamDate { get; set; }
+
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ClassBook> ClassBooks { get; set; }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Elmah;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using personal_pages;
@@ -132,10 +133,17 @@ namespace Personal_Pages.Controllers
         public async Task<ActionResult> Delete(Guid? id)
         {
             if (id == null)
+            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             var course = await _db.Courses.FindAsync(id);
+
             if (course == null)
+            {
                 return HttpNotFound();
+            }
+
             return View(course);
         }
 
@@ -145,9 +153,19 @@ namespace Personal_Pages.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            var course = await _db.Courses.FindAsync(id);
-            _db.Courses.Remove(course);
-            await _db.SaveChangesAsync();
+            try
+            {
+                var course = await _db.Courses.FindAsync(id);
+                _db.Courses.Remove(course);
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Process is used");
+                var course = await _db.Courses.FindAsync(id);
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                return View(course);
+            }
             return RedirectToAction("Index");
         }
 
@@ -166,10 +184,21 @@ namespace Personal_Pages.Controllers
 
             foreach (var plm in role)
                 users = _db.Users.Where(x => (x.RoleId == plm.RoleId) && (x.DepID == depId));
+            var usersName = users.Select(x => new {x.UserId, x.FirstName}).ToList();
+            var fullname = string.Empty;
+            foreach (var i in usersName)
+            {
+                var plm = _db.Users.Where(x => x.UserId == i.UserId);
+                foreach (var p in plm)
+                {
+                   fullname = p.FullName;
+                }
+
+            }
 
             return new JsonResult
             {
-                Data = users.Select(x => new {x.UserId, x.FirstName}).ToList(),
+                Data = users.Select(x => new {x.UserId, fullname }).ToList(),
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
