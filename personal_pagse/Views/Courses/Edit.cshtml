@@ -31,6 +31,23 @@
                 @Html.ValidationMessageFor(model => model.Credits, "", new {@class = "text-danger"})
             </div>
         </div>
+        
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.Label("University", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("UniversityId", null, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Faculty", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("FacultyId", null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.DepartamentId, "DepartamentId", new {@class = "control-label col-md-2"})

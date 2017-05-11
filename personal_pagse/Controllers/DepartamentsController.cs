@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -20,6 +21,9 @@ namespace personal_pages.Controllers
         // GET: Departaments/Create
         public ActionResult Create()
         {
+            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+
             return View();
         }
 
@@ -28,13 +32,19 @@ namespace personal_pages.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Departament departament)
         {
-            if (!ModelState.IsValid) return View(departament);
-            departament.DepId = Guid.NewGuid();
-            departament.Name = StringHelper.CutWhiteSpace(departament.Name.ToTitleCase(TitleCase.All));
+            if (ModelState.IsValid) 
+            {
+                departament.DepId = Guid.NewGuid();
+                departament.Name = StringHelper.CutWhiteSpace(departament.Name.ToTitleCase(TitleCase.All));
 
-            _db.Departaments.Add(departament);
-            await _db.SaveChangesAsync();
-            return RedirectToAction("Index");
+                _db.Departaments.Add(departament);
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            return View(departament);
         }
 
         // GET: Departaments/Edit/5
@@ -45,6 +55,8 @@ namespace personal_pages.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
             var departament = await _db.Departaments.FindAsync(id);
 
             if (departament == null)
@@ -59,12 +71,23 @@ namespace personal_pages.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(Departament departament)
         {
-            if (!ModelState.IsValid) return View(departament);
-            _db.Entry(departament).State = EntityState.Modified;
-            departament.Name = StringHelper.CutWhiteSpace(departament.Name.ToTitleCase(TitleCase.All));
+            if (!string.IsNullOrEmpty(departament.Name))
+            {
+                _db.Entry(departament).State = EntityState.Modified;
+                departament.Name = StringHelper.CutWhiteSpace(departament.Name.ToTitleCase(TitleCase.All));
+                var departaments = await _db.Departaments.FindAsync(departament.DepId);
 
-            await _db.SaveChangesAsync();
-            return RedirectToAction("Index");
+                if (departament.StartDate == null)
+                {
+                    departament.StartDate = departaments.StartDate;
+                }
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            return View(departament);
         }
 
         // GET: Departaments/Delete/5
@@ -100,6 +123,12 @@ namespace personal_pages.Controllers
                 _db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public JsonResult GetFaculty(Guid universityId)
+        {
+            var faculties = _db.Faculties.Where(a => a.UniversityId.Equals(universityId)).DefaultIfEmpty();
+            return new JsonResult { Data = faculties.Select(x => new { x.Name, x.FacultyId }).ToList(), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
     }
 }

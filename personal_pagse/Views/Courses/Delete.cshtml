@@ -32,7 +32,19 @@
         <dd>
             @Html.DisplayFor(model => model.Credits)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Departament.Faculty.University)
+        </dt>
 
+        <dd>
+            @Html.DisplayFor(model => model.Departament.Faculty.University.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Departament.Faculty)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Departament.Faculty.Name)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Departament.Name)
         </dt>

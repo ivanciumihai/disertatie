@@ -604,8 +604,12 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\department.js" />
     <Content Include="Scripts\datepickerready.js" />
     <Content Include="Scripts\courses.js" />
+    <Content Include="Scripts\dropdownT - Copy.min - Copy.js">
+      <DependentUpon>department.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\dropdownT - Copy.min.js">
       <DependentUpon>courses.js</DependentUpon>
     </Content>

@@ -25,6 +25,34 @@
     select.trigger("chosen:updated");
 }
 
+
+function fillSelectDepartment(select, data, hasEmpty, defaultValue) {
+    if (!defaultValue)
+        defaultValue = select.data("sel-item");
+
+    var selID = select.find("option:selected").val();
+
+    if ((typeof (hasEmpty) != "undefined" && !hasEmpty))
+        select.find("option").remove();
+    else
+        select.find("option:gt(0)").remove();
+
+    $.each(data,
+        function () {
+            select.append($("<option></option>").text(this.Name).val(this.FacultyId));
+        });
+    if (selID)
+        select.find("option[value='" + selID + "']").prop("selected", true);
+    else if (typeof defaultValue != "undefined") {
+        if (select.find("option[value='" + defaultValue + "']").length > 0)
+            select.find("option[value='" + defaultValue + "']").prop("selected", true);
+        else
+            select.find("option:contains('" + defaultValue + "')").prop("selected", true);
+    }
+
+    select.trigger("chosen:updated");
+}
+
 $(document)
     .ready(function () {
         $("#DepartamentId")
@@ -107,3 +135,136 @@ $(function () {
     });
 });
 
+$(document)
+    .ready(function () {
+        $("#FacultyId")
+            .change(
+                function () {
+                    var id = $("#FacultyId").val();
+                    var url = "/Courses/GetDepartment?facultyId=" + id;
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        data: { facultyId: id },
+                        success: function (result) {
+                            console.log(result); // show response from the script.                 
+                            fillSelectDepartment($("#FacultyId").closest("form").find("#DepartamentId"), result, false);
+                            if ($("#DepartamentId").val() === null || $("#DepartamentId").val() === 0) {
+                                $("#DepartamentId").hide();
+                                $("#DepartamentHide").hide();
+
+                            } else {
+                                $("#DepartamentId").show();
+                                $("#DepartamentHide").show();
+
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            $("#DepartamentId").hide();
+                            $("#DepartamentHide").hide();
+                            var err = eval("(" + xhr.responseText + ")");
+                            console.log(error);
+                        }
+                    });
+                });
+    });
+
+
+window.onload = function () {
+    var id = $("#FacultyId").val();
+    var url = "/Courses/GetDepartment?facultyId=" + id;
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: { facultyId: id },
+        success: function (result) {
+            console.log(result); // show response from the script.                 
+            fillSelectDepartment($("#FacultyId").closest("form").find("#DepartamentId"), result, false);
+            if ($("#DepartamentId").val() === null || $("#DepartamentId").val() === 0) {
+                $("#DepartamentId").hide();
+                $("#DepartamentHide").hide();
+            } else {
+                $("#DepartamentId").show();
+                $("#DepartamentHide").show();
+            }
+        },
+        error: function (xhr, status, error) {
+            $("#DepartamentId").hide();
+            $("#DepartamentHide").hide();
+            var err = eval("(" + xhr.responseText + ")");
+            console.log(error);
+
+        }
+    });
+};
+/////
+
+function fillSelect(select, data, hasEmpty, defaultValue) {
+    if (!defaultValue)
+        defaultValue = select.data("sel-item");
+
+    var selID = select.find("option:selected").val();
+
+    if ((typeof (hasEmpty) != "undefined" && !hasEmpty))
+        select.find("option").remove();
+    else
+        select.find("option:gt(0)").remove();
+
+    $.each(data,
+        function () {
+            select.append($("<option></option>").text(this.Name).val(this.FacultyId));
+        });
+    if (selID)
+        select.find("option[value='" + selID + "']").prop("selected", true);
+    else if (typeof defaultValue != "undefined") {
+        if (select.find("option[value='" + defaultValue + "']").length > 0)
+            select.find("option[value='" + defaultValue + "']").prop("selected", true);
+        else
+            select.find("option:contains('" + defaultValue + "')").prop("selected", true);
+    }
+
+    select.trigger("chosen:updated");
+}
+
+$(document)
+    .ready(function () {
+        $("#UniversityId")
+            .change(
+                function () {
+                    var id = $("#UniversityId").val();
+                    var url = "/Departaments/GetFaculty?universityId=" + id;
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        data: { universityId: id },
+                        success: function (result) {
+                            console.log(result); // show response from the script.                 
+                            fillSelect($("#UniversityId").closest("form").find("#FacultyId"), result, false);
+
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            console.log(error);
+                        }
+                    });
+                });
+    });
+
+
+$(document).ready(function () {
+    var id = $("#UniversityId").val();
+    var url = "/Departaments/GetFaculty?universityId=" + id;
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: { universityId: id },
+        success: function (result) {
+            console.log(result); // show response from the script.                 
+            fillSelect($("#UniversityId").closest("form").find("#FacultyId"), result, false);
+        },
+        error: function (xhr, status, error) {
+            var err = eval("(" + xhr.responseText + ")");
+            console.log(error);
+        }
+    });
+});

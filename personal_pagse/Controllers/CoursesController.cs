@@ -72,6 +72,8 @@ namespace Personal_Pages.Controllers
             ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name");
             ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
                 "FullName");
+            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
             return View();
         }
 
@@ -93,6 +95,8 @@ namespace Personal_Pages.Controllers
             ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name", course.DepartamentId);
             ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
                 "FirstName");
+            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
             return View(course);
         }
 
@@ -107,6 +111,8 @@ namespace Personal_Pages.Controllers
             ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name", course.DepartamentId);
             ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
                 "FirstName");
+            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
             return View(course);
         }
 
@@ -126,6 +132,8 @@ namespace Personal_Pages.Controllers
             ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name", course.DepartamentId);
             ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
                 "FirstName");
+            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
             return View(course);
         }
 
@@ -201,6 +209,27 @@ namespace Personal_Pages.Controllers
                 Data = users.Select(x => new {x.UserId, fullname }).ToList(),
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
+        }
+
+        public JsonResult GetDepartment(Guid facultyId)
+        {
+            var deparments = _db.Departaments.Where(a => a.FacultyId.Equals(facultyId)).DefaultIfEmpty();
+            try
+            {
+                return new JsonResult
+                {
+                    Data = deparments.Select(x => new {x.Name, x.FacultyId}).ToList(),
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            catch (Exception ex) 
+            {
+                return new JsonResult
+                {
+                    Data =null,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
         }
     }
 }
