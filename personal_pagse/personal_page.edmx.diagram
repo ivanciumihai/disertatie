@@ -39,6 +39,7 @@
         <AssociationConnector Association="personal_pageModel.FK_Users_Faculty" />
         <AssociationConnector Association="personal_pageModel.FK_Requests_User" />
         <AssociationConnector Association="personal_pageModel.FK_Schedule_Users" />
+        <AssociationConnector Association="personal_pageModel.FK_Departament_University" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

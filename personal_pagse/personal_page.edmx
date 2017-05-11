@@ -97,6 +97,7 @@
             <PropertyRef Name="DepId" />
           </Key>
           <Property Name="DepId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UniversityId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="StartDate" Type="datetime" />
         </EntityType>
@@ -299,6 +300,18 @@
             </Principal>
             <Dependent Role="AspNetUserRoles">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Departament_University">
+          <End Role="University" Type="Self.University" Multiplicity="1" />
+          <End Role="Departament" Type="Self.Departament" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="University">
+              <PropertyRef Name="UniversityId" />
+            </Principal>
+            <Dependent Role="Departament">
+              <PropertyRef Name="UniversityId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -526,6 +539,10 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
+          <AssociationSet Name="FK_Departament_University" Association="Self.FK_Departament_University">
+            <End Role="University" EntitySet="University" />
+            <End Role="Departament" EntitySet="Departament" />
+          </AssociationSet>
           <AssociationSet Name="FK_Faculty_University" Association="Self.FK_Faculty_University">
             <End Role="University" EntitySet="University" />
             <End Role="Faculty" EntitySet="Faculty" />
@@ -697,6 +714,8 @@
                               ToRole="Course" />
           <NavigationProperty Name="Users" Relationship="personal_pageModel.FK_Users_Departament"
                               FromRole="Departament" ToRole="User" />
+          <Property Name="UniversityId" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="University" Relationship="personal_pageModel.FK_Departament_University" FromRole="Departament" ToRole="University" />
         </EntityType>
         <EntityType Name="Education_Form">
           <Key>
@@ -795,6 +814,7 @@
                               ToRole="Faculty" />
           <NavigationProperty Name="Notifications" Relationship="Self.FK_Notifications_University"
                               FromRole="University" ToRole="Notifications" />
+          <NavigationProperty Name="Departaments" Relationship="personal_pageModel.FK_Departament_University" FromRole="University" ToRole="Departament" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
@@ -1029,6 +1049,10 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Schedule" EntitySet="Schedules" />
           </AssociationSet>
+          <AssociationSet Name="FK_Departament_University" Association="personal_pageModel.FK_Departament_University">
+            <End Role="University" EntitySet="Universities" />
+            <End Role="Departament" EntitySet="Departaments" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -1184,6 +1208,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Departament_University">
+          <End Type="personal_pageModel.University" Role="University" Multiplicity="1" />
+          <End Type="personal_pageModel.Departament" Role="Departament" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="University">
+              <PropertyRef Name="UniversityId" />
+            </Principal>
+            <Dependent Role="Departament">
+              <PropertyRef Name="UniversityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1276,6 +1312,7 @@
           <EntitySetMapping Name="Departaments">
             <EntityTypeMapping TypeName="personal_pageModel.Departament">
               <MappingFragment StoreEntitySet="Departament">
+                <ScalarProperty Name="UniversityId" ColumnName="UniversityId" />
                 <ScalarProperty Name="DepId" ColumnName="DepId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
