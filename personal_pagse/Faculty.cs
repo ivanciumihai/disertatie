@@ -1,28 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-
 namespace personal_pages
 {
-    public class Faculty
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
+
+    public partial class Faculty
     {
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Faculty()
         {
-            Users = new HashSet<User>();
+            this.Departaments = new HashSet<Departament>();
+            this.Users = new HashSet<User>();
         }
-
-        public Guid FacultyId { get; set; }
+    
+        public System.Guid FacultyId { get; set; }
 
         [Required(ErrorMessage = "name cannot be empty")]
         public string Name { get; set; }
 
-        public Guid UniversityId { get; set; }
+        public System.Guid UniversityId { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Departament> Departaments { get; set; }
 
         public virtual University University { get; set; }
 
-        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User> Users { get; set; }
     }
 }

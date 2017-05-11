@@ -97,7 +97,7 @@
             <PropertyRef Name="DepId" />
           </Key>
           <Property Name="DepId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="UniversityId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FacultyId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="StartDate" Type="datetime" />
         </EntityType>
@@ -303,15 +303,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Departament_University">
-          <End Role="University" Type="Self.University" Multiplicity="1" />
+        <Association Name="FK_Departament_Faculty">
+          <End Role="Faculty" Type="Self.Faculty" Multiplicity="1" />
           <End Role="Departament" Type="Self.Departament" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="University">
-              <PropertyRef Name="UniversityId" />
+            <Principal Role="Faculty">
+              <PropertyRef Name="FacultyId" />
             </Principal>
             <Dependent Role="Departament">
-              <PropertyRef Name="UniversityId" />
+              <PropertyRef Name="FacultyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -539,8 +539,8 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
-          <AssociationSet Name="FK_Departament_University" Association="Self.FK_Departament_University">
-            <End Role="University" EntitySet="University" />
+          <AssociationSet Name="FK_Departament_Faculty" Association="Self.FK_Departament_Faculty">
+            <End Role="Faculty" EntitySet="Faculty" />
             <End Role="Departament" EntitySet="Departament" />
           </AssociationSet>
           <AssociationSet Name="FK_Faculty_University" Association="Self.FK_Faculty_University">
@@ -591,374 +591,7 @@
               xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation"
               xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation"
               xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="C__MigrationHistory">
-          <Key>
-            <PropertyRef Name="MigrationId" />
-            <PropertyRef Name="ContextKey" />
-          </Key>
-          <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true"
-                    Nullable="false" />
-          <Property Name="ContextKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
-          <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true"
-                    Nullable="false" />
-        </EntityType>
-        <EntityType Name="AspNetRole">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="AspNetUsers" Relationship="Self.AspNetUserRoles" FromRole="AspNetRoles"
-                              ToRole="AspNetUsers" />
-          <NavigationProperty Name="Users" Relationship="personal_pageModel.FK_Users_AspNetRoles" FromRole="AspNetRole"
-                              ToRole="User" />
-        </EntityType>
-        <EntityType Name="AspNetUserClaim">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId"
-                              FromRole="AspNetUserClaims" ToRole="AspNetUsers" />
-        </EntityType>
-        <EntityType Name="AspNetUserLogin">
-          <Key>
-            <PropertyRef Name="LoginProvider" />
-            <PropertyRef Name="ProviderKey" />
-            <PropertyRef Name="UserId" />
-          </Key>
-          <Property Name="LoginProvider" Type="String" MaxLength="128" FixedLength="false" Unicode="true"
-                    Nullable="false" />
-          <Property Name="ProviderKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true"
-                    Nullable="false" />
-          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId"
-                              FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
-        </EntityType>
-        <EntityType Name="AspNetUser">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Reg_Date" Type="DateTime" Precision="3" />
-          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
-          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
-          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
-          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
-          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
-          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
-          <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="AspNetUserClaims"
-                              Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers"
-                              ToRole="AspNetUserClaims" />
-          <NavigationProperty Name="AspNetUserLogins"
-                              Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers"
-                              ToRole="AspNetUserLogins" />
-          <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers"
-                              ToRole="AspNetRoles" />
-          <NavigationProperty Name="User" Relationship="personal_pageModel.FK_Users_AspNetUsers" FromRole="AspNetUser"
-                              ToRole="User" />
-        </EntityType>
-        <EntityType Name="ClassBook">
-          <Key>
-            <PropertyRef Name="ClassBookId" />
-          </Key>
-          <Property Name="ClassBookId" Type="Guid" Nullable="false" />
-          <Property Name="CourseId" Type="Guid" />
-          <Property Name="StudentId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Grade" Type="Double" />
-          <Property Name="Promoted" Type="Boolean" />
-          <Property Name="TeacherId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Grade_Date" Type="DateTime" Precision="7" />
-          <Property Name="Grade_modified" Type="DateTime" Precision="7" />
-          <NavigationProperty Name="Course" Relationship="Self.FK_ClassBook_Course" FromRole="ClassBook"
-                              ToRole="Course" />
-          <NavigationProperty Name="User" Relationship="personal_pageModel.FK_ClassBook_Student" FromRole="ClassBook"
-                              ToRole="User" />
-        </EntityType>
-        <EntityType Name="Course">
-          <Key>
-            <PropertyRef Name="CourseId" />
-          </Key>
-          <Property Name="CourseId" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Credits" Type="Int16" Nullable="false" />
-          <Property Name="DepartamentId" Type="Guid" Nullable="false" />
-          <Property Name="TeacherId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="ClassBooks" Relationship="Self.FK_ClassBook_Course" FromRole="Course"
-                              ToRole="ClassBook" />
-          <NavigationProperty Name="Departament" Relationship="Self.FK_Course_Departament" FromRole="Course"
-                              ToRole="Departament" />
-          <NavigationProperty Name="Schedules" Relationship="Self.FK_Schedule_Course" FromRole="Course"
-                              ToRole="Schedule" />
-          <NavigationProperty Name="User" Relationship="personal_pageModel.FK_Course_Teacher" FromRole="Course"
-                              ToRole="User" />
-          <Property Name="ExamDate" Type="DateTime" Precision="7" />
-        </EntityType>
-        <EntityType Name="Departament">
-          <Key>
-            <PropertyRef Name="DepId" />
-          </Key>
-          <Property Name="DepId" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="StartDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Courses" Relationship="Self.FK_Course_Departament" FromRole="Departament"
-                              ToRole="Course" />
-          <NavigationProperty Name="Users" Relationship="personal_pageModel.FK_Users_Departament"
-                              FromRole="Departament" ToRole="User" />
-          <Property Name="UniversityId" Type="Guid" Nullable="false" />
-          <NavigationProperty Name="University" Relationship="personal_pageModel.FK_Departament_University" FromRole="Departament" ToRole="University" />
-        </EntityType>
-        <EntityType Name="Education_Form">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Guid" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Users" Relationship="personal_pageModel.FK_Users_Education_Form"
-                              FromRole="Education_Form" ToRole="User" />
-        </EntityType>
-        <EntityType Name="ELMAH_Error">
-          <Key>
-            <PropertyRef Name="ErrorId" />
-          </Key>
-          <Property Name="ErrorId" Type="Guid" Nullable="false" />
-          <Property Name="Application" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Host" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Type" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Source" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="User" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="StatusCode" Type="Int32" Nullable="false" />
-          <Property Name="TimeUtc" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Sequence" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AllXml" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Faculty">
-          <Key>
-            <PropertyRef Name="FacultyId" />
-          </Key>
-          <Property Name="FacultyId" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="UniversityId" Type="Guid" Nullable="false" />
-          <NavigationProperty Name="University" Relationship="Self.FK_Faculty_University" FromRole="Faculty"
-                              ToRole="University" />
-          <NavigationProperty Name="Users" Relationship="personal_pageModel.FK_Users_Faculty" FromRole="Faculty"
-                              ToRole="User" />
-        </EntityType>
-        <EntityType Name="Notification">
-          <Key>
-            <PropertyRef Name="NotificationId" />
-          </Key>
-          <Property Name="NotificationId" Type="Guid" Nullable="false" />
-          <Property Name="FromUser" Type="Guid" Nullable="false" />
-          <Property Name="Message" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Batchid" Type="Guid" />
-          <Property Name="ToUser" Type="Guid" />
-          <Property Name="GroupNumber" Type="Int32" />
-          <Property Name="FacultyId" Type="Guid" />
-          <Property Name="UniversityId" Type="Guid" />
-          <NavigationProperty Name="University" Relationship="Self.FK_Notifications_University"
-                              FromRole="Notifications" ToRole="University" />
-        </EntityType>
-        <EntityType Name="Request">
-          <Key>
-            <PropertyRef Name="RequestId" />
-          </Key>
-          <Property Name="RequestId" Type="Guid" Nullable="false" />
-          <Property Name="Message" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="RequestBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="RequestDate" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="User" Relationship="personal_pageModel.FK_Requests_User" FromRole="Request"
-                              ToRole="User" />
-        </EntityType>
-        <EntityType Name="Schedule">
-          <Key>
-            <PropertyRef Name="ScheduleId" />
-          </Key>
-          <Property Name="ScheduleId" Type="Guid" Nullable="false" />
-          <Property Name="CourseId" Type="Guid" Nullable="false" />
-          <Property Name="TeacherId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Class_Nr" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Course" Relationship="Self.FK_Schedule_Course" FromRole="Schedule" ToRole="Course" />
-          <NavigationProperty Name="User" Relationship="personal_pageModel.FK_Schedule_Users" FromRole="Schedule"
-                              ToRole="User" />
-        </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="University">
-          <Key>
-            <PropertyRef Name="UniversityId" />
-          </Key>
-          <Property Name="UniversityId" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="true" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Faculties" Relationship="Self.FK_Faculty_University" FromRole="University"
-                              ToRole="Faculty" />
-          <NavigationProperty Name="Notifications" Relationship="Self.FK_Notifications_University"
-                              FromRole="University" ToRole="Notifications" />
-          <NavigationProperty Name="Departaments" Relationship="personal_pageModel.FK_Departament_University" FromRole="University" ToRole="Departament" />
-        </EntityType>
-        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaim" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AspNetUserClaims">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogin" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AspNetUserLogins">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ClassBook_Course">
-          <End Role="Course" Type="Self.Course" Multiplicity="0..1" />
-          <End Role="ClassBook" Type="Self.ClassBook" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Course">
-              <PropertyRef Name="CourseId" />
-            </Principal>
-            <Dependent Role="ClassBook">
-              <PropertyRef Name="CourseId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Course_Departament">
-          <End Role="Departament" Type="Self.Departament" Multiplicity="1" />
-          <End Role="Course" Type="Self.Course" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Departament">
-              <PropertyRef Name="DepId" />
-            </Principal>
-            <Dependent Role="Course">
-              <PropertyRef Name="DepartamentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Schedule_Course">
-          <End Role="Course" Type="Self.Course" Multiplicity="1" />
-          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Course">
-              <PropertyRef Name="CourseId" />
-            </Principal>
-            <Dependent Role="Schedule">
-              <PropertyRef Name="CourseId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Faculty_University">
-          <End Role="University" Type="Self.University" Multiplicity="1" />
-          <End Role="Faculty" Type="Self.Faculty" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="University">
-              <PropertyRef Name="UniversityId" />
-            </Principal>
-            <Dependent Role="Faculty">
-              <PropertyRef Name="UniversityId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Notifications_University">
-          <End Role="University" Type="Self.University" Multiplicity="0..1" />
-          <End Role="Notifications" Type="Self.Notification" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="University">
-              <PropertyRef Name="UniversityId" />
-            </Principal>
-            <Dependent Role="Notifications">
-              <PropertyRef Name="UniversityId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="AspNetUserRoles">
-          <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="*" />
-          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="personal_pageEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
-          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRole" />
-          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaim" />
-          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
-          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
-          <EntitySet Name="ClassBooks" EntityType="Self.ClassBook" />
-          <EntitySet Name="Courses" EntityType="Self.Course" />
-          <EntitySet Name="Departaments" EntityType="Self.Departament" />
-          <EntitySet Name="Education_Form" EntityType="Self.Education_Form" />
-          <EntitySet Name="ELMAH_Error" EntityType="Self.ELMAH_Error" />
-          <EntitySet Name="Faculties" EntityType="Self.Faculty" />
-          <EntitySet Name="Notifications" EntityType="Self.Notification" />
-          <EntitySet Name="Requests" EntityType="Self.Request" />
-          <EntitySet Name="Schedules" EntityType="Self.Schedule" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
-          <EntitySet Name="Universities" EntityType="Self.University" />
-          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId"
-                          Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
-          </AssociationSet>
-          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId"
-                          Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ClassBook_Course" Association="Self.FK_ClassBook_Course">
-            <End Role="Course" EntitySet="Courses" />
-            <End Role="ClassBook" EntitySet="ClassBooks" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Course_Departament" Association="Self.FK_Course_Departament">
-            <End Role="Departament" EntitySet="Departaments" />
-            <End Role="Course" EntitySet="Courses" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Schedule_Course" Association="Self.FK_Schedule_Course">
-            <End Role="Course" EntitySet="Courses" />
-            <End Role="Schedule" EntitySet="Schedules" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Faculty_University" Association="Self.FK_Faculty_University">
-            <End Role="University" EntitySet="Universities" />
-            <End Role="Faculty" EntitySet="Faculties" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Notifications_University" Association="Self.FK_Notifications_University">
-            <End Role="University" EntitySet="Universities" />
-            <End Role="Notifications" EntitySet="Notifications" />
-          </AssociationSet>
-          <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
-            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-          </AssociationSet>
           <FunctionImport Name="ELMAH_GetErrorsXml" ReturnType="Collection(String)">
             <Parameter Name="Application" Mode="In" Type="String" />
             <Parameter Name="PageIndex" Mode="In" Type="Int32" />
@@ -1012,22 +645,62 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="C__MigrationHistory" EntityType="personal_pageModel.C__MigrationHistory" />
+          <EntitySet Name="AspNetRoles" EntityType="personal_pageModel.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="personal_pageModel.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="personal_pageModel.AspNetUserLogin" />
+          <EntitySet Name="AspNetUsers" EntityType="personal_pageModel.AspNetUser" />
+          <EntitySet Name="ClassBooks" EntityType="personal_pageModel.ClassBook" />
+          <EntitySet Name="Courses" EntityType="personal_pageModel.Course" />
+          <EntitySet Name="Departaments" EntityType="personal_pageModel.Departament" />
+          <EntitySet Name="Education_Form" EntityType="personal_pageModel.Education_Form" />
+          <EntitySet Name="ELMAH_Error" EntityType="personal_pageModel.ELMAH_Error" />
+          <EntitySet Name="Faculties" EntityType="personal_pageModel.Faculty" />
+          <EntitySet Name="Notifications" EntityType="personal_pageModel.Notification" />
+          <EntitySet Name="Requests" EntityType="personal_pageModel.Request" />
+          <EntitySet Name="Schedules" EntityType="personal_pageModel.Schedule" />
+          <EntitySet Name="sysdiagrams" EntityType="personal_pageModel.sysdiagram" />
+          <EntitySet Name="Universities" EntityType="personal_pageModel.University" />
           <EntitySet Name="Users" EntityType="personal_pageModel.User" />
           <AssociationSet Name="FK_Users_AspNetRoles" Association="personal_pageModel.FK_Users_AspNetRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="personal_pageModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="personal_pageModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
           <AssociationSet Name="FK_Users_AspNetUsers" Association="personal_pageModel.FK_Users_AspNetUsers">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClassBook_Course" Association="personal_pageModel.FK_ClassBook_Course">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="ClassBook" EntitySet="ClassBooks" />
           </AssociationSet>
           <AssociationSet Name="FK_ClassBook_Student" Association="personal_pageModel.FK_ClassBook_Student">
             <End Role="User" EntitySet="Users" />
             <End Role="ClassBook" EntitySet="ClassBooks" />
           </AssociationSet>
+          <AssociationSet Name="FK_Course_Departament" Association="personal_pageModel.FK_Course_Departament">
+            <End Role="Departament" EntitySet="Departaments" />
+            <End Role="Course" EntitySet="Courses" />
+          </AssociationSet>
           <AssociationSet Name="FK_Course_Teacher" Association="personal_pageModel.FK_Course_Teacher">
             <End Role="User" EntitySet="Users" />
             <End Role="Course" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schedule_Course" Association="personal_pageModel.FK_Schedule_Course">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="Schedule" EntitySet="Schedules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Departament_Faculty" Association="personal_pageModel.FK_Departament_Faculty">
+            <End Role="Faculty" EntitySet="Faculties" />
+            <End Role="Departament" EntitySet="Departaments" />
           </AssociationSet>
           <AssociationSet Name="FK_Users_Departament" Association="personal_pageModel.FK_Users_Departament">
             <End Role="Departament" EntitySet="Departaments" />
@@ -1037,9 +710,17 @@
             <End Role="Education_Form" EntitySet="Education_Form" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
+          <AssociationSet Name="FK_Faculty_University" Association="personal_pageModel.FK_Faculty_University">
+            <End Role="University" EntitySet="Universities" />
+            <End Role="Faculty" EntitySet="Faculties" />
+          </AssociationSet>
           <AssociationSet Name="FK_Users_Faculty" Association="personal_pageModel.FK_Users_Faculty">
             <End Role="Faculty" EntitySet="Faculties" />
             <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notifications_University" Association="personal_pageModel.FK_Notifications_University">
+            <End Role="University" EntitySet="Universities" />
+            <End Role="Notification" EntitySet="Notifications" />
           </AssociationSet>
           <AssociationSet Name="FK_Requests_User" Association="personal_pageModel.FK_Requests_User">
             <End Role="User" EntitySet="Users" />
@@ -1049,9 +730,9 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Schedule" EntitySet="Schedules" />
           </AssociationSet>
-          <AssociationSet Name="FK_Departament_University" Association="personal_pageModel.FK_Departament_University">
-            <End Role="University" EntitySet="Universities" />
-            <End Role="Departament" EntitySet="Departaments" />
+          <AssociationSet Name="AspNetUserRoles" Association="personal_pageModel.AspNetUserRoles">
+            <End Role="AspNetRole" EntitySet="AspNetRoles" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
@@ -1065,6 +746,201 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="C__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ContextKey" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="ProductVersion" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="AspNetRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="personal_pageModel.FK_Users_AspNetRoles" FromRole="AspNetRole" ToRole="User" />
+          <NavigationProperty Name="AspNetUsers" Relationship="personal_pageModel.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="personal_pageModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogin">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="personal_pageModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Reg_Date" Type="DateTime" Precision="3" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="personal_pageModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="personal_pageModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+          <NavigationProperty Name="User" Relationship="personal_pageModel.FK_Users_AspNetUsers" FromRole="AspNetUser" ToRole="User" />
+          <NavigationProperty Name="AspNetRoles" Relationship="personal_pageModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+        </EntityType>
+        <EntityType Name="ClassBook">
+          <Key>
+            <PropertyRef Name="ClassBookId" />
+          </Key>
+          <Property Name="ClassBookId" Type="Guid" Nullable="false" />
+          <Property Name="CourseId" Type="Guid" />
+          <Property Name="StudentId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Grade" Type="Double" />
+          <Property Name="Promoted" Type="Boolean" />
+          <Property Name="TeacherId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Grade_Date" Type="DateTime" Precision="7" />
+          <Property Name="Grade_modified" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Course" Relationship="personal_pageModel.FK_ClassBook_Course" FromRole="ClassBook" ToRole="Course" />
+          <NavigationProperty Name="User" Relationship="personal_pageModel.FK_ClassBook_Student" FromRole="ClassBook" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="CourseId" />
+          </Key>
+          <Property Name="CourseId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Credits" Type="Int16" Nullable="false" />
+          <Property Name="DepartamentId" Type="Guid" Nullable="false" />
+          <Property Name="TeacherId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ExamDate" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="ClassBooks" Relationship="personal_pageModel.FK_ClassBook_Course" FromRole="Course" ToRole="ClassBook" />
+          <NavigationProperty Name="Departament" Relationship="personal_pageModel.FK_Course_Departament" FromRole="Course" ToRole="Departament" />
+          <NavigationProperty Name="User" Relationship="personal_pageModel.FK_Course_Teacher" FromRole="Course" ToRole="User" />
+          <NavigationProperty Name="Schedules" Relationship="personal_pageModel.FK_Schedule_Course" FromRole="Course" ToRole="Schedule" />
+        </EntityType>
+        <EntityType Name="Departament">
+          <Key>
+            <PropertyRef Name="DepId" />
+          </Key>
+          <Property Name="DepId" Type="Guid" Nullable="false" />
+          <Property Name="FacultyId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Courses" Relationship="personal_pageModel.FK_Course_Departament" FromRole="Departament" ToRole="Course" />
+          <NavigationProperty Name="Faculty" Relationship="personal_pageModel.FK_Departament_Faculty" FromRole="Departament" ToRole="Faculty" />
+          <NavigationProperty Name="Users" Relationship="personal_pageModel.FK_Users_Departament" FromRole="Departament" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Education_Form">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="personal_pageModel.FK_Users_Education_Form" FromRole="Education_Form" ToRole="User" />
+        </EntityType>
+        <EntityType Name="ELMAH_Error">
+          <Key>
+            <PropertyRef Name="ErrorId" />
+          </Key>
+          <Property Name="ErrorId" Type="Guid" Nullable="false" />
+          <Property Name="Application" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="Host" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Source" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="User" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StatusCode" Type="Int32" Nullable="false" />
+          <Property Name="TimeUtc" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Sequence" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AllXml" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Faculty">
+          <Key>
+            <PropertyRef Name="FacultyId" />
+          </Key>
+          <Property Name="FacultyId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="UniversityId" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Departaments" Relationship="personal_pageModel.FK_Departament_Faculty" FromRole="Faculty" ToRole="Departament" />
+          <NavigationProperty Name="University" Relationship="personal_pageModel.FK_Faculty_University" FromRole="Faculty" ToRole="University" />
+          <NavigationProperty Name="Users" Relationship="personal_pageModel.FK_Users_Faculty" FromRole="Faculty" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="NotificationId" />
+          </Key>
+          <Property Name="NotificationId" Type="Guid" Nullable="false" />
+          <Property Name="FromUser" Type="Guid" Nullable="false" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Batchid" Type="Guid" />
+          <Property Name="ToUser" Type="Guid" />
+          <Property Name="GroupNumber" Type="Int32" />
+          <Property Name="FacultyId" Type="Guid" />
+          <Property Name="UniversityId" Type="Guid" />
+          <NavigationProperty Name="University" Relationship="personal_pageModel.FK_Notifications_University" FromRole="Notification" ToRole="University" />
+        </EntityType>
+        <EntityType Name="Request">
+          <Key>
+            <PropertyRef Name="RequestId" />
+          </Key>
+          <Property Name="RequestId" Type="Guid" Nullable="false" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RequestBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="RequestDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="User" Relationship="personal_pageModel.FK_Requests_User" FromRole="Request" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Schedule">
+          <Key>
+            <PropertyRef Name="ScheduleId" />
+          </Key>
+          <Property Name="ScheduleId" Type="Guid" Nullable="false" />
+          <Property Name="CourseId" Type="Guid" Nullable="false" />
+          <Property Name="TeacherId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Class_Nr" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Course" Relationship="personal_pageModel.FK_Schedule_Course" FromRole="Schedule" ToRole="Course" />
+          <NavigationProperty Name="User" Relationship="personal_pageModel.FK_Schedule_Users" FromRole="Schedule" ToRole="User" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="University">
+          <Key>
+            <PropertyRef Name="UniversityId" />
+          </Key>
+          <Property Name="UniversityId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Faculties" Relationship="personal_pageModel.FK_Faculty_University" FromRole="University" ToRole="Faculty" />
+          <NavigationProperty Name="Notifications" Relationship="personal_pageModel.FK_Notifications_University" FromRole="University" ToRole="Notification" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="UserId" />
@@ -1080,25 +956,16 @@
           <Property Name="FacultyId" Type="Guid" Nullable="false" />
           <Property Name="UniversityId" Type="Guid" Nullable="false" />
           <Property Name="RoleId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath" Type="String" Nullable="true" MaxLength="128" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AspNetRole" Relationship="personal_pageModel.FK_Users_AspNetRoles" FromRole="User"
-                              ToRole="AspNetRole" />
-          <NavigationProperty Name="AspNetUser" Relationship="personal_pageModel.FK_Users_AspNetUsers" FromRole="User"
-                              ToRole="AspNetUser" />
-          <NavigationProperty Name="ClassBooks" Relationship="personal_pageModel.FK_ClassBook_Student" FromRole="User"
-                              ToRole="ClassBook" />
-          <NavigationProperty Name="Courses" Relationship="personal_pageModel.FK_Course_Teacher" FromRole="User"
-                              ToRole="Course" />
-          <NavigationProperty Name="Departament" Relationship="personal_pageModel.FK_Users_Departament" FromRole="User"
-                              ToRole="Departament" />
-          <NavigationProperty Name="Education_Form" Relationship="personal_pageModel.FK_Users_Education_Form"
-                              FromRole="User" ToRole="Education_Form" />
-          <NavigationProperty Name="Faculty" Relationship="personal_pageModel.FK_Users_Faculty" FromRole="User"
-                              ToRole="Faculty" />
-          <NavigationProperty Name="Requests" Relationship="personal_pageModel.FK_Requests_User" FromRole="User"
-                              ToRole="Request" />
-          <NavigationProperty Name="Schedules" Relationship="personal_pageModel.FK_Schedule_Users" FromRole="User"
-                              ToRole="Schedule" />
+          <Property Name="ImagePath" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetRole" Relationship="personal_pageModel.FK_Users_AspNetRoles" FromRole="User" ToRole="AspNetRole" />
+          <NavigationProperty Name="AspNetUser" Relationship="personal_pageModel.FK_Users_AspNetUsers" FromRole="User" ToRole="AspNetUser" />
+          <NavigationProperty Name="ClassBooks" Relationship="personal_pageModel.FK_ClassBook_Student" FromRole="User" ToRole="ClassBook" />
+          <NavigationProperty Name="Courses" Relationship="personal_pageModel.FK_Course_Teacher" FromRole="User" ToRole="Course" />
+          <NavigationProperty Name="Departament" Relationship="personal_pageModel.FK_Users_Departament" FromRole="User" ToRole="Departament" />
+          <NavigationProperty Name="Education_Form" Relationship="personal_pageModel.FK_Users_Education_Form" FromRole="User" ToRole="Education_Form" />
+          <NavigationProperty Name="Faculty" Relationship="personal_pageModel.FK_Users_Faculty" FromRole="User" ToRole="Faculty" />
+          <NavigationProperty Name="Requests" Relationship="personal_pageModel.FK_Requests_User" FromRole="User" ToRole="Request" />
+          <NavigationProperty Name="Schedules" Relationship="personal_pageModel.FK_Schedule_Users" FromRole="User" ToRole="Schedule" />
         </EntityType>
         <Association Name="FK_Users_AspNetRoles">
           <End Type="personal_pageModel.AspNetRole" Role="AspNetRole" Multiplicity="0..1" />
@@ -1109,6 +976,34 @@
             </Principal>
             <Dependent Role="User">
               <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Type="personal_pageModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="personal_pageModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaim">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Type="personal_pageModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="personal_pageModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogin">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1124,6 +1019,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ClassBook_Course">
+          <End Type="personal_pageModel.Course" Role="Course" Multiplicity="0..1" />
+          <End Type="personal_pageModel.ClassBook" Role="ClassBook" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseId" />
+            </Principal>
+            <Dependent Role="ClassBook">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ClassBook_Student">
           <End Type="personal_pageModel.User" Role="User" Multiplicity="0..1" />
           <End Type="personal_pageModel.ClassBook" Role="ClassBook" Multiplicity="*" />
@@ -1136,6 +1043,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Course_Departament">
+          <End Type="personal_pageModel.Departament" Role="Departament" Multiplicity="1" />
+          <End Type="personal_pageModel.Course" Role="Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departament">
+              <PropertyRef Name="DepId" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="DepartamentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Course_Teacher">
           <End Type="personal_pageModel.User" Role="User" Multiplicity="1" />
           <End Type="personal_pageModel.Course" Role="Course" Multiplicity="*" />
@@ -1145,6 +1064,30 @@
             </Principal>
             <Dependent Role="Course">
               <PropertyRef Name="TeacherId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schedule_Course">
+          <End Type="personal_pageModel.Course" Role="Course" Multiplicity="1" />
+          <End Type="personal_pageModel.Schedule" Role="Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseId" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Departament_Faculty">
+          <End Type="personal_pageModel.Faculty" Role="Faculty" Multiplicity="1" />
+          <End Type="personal_pageModel.Departament" Role="Departament" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Faculty">
+              <PropertyRef Name="FacultyId" />
+            </Principal>
+            <Dependent Role="Departament">
+              <PropertyRef Name="FacultyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1172,6 +1115,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Faculty_University">
+          <End Type="personal_pageModel.University" Role="University" Multiplicity="1" />
+          <End Type="personal_pageModel.Faculty" Role="Faculty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="University">
+              <PropertyRef Name="UniversityId" />
+            </Principal>
+            <Dependent Role="Faculty">
+              <PropertyRef Name="UniversityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Users_Faculty">
           <End Type="personal_pageModel.Faculty" Role="Faculty" Multiplicity="1" />
           <End Type="personal_pageModel.User" Role="User" Multiplicity="*" />
@@ -1181,6 +1136,18 @@
             </Principal>
             <Dependent Role="User">
               <PropertyRef Name="FacultyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notifications_University">
+          <End Type="personal_pageModel.University" Role="University" Multiplicity="0..1" />
+          <End Type="personal_pageModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="University">
+              <PropertyRef Name="UniversityId" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="UniversityId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1208,17 +1175,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Departament_University">
-          <End Type="personal_pageModel.University" Role="University" Multiplicity="1" />
-          <End Type="personal_pageModel.Departament" Role="Departament" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="University">
-              <PropertyRef Name="UniversityId" />
-            </Principal>
-            <Dependent Role="Departament">
-              <PropertyRef Name="UniversityId" />
-            </Dependent>
-          </ReferentialConstraint>
+        <Association Name="AspNetUserRoles">
+          <End Type="personal_pageModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
+          <End Type="personal_pageModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -1227,196 +1186,6 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="personal_pageModelStoreContainer"
                                 CdmEntityContainer="personal_pageEntities">
-          <EntitySetMapping Name="C__MigrationHistory">
-            <EntityTypeMapping TypeName="personal_pageModel.C__MigrationHistory">
-              <MappingFragment StoreEntitySet="__MigrationHistory">
-                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
-                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
-                <ScalarProperty Name="Model" ColumnName="Model" />
-                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetRoles">
-            <EntityTypeMapping TypeName="personal_pageModel.AspNetRole">
-              <MappingFragment StoreEntitySet="AspNetRoles">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetUserClaims">
-            <EntityTypeMapping TypeName="personal_pageModel.AspNetUserClaim">
-              <MappingFragment StoreEntitySet="AspNetUserClaims">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
-                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetUserLogins">
-            <EntityTypeMapping TypeName="personal_pageModel.AspNetUserLogin">
-              <MappingFragment StoreEntitySet="AspNetUserLogins">
-                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
-                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetUsers">
-            <EntityTypeMapping TypeName="personal_pageModel.AspNetUser">
-              <MappingFragment StoreEntitySet="AspNetUsers">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Reg_Date" ColumnName="Reg_Date" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
-                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
-                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
-                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
-                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
-                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
-                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ClassBooks">
-            <EntityTypeMapping TypeName="personal_pageModel.ClassBook">
-              <MappingFragment StoreEntitySet="ClassBook">
-                <ScalarProperty Name="ClassBookId" ColumnName="ClassBookId" />
-                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
-                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
-                <ScalarProperty Name="Grade" ColumnName="Grade" />
-                <ScalarProperty Name="Promoted" ColumnName="Promoted" />
-                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
-                <ScalarProperty Name="Grade_Date" ColumnName="Grade_Date" />
-                <ScalarProperty Name="Grade_modified" ColumnName="Grade_modified" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Courses">
-            <EntityTypeMapping TypeName="personal_pageModel.Course">
-              <MappingFragment StoreEntitySet="Course">
-                <ScalarProperty Name="ExamDate" ColumnName="ExamDate" />
-                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Credits" ColumnName="Credits" />
-                <ScalarProperty Name="DepartamentId" ColumnName="DepartamentId" />
-                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Departaments">
-            <EntityTypeMapping TypeName="personal_pageModel.Departament">
-              <MappingFragment StoreEntitySet="Departament">
-                <ScalarProperty Name="UniversityId" ColumnName="UniversityId" />
-                <ScalarProperty Name="DepId" ColumnName="DepId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Education_Form">
-            <EntityTypeMapping TypeName="personal_pageModel.Education_Form">
-              <MappingFragment StoreEntitySet="Education_Form">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ELMAH_Error">
-            <EntityTypeMapping TypeName="personal_pageModel.ELMAH_Error">
-              <MappingFragment StoreEntitySet="ELMAH_Error">
-                <ScalarProperty Name="ErrorId" ColumnName="ErrorId" />
-                <ScalarProperty Name="Application" ColumnName="Application" />
-                <ScalarProperty Name="Host" ColumnName="Host" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Source" ColumnName="Source" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
-                <ScalarProperty Name="User" ColumnName="User" />
-                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
-                <ScalarProperty Name="TimeUtc" ColumnName="TimeUtc" />
-                <ScalarProperty Name="Sequence" ColumnName="Sequence" />
-                <ScalarProperty Name="AllXml" ColumnName="AllXml" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Faculties">
-            <EntityTypeMapping TypeName="personal_pageModel.Faculty">
-              <MappingFragment StoreEntitySet="Faculty">
-                <ScalarProperty Name="FacultyId" ColumnName="FacultyId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="UniversityId" ColumnName="UniversityId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Notifications">
-            <EntityTypeMapping TypeName="personal_pageModel.Notification">
-              <MappingFragment StoreEntitySet="Notifications">
-                <ScalarProperty Name="NotificationId" ColumnName="NotificationId" />
-                <ScalarProperty Name="FromUser" ColumnName="FromUser" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Batchid" ColumnName="Batchid" />
-                <ScalarProperty Name="ToUser" ColumnName="ToUser" />
-                <ScalarProperty Name="GroupNumber" ColumnName="GroupNumber" />
-                <ScalarProperty Name="FacultyId" ColumnName="FacultyId" />
-                <ScalarProperty Name="UniversityId" ColumnName="UniversityId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Requests">
-            <EntityTypeMapping TypeName="personal_pageModel.Request">
-              <MappingFragment StoreEntitySet="Requests">
-                <ScalarProperty Name="RequestId" ColumnName="RequestId" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
-                <ScalarProperty Name="RequestBy" ColumnName="RequestBy" />
-                <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Schedules">
-            <EntityTypeMapping TypeName="personal_pageModel.Schedule">
-              <MappingFragment StoreEntitySet="Schedule">
-                <ScalarProperty Name="ScheduleId" ColumnName="ScheduleId" />
-                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
-                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="Class_Nr" ColumnName="Class_Nr" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="personal_pageModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Universities">
-            <EntityTypeMapping TypeName="personal_pageModel.University">
-              <MappingFragment StoreEntitySet="University">
-                <ScalarProperty Name="UniversityId" ColumnName="UniversityId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="AspNetUserRoles" TypeName="personal_pageModel.AspNetUserRoles"
-                                 StoreEntitySet="AspNetUserRoles">
-            <EndProperty Name="AspNetRoles">
-              <ScalarProperty Name="Id" ColumnName="RoleId" />
-            </EndProperty>
-            <EndProperty Name="AspNetUsers">
-              <ScalarProperty Name="Id" ColumnName="UserId" />
-            </EndProperty>
-          </AssociationSetMapping>
           <FunctionImportMapping FunctionImportName="ELMAH_GetErrorsXml"
                                  FunctionName="personal_pageModel.Store.ELMAH_GetErrorsXml" />
           <FunctionImportMapping FunctionImportName="ELMAH_GetErrorXml"
@@ -1454,6 +1223,187 @@
                                  FunctionName="personal_pageModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams"
                                  FunctionName="personal_pageModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="C__MigrationHistory">
+            <EntityTypeMapping TypeName="personal_pageModel.C__MigrationHistory">
+              <MappingFragment StoreEntitySet="__MigrationHistory">
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="personal_pageModel.AspNetRole">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="personal_pageModel.AspNetUserClaim">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="personal_pageModel.AspNetUserLogin">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="personal_pageModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Reg_Date" ColumnName="Reg_Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClassBooks">
+            <EntityTypeMapping TypeName="personal_pageModel.ClassBook">
+              <MappingFragment StoreEntitySet="ClassBook">
+                <ScalarProperty Name="Grade_modified" ColumnName="Grade_modified" />
+                <ScalarProperty Name="Grade_Date" ColumnName="Grade_Date" />
+                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
+                <ScalarProperty Name="Promoted" ColumnName="Promoted" />
+                <ScalarProperty Name="Grade" ColumnName="Grade" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+                <ScalarProperty Name="ClassBookId" ColumnName="ClassBookId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Courses">
+            <EntityTypeMapping TypeName="personal_pageModel.Course">
+              <MappingFragment StoreEntitySet="Course">
+                <ScalarProperty Name="ExamDate" ColumnName="ExamDate" />
+                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
+                <ScalarProperty Name="DepartamentId" ColumnName="DepartamentId" />
+                <ScalarProperty Name="Credits" ColumnName="Credits" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departaments">
+            <EntityTypeMapping TypeName="personal_pageModel.Departament">
+              <MappingFragment StoreEntitySet="Departament">
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="FacultyId" ColumnName="FacultyId" />
+                <ScalarProperty Name="DepId" ColumnName="DepId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Education_Form">
+            <EntityTypeMapping TypeName="personal_pageModel.Education_Form">
+              <MappingFragment StoreEntitySet="Education_Form">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ELMAH_Error">
+            <EntityTypeMapping TypeName="personal_pageModel.ELMAH_Error">
+              <MappingFragment StoreEntitySet="ELMAH_Error">
+                <ScalarProperty Name="AllXml" ColumnName="AllXml" />
+                <ScalarProperty Name="Sequence" ColumnName="Sequence" />
+                <ScalarProperty Name="TimeUtc" ColumnName="TimeUtc" />
+                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
+                <ScalarProperty Name="User" ColumnName="User" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Host" ColumnName="Host" />
+                <ScalarProperty Name="Application" ColumnName="Application" />
+                <ScalarProperty Name="ErrorId" ColumnName="ErrorId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Faculties">
+            <EntityTypeMapping TypeName="personal_pageModel.Faculty">
+              <MappingFragment StoreEntitySet="Faculty">
+                <ScalarProperty Name="UniversityId" ColumnName="UniversityId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="FacultyId" ColumnName="FacultyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notifications">
+            <EntityTypeMapping TypeName="personal_pageModel.Notification">
+              <MappingFragment StoreEntitySet="Notifications">
+                <ScalarProperty Name="UniversityId" ColumnName="UniversityId" />
+                <ScalarProperty Name="FacultyId" ColumnName="FacultyId" />
+                <ScalarProperty Name="GroupNumber" ColumnName="GroupNumber" />
+                <ScalarProperty Name="ToUser" ColumnName="ToUser" />
+                <ScalarProperty Name="Batchid" ColumnName="Batchid" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="FromUser" ColumnName="FromUser" />
+                <ScalarProperty Name="NotificationId" ColumnName="NotificationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Requests">
+            <EntityTypeMapping TypeName="personal_pageModel.Request">
+              <MappingFragment StoreEntitySet="Requests">
+                <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+                <ScalarProperty Name="RequestBy" ColumnName="RequestBy" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="RequestId" ColumnName="RequestId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Schedules">
+            <EntityTypeMapping TypeName="personal_pageModel.Schedule">
+              <MappingFragment StoreEntitySet="Schedule">
+                <ScalarProperty Name="Class_Nr" ColumnName="Class_Nr" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
+                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+                <ScalarProperty Name="ScheduleId" ColumnName="ScheduleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="personal_pageModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Universities">
+            <EntityTypeMapping TypeName="personal_pageModel.University">
+              <MappingFragment StoreEntitySet="University">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UniversityId" ColumnName="UniversityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="personal_pageModel.User">
               <MappingFragment StoreEntitySet="Users">
@@ -1472,6 +1422,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="personal_pageModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetUser">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="AspNetRole">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

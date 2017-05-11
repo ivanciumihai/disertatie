@@ -4,6 +4,7 @@ namespace personal_pages
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
+
     public partial class Departament
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -12,26 +13,24 @@ namespace personal_pages
             this.Courses = new HashSet<Course>();
             this.Users = new HashSet<User>();
         }
-
+    
         public System.Guid DepId { get; set; }
 
-        [Required(ErrorMessage = "name cannot be empty")]
+        public System.Guid FacultyId { get; set; }
+
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Start date and time cannot be empty")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-
         public DateTime? StartDate { get; set; }
-
-        public System.Guid UniversityId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Course> Courses { get; set; }
 
+        public virtual Faculty Faculty { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User> Users { get; set; }
-
-        public virtual University University { get; set; }
     }
 }
