@@ -8,7 +8,7 @@
         select.find("option").remove();
     else
         select.find("option:gt(0)").remove();
-
+    select.append($("<option></option>").text("").val(""));
     $.each(data,
         function () {
             select.append($("<option></option>").text(this.fullname).val(this.UserId));
@@ -36,7 +36,7 @@ function fillSelectDepartment(select, data, hasEmpty, defaultValue) {
         select.find("option").remove();
     else
         select.find("option:gt(0)").remove();
-
+    select.append($("<option></option>").text("").val(""));
     $.each(data,
         function () {
             select.append($("<option></option>").text(this.Name).val(this.FacultyId));
@@ -67,15 +67,6 @@ $(document)
                         success: function (result) {
                             console.log(result); // show response from the script.                 
                             fillSelect($("#DepartamentId").closest("form").find("#TeacherId"), result, false);
-                            if ($("#TeacherId").val() === null || $("#TeacherId").val() === 0) {
-                                $("#TeacherId").hide();
-                                $("#teacherhide").hide();
-
-                            } else {
-                                $("#TeacherId").show();
-                                $("#teacherhide").show();
-
-                            }
                         },
                         error: function (xhr, status, error) {
                             var err = eval("(" + xhr.responseText + ")");
@@ -84,32 +75,6 @@ $(document)
                     });
                 });
     });
-
-
-window.onload = function () {
-    var id = $("#DepartamentId").val();
-    var url = "/Courses/GetTeacher?depId=" + id;
-    $.ajax({
-        type: "GET",
-        url: url,
-        data: { universityId: id },
-        success: function (result) {
-            console.log(result); // show response from the script.                 
-            fillSelect($("#DepartamentId").closest("form").find("#TeacherId"), result, false);
-            if ($("#TeacherId").val() === null || $("#TeacherId").val() === 0) {
-                $("#TeacherId").hide();
-                $("#teacherhide").hide();
-            } else {
-                $("#TeacherId").show();
-                $("#teacherhide").show();
-            }
-        },
-        error: function (xhr, status, error) {
-            var err = eval("(" + xhr.responseText + ")");
-            console.log(error);
-        }
-    });
-};
 
 
 $(function () {
@@ -149,15 +114,6 @@ $(document)
                         success: function (result) {
                             console.log(result); // show response from the script.                 
                             fillSelectDepartment($("#FacultyId").closest("form").find("#DepartamentId"), result, false);
-                            if ($("#DepartamentId").val() === null || $("#DepartamentId").val() === 0) {
-                                $("#DepartamentId").hide();
-                                $("#DepartamentHide").hide();
-
-                            } else {
-                                $("#DepartamentId").show();
-                                $("#DepartamentHide").show();
-
-                            }
                         },
                         error: function (xhr, status, error) {
                             $("#DepartamentId").hide();
@@ -170,34 +126,8 @@ $(document)
     });
 
 
-window.onload = function () {
-    var id = $("#FacultyId").val();
-    var url = "/Courses/GetDepartment?facultyId=" + id;
-    $.ajax({
-        type: "GET",
-        url: url,
-        data: { facultyId: id },
-        success: function (result) {
-            console.log(result); // show response from the script.                 
-            fillSelectDepartment($("#FacultyId").closest("form").find("#DepartamentId"), result, false);
-            if ($("#DepartamentId").val() === null || $("#DepartamentId").val() === 0) {
-                $("#DepartamentId").hide();
-                $("#DepartamentHide").hide();
-            } else {
-                $("#DepartamentId").show();
-                $("#DepartamentHide").show();
-            }
-        },
-        error: function (xhr, status, error) {
-            $("#DepartamentId").hide();
-            $("#DepartamentHide").hide();
-            var err = eval("(" + xhr.responseText + ")");
-            console.log(error);
 
-        }
-    });
-};
-/////
+///////
 
 function fillSelect(select, data, hasEmpty, defaultValue) {
     if (!defaultValue)
@@ -209,7 +139,7 @@ function fillSelect(select, data, hasEmpty, defaultValue) {
         select.find("option").remove();
     else
         select.find("option:gt(0)").remove();
-
+    select.append($("<option></option>").text("").val(""));
     $.each(data,
         function () {
             select.append($("<option></option>").text(this.Name).val(this.FacultyId));
@@ -251,20 +181,3 @@ $(document)
     });
 
 
-$(document).ready(function () {
-    var id = $("#UniversityId").val();
-    var url = "/Departaments/GetFaculty?universityId=" + id;
-    $.ajax({
-        type: "GET",
-        url: url,
-        data: { universityId: id },
-        success: function (result) {
-            console.log(result); // show response from the script.                 
-            fillSelect($("#UniversityId").closest("form").find("#FacultyId"), result, false);
-        },
-        error: function (xhr, status, error) {
-            var err = eval("(" + xhr.responseText + ")");
-            console.log(error);
-        }
-    });
-});

@@ -35,14 +35,14 @@
         <div class="form-group">
             @Html.Label("University", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("UniversityId", null, new { @class = "form-control" })
+                @Html.DropDownList("UniversityId", (SelectList)ViewBag.Name, " ", new { @class = "form-control" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.Label("Faculty", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("FacultyId", null, new { @class = "form-control" })
+                @Html.DropDownList("FacultyId", (SelectList)ViewBag.Name, " ", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -50,7 +50,7 @@
         <div class="form-group">
             @Html.Label("Departament", new { @class = "control-label col-md-2", id = "DepartamentHide" })
             <div class="col-md-10">
-                @Html.DropDownList("DepartamentId", null, new { @class = "form-control" })
+                @Html.DropDownList("DepartamentId", (SelectList)ViewBag.Name, " ", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.DepartamentId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -58,7 +58,7 @@
         <div class="form-group">
             @Html.Label("Teacher Name", new { @class = "control-label col-md-2", id = "teacherhide" })
             <div class="col-md-10">
-                @Html.DropDownList("TeacherId", null, new { @class = "form-control", })
+                @Html.DropDownList("TeacherId", (SelectList)ViewBag.Name, " ", new { @class = "form-control", })
                 @Html.ValidationMessageFor(model => model.TeacherId, "", new { @class = "text-danger" })
             </div>
         </div>

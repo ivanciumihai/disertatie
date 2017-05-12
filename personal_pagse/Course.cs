@@ -24,6 +24,7 @@ namespace personal_pages
 
         public Guid DepartamentId { get; set; }
 
+        [Required(ErrorMessage = "Teacher field cannot be empty")]
         public string TeacherId { get; set; }
 
         [Required(ErrorMessage = "Exam date cannot be empty")]
