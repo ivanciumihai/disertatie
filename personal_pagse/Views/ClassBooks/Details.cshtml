@@ -5,100 +5,110 @@
 }
 
 <h2>Details</h2>
+<table>
+    <tr>
+        <td>
+            <div>
+                <img src="~/Img/@Model.User.ImagePath" width="250" height="220" alt="" />
+            </div>
+            <br />
+            <p>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.ClassBookId }) |
+                @Html.ActionLink("Back to List", "Index")
+            </p>
+        </td>
+        <td>
+            <div>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        Student First Name
+                    </dt>
 
-<div>
-    <h4>ClassBook</h4>
-    <hr/>
-    <dl class="dl-horizontal">
-        <dt>
-            Student First Name
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.FirstName)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.FirstName)
-        </dd>
+                    <dt>
+                        Student Last Name
+                    </dt>
 
-        <dt>
-            Student Last Name
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.LastName)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.LastName)
-        </dd>
+                    <dt>
+                        University Name
+                    </dt>
 
-        <dt>
-            University Name
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.Faculty.University.Name)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Faculty.University.Name)
-        </dd>
+                    <dt>
+                        Faculty Name
+                    </dt>
 
-        <dt>
-            Faculty Name
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.User.Faculty.Name)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Faculty.Name)
-        </dd>
+                    <dt>
+                        Course Name
+                    </dt>
 
-        <dt>
-            Course Name
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Course.Name)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Course.Name)
-        </dd>
+                    <dt>
+                        Teacher Name
+                    </dt>
 
-        <dt>
-            Teacher Name
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.TeacherId)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.TeacherId)
-        </dd>
+                    <dt>
+                        Grade Date
+                    </dt>
 
-        <dt>
-            Grade Date
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Grade_Date)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Grade_Date)
-        </dd>
+                    <dt>
+                        Grade Modified
+                    </dt>
 
-        <dt>
-            Grade Modified
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Grade_modified)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Grade_modified)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Grade)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Grade)
-        </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Grade)
+                    </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Grade)
-        </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Promoted)
+                    </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Promoted)
-        </dt>
-
-        <dd>
-            @if (Model.Promoted == true)
-            {
-                <button type="button" class="btn btn-success">Promoted</button>
-            }
-            else
-            {
-                <button type="button" class="btn btn-danger">Promoted</button>
-            }
-        </dd>
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new {id = Model.ClassBookId}) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+                    <dd>
+                        @if (Model.Promoted == true)
+                        {
+                            <button type="button" class="btn btn-success">Promoted</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-danger">Failed</button>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </td>
+    </tr>
+</table>

@@ -5,7 +5,12 @@
 }
 
 <h2>Edit</h2>
-
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationMessage(string.Empty)
+    </div>
+}
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -43,7 +48,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Grade, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Grade, new {htmlAttributes = new {@class = "form-control", type = "number", onkeypress = "ValidateNumber(event);"}})
+                @Html.EditorFor(model => model.Grade, new {htmlAttributes = new {@class = "form-control", type = "number", step = "0.01", onkeypress = "ValidateNumber(event);"}})
                 @Html.ValidationMessageFor(model => model.Grade, "", new {@class = "text-danger"})
             </div>
         </div>

@@ -76,9 +76,16 @@ namespace personal_pages.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var classBook = await _db.ClassBooks.FindAsync(id);
+
             if (classBook == null)
             {
                 return HttpNotFound();
+            }
+
+            var user = await _db.Users.FindAsync(classBook.StudentId);
+            if (user != null && user.ImagePath == null)
+            {
+                user.ImagePath = "default-avatar.png";
             }
             return View(classBook);
         }
@@ -88,7 +95,7 @@ namespace personal_pages.Controllers
         {
             ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name");
             ViewBag.StudentId = new SelectList(_db.Users.Where(a => a.AspNetRole.Name == "Student"), "UserId",
-                "FullName");          
+                "FullName");
             return View();
         }
 
@@ -99,11 +106,21 @@ namespace personal_pages.Controllers
         {
             if (ModelState.IsValid)
             {
+                var getUsers = _db.ClassBooks.Any(x => x.StudentId == classBook.StudentId && x.CourseId==classBook.CourseId);
+
+                if (getUsers)
+                {
+                    ModelState.AddModelError(string.Empty, "Student already has a grade on this");
+                    ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name");
+                    ViewBag.StudentId = new SelectList(_db.Users.Where(a => a.AspNetRole.Name == "Student"), "UserId",
+                        "FullName");
+                    return View(classBook);
+                }
                 classBook.Grade_Date = DateTime.Now;
                 classBook.Grade_modified = DateTime.Now;
                 classBook.TeacherId = User.Identity.Name;
                 classBook.ClassBookId = Guid.NewGuid();
-                classBook.Promoted = classBook.Grade >= 5;
+                classBook.Promoted = classBook.Grade != null && Math.Round((double)classBook.Grade) >= 5;
                 _db.ClassBooks.Add(classBook);
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -111,7 +128,7 @@ namespace personal_pages.Controllers
 
             ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name", classBook.CourseId);
             ViewBag.StudentId = new SelectList(_db.Users.Where(a => a.AspNetRole.Name == "Student"), "UserId",
-                "FirstName");         
+                "FirstName");
             return View(classBook);
         }
 
@@ -140,16 +157,26 @@ namespace personal_pages.Controllers
         {
             if (ModelState.IsValid)
             {
+                var getUsers = _db.ClassBooks.Any(x => x.StudentId == classBook.StudentId && x.CourseId == classBook.CourseId);
+                var classBooksPage = await _db.ClassBooks.FindAsync(classBook.CourseId);
+                if (getUsers)
+                {
+                    ModelState.AddModelError(string.Empty, "Student already has a grade on this");
+                    ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name");
+                    ViewBag.StudentId = new SelectList(_db.Users.Where(a => a.AspNetRole.Name == "Student"), "UserId",
+                        "FullName");
+                    return View(classBooksPage);
+                }
                 classBook.User = classBook.User;
                 classBook.TeacherId = User.Identity.Name;
                 classBook.Grade_modified = DateTime.Now;
-                classBook.Promoted = classBook.Grade >= 5;
+                classBook.Promoted = classBook.Grade != null && Math.Round((double)classBook.Grade) >= 5;
                 _db.Entry(classBook).State = EntityState.Modified;
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name", classBook.CourseId);
-             
+
             return View(classBook);
         }
 
