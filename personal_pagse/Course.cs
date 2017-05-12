@@ -11,7 +11,6 @@ namespace personal_pages
         public Course()
         {
             ClassBooks = new HashSet<ClassBook>();
-            Schedules = new HashSet<Schedule>();
         }
 
         public Guid CourseId { get; set; }
@@ -36,8 +35,5 @@ namespace personal_pages
         public virtual Departament Departament { get; set; }
 
         public virtual User User { get; set; }
-
-        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Schedule> Schedules { get; set; }
     }
 }

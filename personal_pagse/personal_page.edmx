@@ -132,39 +132,6 @@
           <Property Name="Name" Type="char" MaxLength="50" Nullable="false" />
           <Property Name="UniversityId" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
-        <EntityType Name="Notifications">
-          <Key>
-            <PropertyRef Name="NotificationId" />
-          </Key>
-          <Property Name="NotificationId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="FromUser" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Message" Type="nvarchar" MaxLength="200" Nullable="false" />
-          <Property Name="Date" Type="date" Nullable="false" />
-          <Property Name="Batchid" Type="uniqueidentifier" />
-          <Property Name="ToUser" Type="uniqueidentifier" />
-          <Property Name="GroupNumber" Type="int" />
-          <Property Name="FacultyId" Type="uniqueidentifier" />
-          <Property Name="UniversityId" Type="uniqueidentifier" />
-        </EntityType>
-        <EntityType Name="Requests">
-          <Key>
-            <PropertyRef Name="RequestId" />
-          </Key>
-          <Property Name="RequestId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Message" Type="nvarchar" MaxLength="200" Nullable="false" />
-          <Property Name="RequestBy" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="RequestDate" Type="date" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Schedule">
-          <Key>
-            <PropertyRef Name="ScheduleId" />
-          </Key>
-          <Property Name="ScheduleId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="CourseId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="TeacherId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="StartDate" Type="date" Nullable="false" />
-          <Property Name="Class_Nr" Type="nvarchar" MaxLength="50" Nullable="false" />
-        </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -327,54 +294,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Notifications_University">
-          <End Role="University" Type="Self.University" Multiplicity="0..1" />
-          <End Role="Notifications" Type="Self.Notifications" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="University">
-              <PropertyRef Name="UniversityId" />
-            </Principal>
-            <Dependent Role="Notifications">
-              <PropertyRef Name="UniversityId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Requests_User">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="Requests" Type="Self.Requests" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="Requests">
-              <PropertyRef Name="RequestBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Schedule_Course">
-          <End Role="Course" Type="Self.Course" Multiplicity="1" />
-          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Course">
-              <PropertyRef Name="CourseId" />
-            </Principal>
-            <Dependent Role="Schedule">
-              <PropertyRef Name="CourseId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Schedule_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="Schedule">
-              <PropertyRef Name="TeacherId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Users_AspNetRoles">
           <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="0..1" />
           <End Role="Users" Type="Self.Users" Multiplicity="*" />
@@ -501,9 +420,6 @@
           <EntitySet Name="Education_Form" EntityType="Self.Education_Form" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ELMAH_Error" EntityType="Self.ELMAH_Error" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Faculty" EntityType="Self.Faculty" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Notifications" EntityType="Self.Notifications" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Requests" EntityType="Self.Requests" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="University" EntityType="Self.University" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
@@ -546,22 +462,6 @@
           <AssociationSet Name="FK_Faculty_University" Association="Self.FK_Faculty_University">
             <End Role="University" EntitySet="University" />
             <End Role="Faculty" EntitySet="Faculty" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Notifications_University" Association="Self.FK_Notifications_University">
-            <End Role="University" EntitySet="University" />
-            <End Role="Notifications" EntitySet="Notifications" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Requests_User" Association="Self.FK_Requests_User">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Requests" EntitySet="Requests" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Schedule_Course" Association="Self.FK_Schedule_Course">
-            <End Role="Course" EntitySet="Course" />
-            <End Role="Schedule" EntitySet="Schedule" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Schedule_Users" Association="Self.FK_Schedule_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Schedule" EntitySet="Schedule" />
           </AssociationSet>
           <AssociationSet Name="FK_Users_AspNetRoles" Association="Self.FK_Users_AspNetRoles">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
@@ -656,9 +556,6 @@
           <EntitySet Name="Education_Form" EntityType="personal_pageModel.Education_Form" />
           <EntitySet Name="ELMAH_Error" EntityType="personal_pageModel.ELMAH_Error" />
           <EntitySet Name="Faculties" EntityType="personal_pageModel.Faculty" />
-          <EntitySet Name="Notifications" EntityType="personal_pageModel.Notification" />
-          <EntitySet Name="Requests" EntityType="personal_pageModel.Request" />
-          <EntitySet Name="Schedules" EntityType="personal_pageModel.Schedule" />
           <EntitySet Name="sysdiagrams" EntityType="personal_pageModel.sysdiagram" />
           <EntitySet Name="Universities" EntityType="personal_pageModel.University" />
           <EntitySet Name="Users" EntityType="personal_pageModel.User" />
@@ -694,10 +591,6 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Course" EntitySet="Courses" />
           </AssociationSet>
-          <AssociationSet Name="FK_Schedule_Course" Association="personal_pageModel.FK_Schedule_Course">
-            <End Role="Course" EntitySet="Courses" />
-            <End Role="Schedule" EntitySet="Schedules" />
-          </AssociationSet>
           <AssociationSet Name="FK_Departament_Faculty" Association="personal_pageModel.FK_Departament_Faculty">
             <End Role="Faculty" EntitySet="Faculties" />
             <End Role="Departament" EntitySet="Departaments" />
@@ -718,23 +611,11 @@
             <End Role="Faculty" EntitySet="Faculties" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
-          <AssociationSet Name="FK_Notifications_University" Association="personal_pageModel.FK_Notifications_University">
-            <End Role="University" EntitySet="Universities" />
-            <End Role="Notification" EntitySet="Notifications" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Requests_User" Association="personal_pageModel.FK_Requests_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Request" EntitySet="Requests" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Schedule_Users" Association="personal_pageModel.FK_Schedule_Users">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Schedule" EntitySet="Schedules" />
-          </AssociationSet>
           <AssociationSet Name="AspNetUserRoles" Association="personal_pageModel.AspNetUserRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
           <Property Type="Binary" Name="definition" Nullable="true" />
@@ -836,7 +717,6 @@
           <NavigationProperty Name="ClassBooks" Relationship="personal_pageModel.FK_ClassBook_Course" FromRole="Course" ToRole="ClassBook" />
           <NavigationProperty Name="Departament" Relationship="personal_pageModel.FK_Course_Departament" FromRole="Course" ToRole="Departament" />
           <NavigationProperty Name="User" Relationship="personal_pageModel.FK_Course_Teacher" FromRole="Course" ToRole="User" />
-          <NavigationProperty Name="Schedules" Relationship="personal_pageModel.FK_Schedule_Course" FromRole="Course" ToRole="Schedule" />
         </EntityType>
         <EntityType Name="Departament">
           <Key>
@@ -885,43 +765,6 @@
           <NavigationProperty Name="University" Relationship="personal_pageModel.FK_Faculty_University" FromRole="Faculty" ToRole="University" />
           <NavigationProperty Name="Users" Relationship="personal_pageModel.FK_Users_Faculty" FromRole="Faculty" ToRole="User" />
         </EntityType>
-        <EntityType Name="Notification">
-          <Key>
-            <PropertyRef Name="NotificationId" />
-          </Key>
-          <Property Name="NotificationId" Type="Guid" Nullable="false" />
-          <Property Name="FromUser" Type="Guid" Nullable="false" />
-          <Property Name="Message" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Batchid" Type="Guid" />
-          <Property Name="ToUser" Type="Guid" />
-          <Property Name="GroupNumber" Type="Int32" />
-          <Property Name="FacultyId" Type="Guid" />
-          <Property Name="UniversityId" Type="Guid" />
-          <NavigationProperty Name="University" Relationship="personal_pageModel.FK_Notifications_University" FromRole="Notification" ToRole="University" />
-        </EntityType>
-        <EntityType Name="Request">
-          <Key>
-            <PropertyRef Name="RequestId" />
-          </Key>
-          <Property Name="RequestId" Type="Guid" Nullable="false" />
-          <Property Name="Message" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="RequestBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="RequestDate" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="User" Relationship="personal_pageModel.FK_Requests_User" FromRole="Request" ToRole="User" />
-        </EntityType>
-        <EntityType Name="Schedule">
-          <Key>
-            <PropertyRef Name="ScheduleId" />
-          </Key>
-          <Property Name="ScheduleId" Type="Guid" Nullable="false" />
-          <Property Name="CourseId" Type="Guid" Nullable="false" />
-          <Property Name="TeacherId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Class_Nr" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Course" Relationship="personal_pageModel.FK_Schedule_Course" FromRole="Schedule" ToRole="Course" />
-          <NavigationProperty Name="User" Relationship="personal_pageModel.FK_Schedule_Users" FromRole="Schedule" ToRole="User" />
-        </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -939,7 +782,6 @@
           <Property Name="UniversityId" Type="Guid" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="Faculties" Relationship="personal_pageModel.FK_Faculty_University" FromRole="University" ToRole="Faculty" />
-          <NavigationProperty Name="Notifications" Relationship="personal_pageModel.FK_Notifications_University" FromRole="University" ToRole="Notification" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -964,8 +806,6 @@
           <NavigationProperty Name="Departament" Relationship="personal_pageModel.FK_Users_Departament" FromRole="User" ToRole="Departament" />
           <NavigationProperty Name="Education_Form" Relationship="personal_pageModel.FK_Users_Education_Form" FromRole="User" ToRole="Education_Form" />
           <NavigationProperty Name="Faculty" Relationship="personal_pageModel.FK_Users_Faculty" FromRole="User" ToRole="Faculty" />
-          <NavigationProperty Name="Requests" Relationship="personal_pageModel.FK_Requests_User" FromRole="User" ToRole="Request" />
-          <NavigationProperty Name="Schedules" Relationship="personal_pageModel.FK_Schedule_Users" FromRole="User" ToRole="Schedule" />
         </EntityType>
         <Association Name="FK_Users_AspNetRoles">
           <End Type="personal_pageModel.AspNetRole" Role="AspNetRole" Multiplicity="0..1" />
@@ -1067,18 +907,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Schedule_Course">
-          <End Type="personal_pageModel.Course" Role="Course" Multiplicity="1" />
-          <End Type="personal_pageModel.Schedule" Role="Schedule" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Course">
-              <PropertyRef Name="CourseId" />
-            </Principal>
-            <Dependent Role="Schedule">
-              <PropertyRef Name="CourseId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Departament_Faculty">
           <End Type="personal_pageModel.Faculty" Role="Faculty" Multiplicity="1" />
           <End Type="personal_pageModel.Departament" Role="Departament" Multiplicity="*" />
@@ -1139,47 +967,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Notifications_University">
-          <End Type="personal_pageModel.University" Role="University" Multiplicity="0..1" />
-          <End Type="personal_pageModel.Notification" Role="Notification" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="University">
-              <PropertyRef Name="UniversityId" />
-            </Principal>
-            <Dependent Role="Notification">
-              <PropertyRef Name="UniversityId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Requests_User">
-          <End Type="personal_pageModel.User" Role="User" Multiplicity="1" />
-          <End Type="personal_pageModel.Request" Role="Request" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="Request">
-              <PropertyRef Name="RequestBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Schedule_Users">
-          <End Type="personal_pageModel.User" Role="User" Multiplicity="1" />
-          <End Type="personal_pageModel.Schedule" Role="Schedule" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="Schedule">
-              <PropertyRef Name="TeacherId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="AspNetUserRoles">
           <End Type="personal_pageModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="personal_pageModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -1349,42 +1141,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Notifications">
-            <EntityTypeMapping TypeName="personal_pageModel.Notification">
-              <MappingFragment StoreEntitySet="Notifications">
-                <ScalarProperty Name="UniversityId" ColumnName="UniversityId" />
-                <ScalarProperty Name="FacultyId" ColumnName="FacultyId" />
-                <ScalarProperty Name="GroupNumber" ColumnName="GroupNumber" />
-                <ScalarProperty Name="ToUser" ColumnName="ToUser" />
-                <ScalarProperty Name="Batchid" ColumnName="Batchid" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
-                <ScalarProperty Name="FromUser" ColumnName="FromUser" />
-                <ScalarProperty Name="NotificationId" ColumnName="NotificationId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Requests">
-            <EntityTypeMapping TypeName="personal_pageModel.Request">
-              <MappingFragment StoreEntitySet="Requests">
-                <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
-                <ScalarProperty Name="RequestBy" ColumnName="RequestBy" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
-                <ScalarProperty Name="RequestId" ColumnName="RequestId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Schedules">
-            <EntityTypeMapping TypeName="personal_pageModel.Schedule">
-              <MappingFragment StoreEntitySet="Schedule">
-                <ScalarProperty Name="Class_Nr" ColumnName="Class_Nr" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
-                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
-                <ScalarProperty Name="ScheduleId" ColumnName="ScheduleId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="personal_pageModel.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">
@@ -1430,7 +1186,7 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
-        </EntityContainerMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

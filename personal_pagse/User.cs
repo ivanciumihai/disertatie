@@ -13,8 +13,6 @@ namespace personal_pages
         {
             ClassBooks = new HashSet<ClassBook>();
             Courses = new HashSet<Course>();
-            Requests = new HashSet<Request>();
-            Schedules = new HashSet<Schedule>();
         }
 
         public string FullName => StringHelper.CutWhiteSpace(
@@ -62,12 +60,6 @@ namespace personal_pages
         public virtual Education_Form Education_Form { get; set; }
 
         public virtual Faculty Faculty { get; set; }
-
-        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Request> Requests { get; set; }
-
-        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Schedule> Schedules { get; set; }
 
         public virtual AspNetUser AspNetUser { get; set; }
     }

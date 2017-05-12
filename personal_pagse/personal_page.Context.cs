@@ -38,9 +38,6 @@ namespace personal_pages
         public virtual DbSet<Education_Form> Education_Form { get; set; }
         public virtual DbSet<ELMAH_Error> ELMAH_Error { get; set; }
         public virtual DbSet<Faculty> Faculties { get; set; }
-        public virtual DbSet<Notification> Notifications { get; set; }
-        public virtual DbSet<Request> Requests { get; set; }
-        public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<University> Universities { get; set; }
         public virtual DbSet<User> Users { get; set; }
