@@ -67,21 +67,18 @@
                         </ul>
                     </li>
                     <li>@Html.ActionLink("Class Book", "Index", "ClassBooks")</li>
-                    <li>@Html.ActionLink("Schedules", "Index", "Schedules")</li>
                 }
                 else if (User.IsInRole("Teacher"))
                 {
                     <li>@Html.ActionLink("User Profile", "Index", "UsersProfile")</li>
                     <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
                     <li>@Html.ActionLink("Class Book", "Index", "ClassBooks")</li>
-                    <li>@Html.ActionLink("Schedules", "Index", "Schedules")</li>
                 }
                 else if (User.IsInRole("Secretary"))
                 {
                     <li>@Html.ActionLink("Educational Form", "Index", "Education_Form")</li>
                     <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
                     <li>@Html.ActionLink("Class Book", "Index", "ClassBooks")</li>
-                    <li>@Html.ActionLink("Schedules", "Index", "Schedules")</li>
                 }
                 else if (User.IsInRole("Student"))
                 {
