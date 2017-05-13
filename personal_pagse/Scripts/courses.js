@@ -1,4 +1,4 @@
-﻿function fillSelect(select, data, hasEmpty, defaultValue) {
+﻿function fillSelectTeacher(select, data, hasEmpty, defaultValue) {
     if (!defaultValue)
         defaultValue = select.data("sel-item");
 
@@ -39,7 +39,7 @@ function fillSelectDepartment(select, data, hasEmpty, defaultValue) {
     select.append($("<option></option>").text("").val(""));
     $.each(data,
         function () {
-            select.append($("<option></option>").text(this.Name).val(this.FacultyId));
+            select.append($("<option></option>").text(this.Name).val(this.DepId));
         });
     if (selID)
         select.find("option[value='" + selID + "']").prop("selected", true);
@@ -66,7 +66,7 @@ $(document)
                         data: { depId: id },
                         success: function (result) {
                             console.log(result); // show response from the script.                 
-                            fillSelect($("#DepartamentId").closest("form").find("#TeacherId"), result, false);
+                            fillSelectTeacher($("#DepartamentId").closest("form").find("#TeacherId"), result, false);
                         },
                         error: function (xhr, status, error) {
                             var err = eval("(" + xhr.responseText + ")");
@@ -79,7 +79,7 @@ $(document)
 
 $(function () {
     $('#dd').datepicker({
-        dateFormat: 'yy-dd-mm',
+        dateFormat: 'yy-mm-dd',
         onSelect: function (datetext) {
 
             var d = new Date(); // for now

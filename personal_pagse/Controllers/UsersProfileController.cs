@@ -293,6 +293,13 @@ namespace personal_pages.Controllers
             return new JsonResult { Data = faculties.Select(x => new { x.Name, x.FacultyId }).ToList(), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        public JsonResult GetUserRole(string id)
+        {
+            var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var firstOrDefault = userManager.GetRoles(id).FirstOrDefault();
+            return new JsonResult { Data = firstOrDefault, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
     }
 }
 

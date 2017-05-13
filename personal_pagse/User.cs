@@ -39,8 +39,10 @@ namespace personal_pages
         [Range(0, 9999, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public int? GroupNumber { get; set; }
 
+        [Required(ErrorMessage = "Faculty cannot be empty")]
         public Guid FacultyId { get; set; }
 
+        [Required(ErrorMessage = "University cannot be empty")]
         public Guid UniversityId { get; set; }
 
         public string RoleId { get; set; }

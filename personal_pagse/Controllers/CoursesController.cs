@@ -218,7 +218,7 @@ namespace Personal_Pages.Controllers
             {
                 return new JsonResult
                 {
-                    Data = deparments.Select(x => new {x.Name, x.FacultyId}).ToList(),
+                    Data = deparments.Select(x => new {x.Name, x.DepId}).ToList(),
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
             }

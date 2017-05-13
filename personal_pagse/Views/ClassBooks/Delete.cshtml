@@ -24,7 +24,16 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Promoted)
+            <td>
+                @if (Model.Promoted == true)
+                {
+                    <button type="button" class="btn btn-success">Promoted</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-danger">Failed</button>
+                }
+            </td>
         </dd>
 
         <dt>

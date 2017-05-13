@@ -70,7 +70,7 @@ namespace personal_pages.Controllers
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, model.RememberMe});
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
@@ -86,7 +86,7 @@ namespace personal_pages.Controllers
             // Require that the user has already logged in via username/password or external login
             if (!await SignInManager.HasBeenVerifiedAsync())
                 return View("Error");
-            return View(new VerifyCodeViewModel {Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe});
+            return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
         //
@@ -127,7 +127,9 @@ namespace personal_pages.Controllers
             ViewBag.Name = User.IsInRole("Admin")
                 ? new SelectList(_context.Roles.ToList(), "Name", "Name")
                 : new SelectList(_context.Roles.Where(u => !u.Name.Contains("Admin")).ToList(), "Name", "Name");
-
+            //ViewBag.UserRoles = User.IsInRole("Admin")
+            //    ? new SelectList(_context.Roles.ToList(), "Name", "Name")
+            //    : new SelectList(_context.Roles.Where(u => !u.Name.Contains("Admin")).ToList(), "Name", "Name");
 
             return View();
         }
@@ -138,15 +140,30 @@ namespace personal_pages.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
-            var user = new ApplicationUser {UserName = model.UserName, Email = model.Email, Reg_Date = DateTime.Now};
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Name = User.IsInRole("Admin") ? 
+                      new SelectList(_context.Roles.ToList(), "Name", "Name")
+                    : new SelectList(_context.Roles.Where(u => !u.Name.Contains("Admin")).ToList(), "Name", "Name");
+                return View(model);
+            }
+            var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, Reg_Date = DateTime.Now };
             var role = new IdentityRole();
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(_context));
-            var chkUser = UserManager.Create(user, model.Password);
+             UserManager.Create(user, model.Password);
             //   var user2 = new User();
-//
-
-            var result1 = UserManager.AddToRole(user.Id, model.UserRoles);
+            //
+            var result1 = new IdentityResult();
+            try
+            {
+                 result1 = UserManager.AddToRole(user.Id, model.UserRoles);
+            }
+            catch (Exception ex)
+            {
+                
+                throw;
+            }
+           
             // roleManager.Create(role);
 
             //  var result = await UserManager.CreateAsync(user, model.Password);
@@ -210,7 +227,7 @@ namespace personal_pages.Controllers
 
             var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
             var callbackUrl = Url.Action("ResetPassword", "Account",
-                new {UserId = user.Id, code}, Request.Url.Scheme);
+                new { UserId = user.Id, code }, Request.Url.Scheme);
             await UserManager.SendEmailAsync(user.Id, "Reset Password",
                 "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
             return View("ForgotPasswordConfirmation");
@@ -265,7 +282,7 @@ namespace personal_pages.Controllers
         {
             // Request a redirect to the external login provider
             return new ChallengeResult(provider,
-                Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl}));
+                Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
         // GET: /Account/SendCode
@@ -277,9 +294,9 @@ namespace personal_pages.Controllers
                 return View("Error");
             var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
             var factorOptions =
-                userFactors.Select(purpose => new SelectListItem {Text = purpose, Value = purpose}).ToList();
+                userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
             return
-                View(new SendCodeViewModel {Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe});
+                View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
         // POST: /Account/SendCode
@@ -295,7 +312,7 @@ namespace personal_pages.Controllers
             if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
                 return View("Error");
             return RedirectToAction("VerifyCode",
-                new {Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe});
+                new { Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe });
         }
 
         // GET: /Account/ExternalLoginCallback
@@ -315,14 +332,14 @@ namespace personal_pages.Controllers
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, RememberMe = false});
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
                     return View("ExternalLoginConfirmation",
-                        new ExternalLoginConfirmationViewModel {Email = loginInfo.Email});
+                        new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
             }
         }
 
@@ -342,7 +359,7 @@ namespace personal_pages.Controllers
                 var info = await AuthenticationManager.GetExternalLoginInfoAsync();
                 if (info == null)
                     return View("ExternalLoginFailure");
-                var user = new ApplicationUser {UserName = model.Email, Email = model.Email};
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -437,7 +454,7 @@ namespace personal_pages.Controllers
 
             public override void ExecuteResult(ControllerContext context)
             {
-                var properties = new AuthenticationProperties {RedirectUri = RedirectUri};
+                var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
                 if (UserId != null)
                     properties.Dictionary[XsrfKey] = UserId;
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);

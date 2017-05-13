@@ -26,7 +26,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TypeScriptToolsVersion>2.2</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -594,9 +594,13 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\classbook.js" />
     <Content Include="Scripts\department.js" />
     <Content Include="Scripts\datepickerready.js" />
     <Content Include="Scripts\courses.js" />
+    <Content Include="Scripts\dropdownT - Copy.min - Copy %282%29.js">
+      <DependentUpon>classbook.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\dropdownT - Copy.min - Copy.js">
       <DependentUpon>department.js</DependentUpon>
     </Content>
@@ -786,7 +790,9 @@
     <Folder Include="Scripts\jquery-ui-1.12.1\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>

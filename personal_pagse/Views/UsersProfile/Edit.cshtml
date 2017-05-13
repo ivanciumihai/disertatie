@@ -33,7 +33,15 @@
         </div>
 
         <div class="form-group">
-            @Html.Label("Educational Form", new {@class = "control-label col-md-2"})
+            @Html.Label("Father Name", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FatherName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FatherName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Educational Form", new {@class = "control-label col-md-2", id = "EducationalFormLabel"})
             <div class="col-md-10">
                 @Html.DropDownList("Ed_Form", null, new {@class = "form-control"})
                 @Html.ValidationMessageFor(model => model.Ed_Form, "", new {@class = "text-danger"})
@@ -41,15 +49,23 @@
         </div>
 
         <div class="form-group">
-            @Html.Label("Father Name", new {@class = "control-label col-md-2"})
+            @Html.Label("University", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.FatherName, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.FatherName, "", new {@class = "text-danger"})
+                @Html.DropDownListFor(x => x.UniversityId, null, new { @class = "form-control", getUniversityUrl = Url.Action("GetFaculty") })
+                @Html.ValidationMessageFor(model => model.Faculty.UniversityId, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.Label("Department", new {@class = "control-label col-md-2"})
+            @Html.Label("Faculty", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(x => x.FacultyId, null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FacultyId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Department", new {@class = "control-label col-md-2", id="Departament"})
             <div class="col-md-10">
                 @Html.DropDownList("DepID", null, new {@class = "form-control"})
                 @Html.ValidationMessageFor(model => model.DepID, "", new {@class = "text-danger"})
@@ -57,28 +73,13 @@
         </div>
 
         <div class="form-group">
-            @Html.Label("Group Number", new {@class = "control-label col-md-2"})
+            @Html.Label("Group Number", new {@class = "control-label col-md-2", id="GroupLabel"})
             <div class="col-md-10">
                 @Html.EditorFor(model => model.GroupNumber, new {htmlAttributes = new {@class = "form-control", type = "number", onkeypress = "ValidateGroup(event);"}})
                 @Html.ValidationMessageFor(model => model.GroupNumber, "", new {@class = "text-danger"})
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.Label("University", new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.DropDownListFor(x => x.UniversityId, null, new {@class = "form-control", getUniversityUrl = Url.Action("GetFaculty")})
-                @Html.ValidationMessageFor(model => model.Faculty.UniversityId, "", new {@class = "text-danger"})
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Faculty", new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.DropDownListFor(x => x.FacultyId, null, new {@class = "form-control"})
-                @Html.ValidationMessageFor(model => model.FacultyId, "", new {@class = "text-danger"})
-            </div>
-        </div>
 
         <div class="form-group">
             @Html.Label("Role", new {@class = "control-label col-md-2"})

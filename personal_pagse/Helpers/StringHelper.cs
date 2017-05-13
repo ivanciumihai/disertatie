@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -47,9 +48,18 @@ namespace personal_pages.Helpers
 
         public static string SubStringCapital(string s)
         {
-            var r = new Regex(@"[A-Z]", RegexOptions.IgnorePatternWhitespace);
-            var result = r.Matches(s);
-            return result.Cast<Match>().Aggregate(string.Empty, (current, match) => current + match.Value + ".");
+            try
+            {
+                var r = new Regex(@"[A-Z]", RegexOptions.IgnorePatternWhitespace);
+                var result = r.Matches(s);
+                return result.Cast<Match>().Aggregate(string.Empty, (current, match) => current + match.Value + ".");
+            }
+            catch (Exception)
+            {
+                
+                return null;
+            }
+          
         }
     }
 

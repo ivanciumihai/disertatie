@@ -5,6 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using personal_pages.Models;
 using PagedList;
 
 
@@ -96,6 +99,9 @@ namespace personal_pages.Controllers
             ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name");
             ViewBag.StudentId = new SelectList(_db.Users.Where(a => a.AspNetRole.Name == "Student"), "UserId",
                 "FullName");
+            ViewBag.DepId = new SelectList(_db.Departaments, "DepId", "Name");
+            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
             return View();
         }
 
@@ -114,6 +120,9 @@ namespace personal_pages.Controllers
                     ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name");
                     ViewBag.StudentId = new SelectList(_db.Users.Where(a => a.AspNetRole.Name == "Student"), "UserId",
                         "FullName");
+                    ViewBag.DepId = new SelectList(_db.Departaments, "DepId", "Name");
+                    ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+                    ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
                     return View(classBook);
                 }
                 classBook.Grade_Date = DateTime.Now;
@@ -129,6 +138,9 @@ namespace personal_pages.Controllers
             ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name", classBook.CourseId);
             ViewBag.StudentId = new SelectList(_db.Users.Where(a => a.AspNetRole.Name == "Student"), "UserId",
                 "FirstName");
+            ViewBag.DepId = new SelectList(_db.Departaments, "DepId", "Name");
+            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
             return View(classBook);
         }
 
@@ -147,27 +159,33 @@ namespace personal_pages.Controllers
             ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name", classBook.CourseId);
             ViewBag.StudentId = new SelectList(_db.Users.Where(a => a.AspNetRole.Name == "Student"), "UserId",
             "FullName");
+            ViewBag.DepId = new SelectList(_db.Departaments, "DepId", "Name");
+            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
             return View(classBook);
         }
 
         // POST: ClassBooks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(ClassBook classBook)
+        public async Task<ActionResult> Edit([Bind(Include = "ClassBookId,CourseId,StudentId,Grade,Promoted,TeacherId,Grade_Date,Grade_modified")] ClassBook classBook)
         {
             if (ModelState.IsValid)
             {
-                var getUsers = _db.ClassBooks.Any(x => x.StudentId == classBook.StudentId && x.CourseId == classBook.CourseId);
+                var getUsers = _db.ClassBooks.Any(x => x.StudentId == classBook.StudentId && x.CourseId == classBook.CourseId && x.Grade == classBook.Grade);
                 var classBooksPage = await _db.ClassBooks.FindAsync(classBook.CourseId);
                 if (getUsers)
                 {
-                    ModelState.AddModelError(string.Empty, "Student already has a grade on this");
+                    ModelState.AddModelError(string.Empty, "Student already has this grade");
                     ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name");
                     ViewBag.StudentId = new SelectList(_db.Users.Where(a => a.AspNetRole.Name == "Student"), "UserId",
                         "FullName");
+                    ViewBag.DepId = new SelectList(_db.Departaments, "DepId", "Name");
+                    ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+                    ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
                     return View(classBooksPage);
                 }
-                classBook.User = classBook.User;
+              //  classBook.User = classBook.User;
                 classBook.TeacherId = User.Identity.Name;
                 classBook.Grade_modified = DateTime.Now;
                 classBook.Promoted = classBook.Grade != null && Math.Round((double)classBook.Grade) >= 5;
@@ -176,6 +194,11 @@ namespace personal_pages.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name", classBook.CourseId);
+            ViewBag.DepId = new SelectList(_db.Departaments, "DepId", "Name");
+            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            ViewBag.StudentId = new SelectList(_db.Users.Where(a => a.AspNetRole.Name == "Student"), "UserId",
+    "FullName");
 
             return View(classBook);
         }
@@ -213,6 +236,59 @@ namespace personal_pages.Controllers
                 _db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public JsonResult GetStudents(Guid depId)
+        {
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+            var role = roleManager.FindByName("Student").Users.ToList();
+            IQueryable<User> users = null;
+
+            foreach (var user in role)
+                users = _db.Users.Where(x => (x.RoleId == user.RoleId) && (x.DepID == depId));
+            var usersName = users.Select(x => new { x.UserId, x.FirstName }).ToList();
+            var fullname = string.Empty;
+            foreach (var p in usersName.Select(i => _db.Users.Where(x => x.UserId == i.UserId)).SelectMany(plm => plm))
+            {
+                fullname = p.FullName;
+            }
+            try
+            {
+                return new JsonResult
+                {
+                    Data = users.Select(x => new {x.UserId, fullname}).ToList(),
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult
+                {
+                    Data = null,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+        }
+
+        public JsonResult GetCourse(Guid depId)
+        {
+            var courses = _db.Courses.Where(a => a.DepartamentId.Equals(depId)).DefaultIfEmpty();
+            try
+            {
+                return new JsonResult
+                {
+                    Data = courses.Select(x => new { x.Name, x.CourseId }).ToList(),
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult
+                {
+                    Data = null,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
         }
     }
 }
