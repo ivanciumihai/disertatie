@@ -60,14 +60,11 @@ namespace personal_pages.Controllers
 
             var userId = User.Identity.GetUserId();
             var user = await _db.Users.FindAsync(userId);
-            const string imagePath = "default-avatar.png";
+            var imagePath = "default-avatar.png";
 
-            if (user != null)
+            if (user?.ImagePath != null)
             {
-                if (user.ImagePath == null)
-                {
-                    user.ImagePath = "default-avatar.png";
-                }
+                imagePath = user.ImagePath;
             }
 
             var model = new IndexViewModel

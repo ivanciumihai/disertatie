@@ -31,16 +31,16 @@ namespace Personal_Pages.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var courses = _db.Courses.Include(c => c.Departament).Include(c => c.User);
-
             var strCurrentUserId = User.Identity.GetUserId();
+            var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+            var courses = _db.Courses.Include(c => c.Departament).Include(c => c.User).Where(c => c.DepartamentId == userDetails.DepID);
 
-            if (User.IsInRole("Student"))
+
+            if (User.IsInRole("Admin"))
             {
-                var userss = await _db.Users.FindAsync(strCurrentUserId);
-                courses = _db.Courses.Include(c => c.Departament).Include(c => c.User).Where(c=>c.DepartamentId== userss.DepID);
-
+                courses = _db.Courses.Include(c => c.Departament).Include(c => c.User);
             }
+
 
             if (!string.IsNullOrEmpty(searchString))
                 courses = courses.Where(s => s.User.FirstName.Contains(searchString)

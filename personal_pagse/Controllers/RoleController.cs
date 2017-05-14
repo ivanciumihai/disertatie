@@ -6,7 +6,7 @@ using personal_pages.Models;
 
 namespace personal_pages.Controllers
 {
-    [Authorize(Roles = "Teacher, Admin, Secretary")]
+   [Authorize(Roles = "Teacher, Admin, Secretary")]
     public class RoleController : Controller
     {
         private readonly ApplicationDbContext context;

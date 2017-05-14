@@ -23,7 +23,7 @@ namespace personal_pages.Controllers
     {
         private readonly personal_pageEntities _db = new personal_pageEntities();
         // GET: UsersProfile
-        public ViewResult Index(string sortOrder, string searchString, string currentFilter, int? page)
+        public async Task<ViewResult> Index(string sortOrder, string searchString, string currentFilter, int? page)
         {
             ViewBag.LastNameSortParm = string.IsNullOrEmpty(sortOrder) ? "lastname_desc" : "";
             ViewBag.FirstDepSortParm = string.IsNullOrEmpty(sortOrder) ? "firstname_desc" : "";
@@ -50,6 +50,22 @@ namespace personal_pages.Controllers
                     .Include(u => u.Faculty.University)
                     .Include(u => u.AspNetRole)
                     .Include(u => u.AspNetUser);
+
+
+            if (User.IsInRole("Teacher") || User.IsInRole("Secretary"))
+            {
+                var strCurrentUserId = User.Identity.GetUserId();
+                var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+
+                users =
+                    _db.Users.Include(u => u.Departament)
+                        .Include(u => u.Education_Form)
+                        .Include(u => u.Faculty)
+                        .Include(u => u.Faculty.University)
+                        .Include(u => u.AspNetRole)
+                        .Include(u => u.AspNetUser)
+                        .Where(u =>u.DepID == userDetails.DepID);
+            }
 
             if (!string.IsNullOrEmpty(searchString))
             {

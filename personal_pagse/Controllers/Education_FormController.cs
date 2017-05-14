@@ -18,17 +18,6 @@ namespace Personal_Pages.Controllers
             return View(await _db.Education_Form.ToListAsync());
         }
 
-        // GET: Education_Form/Details/5
-        public async Task<ActionResult> Details(Guid? id)
-        {
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var educationForm = await _db.Education_Form.FindAsync(id);
-            if (educationForm == null)
-                return HttpNotFound();
-            return View(educationForm);
-        }
-
         // GET: Education_Form/Create
         public ActionResult Create()
         {

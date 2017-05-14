@@ -8,7 +8,7 @@
 
 <h2>Index</h2>
 
-@if (User.IsInRole("Admin") || User.IsInRole("Secretary"))
+@if (User.IsInRole("Admin") || User.IsInRole("Secretary") || User.IsInRole("Teacher"))
 {
     <p>
         @Html.ActionLink("Create New", "Create")
@@ -92,12 +92,10 @@
                 }
             </td>
             <td>
-                @if (User.IsInRole("Admin") || User.IsInRole("Secretary"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Secretary") || User.IsInRole("Teacher"))
                 {
-                    @Html.ActionLink("Edit", "Edit", new {id = item.ClassBookId})
-                    Html.Raw("|");
-                    @Html.ActionLink("Details", "Details", new {id = item.ClassBookId}) 
-                    Html.Raw("|");
+                    @Html.ActionLink("Edit | ", "Edit", new {id = item.ClassBookId})
+                    @Html.ActionLink("Details | ", "Details", new {id = item.ClassBookId}) 
                     @Html.ActionLink("Delete", "Delete", new {id = item.ClassBookId})
                 }
             </td>
