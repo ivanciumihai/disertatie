@@ -6,6 +6,7 @@ using personal_pages.Models;
 namespace personal_pages.Controllers
 {
     [Authorize]
+    [Authorize(Roles = "Teacher, Admin, Secretary")]
     public class UsersController : Controller
     {
         // GET: Users

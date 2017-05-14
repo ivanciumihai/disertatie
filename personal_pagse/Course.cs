@@ -22,6 +22,7 @@ namespace personal_pages
         [Range(0, 100, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public short Credits { get; set; }
 
+        [Required(ErrorMessage = "Department field cannot be empty")]
         public Guid DepartamentId { get; set; }
 
         [Required(ErrorMessage = "Teacher field cannot be empty")]

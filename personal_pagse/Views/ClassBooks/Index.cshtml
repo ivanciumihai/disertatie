@@ -92,9 +92,14 @@
                 }
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {id = item.ClassBookId}) |
-                @Html.ActionLink("Details", "Details", new {id = item.ClassBookId}) |
-                @Html.ActionLink("Delete", "Delete", new {id = item.ClassBookId})
+                @if (User.IsInRole("Admin") || User.IsInRole("Secretary"))
+                {
+                    @Html.ActionLink("Edit", "Edit", new {id = item.ClassBookId})
+                    Html.Raw("|");
+                    @Html.ActionLink("Details", "Details", new {id = item.ClassBookId}) 
+                    Html.Raw("|");
+                    @Html.ActionLink("Delete", "Delete", new {id = item.ClassBookId})
+                }
             </td>
         </tr>
     }

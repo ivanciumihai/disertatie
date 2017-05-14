@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace personal_pages.Controllers
 {
+    [Authorize(Roles = "Teacher, Admin, Secretary")]
     [MyAuthorize]
     public class RolesController : Controller
     {

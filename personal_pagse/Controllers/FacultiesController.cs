@@ -7,6 +7,7 @@ using personal_pages.Helpers;
 
 namespace personal_pages.Controllers
 {
+    [Authorize(Roles = "Teacher, Admin, Secretary")]
     public class FacultiesController : Controller
     {
         private readonly personal_pageEntities _db = new personal_pageEntities();

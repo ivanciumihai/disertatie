@@ -12,6 +12,7 @@ namespace personal_pages.Controllers
     [Authorize]
     public class ManageController : Controller
     {
+        private readonly personal_pageEntities _db = new personal_pageEntities();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -41,6 +42,7 @@ namespace personal_pages.Controllers
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
+
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess
                     ? "Your password has been changed."
@@ -57,18 +59,29 @@ namespace personal_pages.Controllers
                                         : "";
 
             var userId = User.Identity.GetUserId();
+            var user = await _db.Users.FindAsync(userId);
+            const string imagePath = "default-avatar.png";
+
+            if (user != null)
+            {
+                if (user.ImagePath == null)
+                {
+                    user.ImagePath = "default-avatar.png";
+                }
+            }
+
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+                ImagePath = imagePath
             };
             return View(model);
         }
 
-        //
         // POST: /Manage/RemoveLogin
         [HttpPost]
         [ValidateAntiForgeryToken]

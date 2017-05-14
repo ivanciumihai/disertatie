@@ -13,6 +13,7 @@ namespace personal_pages.Models
         public string PhoneNumber { get; set; }
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
+        public string ImagePath { get; set; }
     }
 
     public class ManageLoginsViewModel

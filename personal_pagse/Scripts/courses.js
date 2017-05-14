@@ -116,8 +116,6 @@ $(document)
                             fillSelectDepartment($("#FacultyId").closest("form").find("#DepartamentId"), result, false);
                         },
                         error: function (xhr, status, error) {
-                            $("#DepartamentId").hide();
-                            $("#DepartamentHide").hide();
                             var err = eval("(" + xhr.responseText + ")");
                             console.log(error);
                         }
@@ -181,3 +179,66 @@ $(document)
     });
 
 
+
+$(document)
+    .ready(function () {
+        var id = $("#UniversityId").val();
+        var url = "/Departaments/GetFaculty?universityId=" + id;
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: { universityId: id },
+            success: function (result) {
+                console.log(result); // show response from the script.                 
+                fillSelect($("#UniversityId").closest("form").find("#FacultyId"), result, false);
+
+            },
+            error: function (xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                console.log(error);
+            }
+        });
+    });
+
+
+$(document)
+    .ready(function () {
+        var id = $("#FacultyId").val();
+        var url = "/Courses/GetDepartment?facultyId=" + id;
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: { facultyId: id },
+            success: function (result) {
+                console.log(result); // show response from the script.                 
+                fillSelectDepartment($("#FacultyId").closest("form").find("#DepartamentId"), result, false);
+            },
+            error: function (xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                console.log(error);
+            }
+        });
+    });
+
+
+
+
+
+$(document)
+    .ready(function () {
+        var id = $("#DepartamentId").val();
+        var url = "/Courses/GetTeacher?depId=" + id;
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: { depId: id },
+            success: function (result) {
+                console.log(result); // show response from the script.                 
+                fillSelectTeacher($("#DepartamentId").closest("form").find("#TeacherId"), result, false);
+            },
+            error: function (xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                console.log(error);
+            }
+        });
+    });

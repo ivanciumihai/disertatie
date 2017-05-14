@@ -14,11 +14,12 @@ using PagedList;
 
 namespace Personal_Pages.Controllers
 {
+    [Authorize]
     public class CoursesController : Controller
     {
         private readonly personal_pageEntities _db = new personal_pageEntities();
         // GET: Courses
-        public ViewResult Index(string sortOrder, string searchString, string currentFilter, int? page)
+        public async Task<ViewResult> Index(string sortOrder, string searchString, string currentFilter, int? page)
         {
             ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.NameDepSortParm = string.IsNullOrEmpty(sortOrder) ? "depname_desc" : "";
@@ -31,6 +32,15 @@ namespace Personal_Pages.Controllers
             ViewBag.CurrentFilter = searchString;
 
             var courses = _db.Courses.Include(c => c.Departament).Include(c => c.User);
+
+            var strCurrentUserId = User.Identity.GetUserId();
+
+            if (User.IsInRole("Student"))
+            {
+                var userss = await _db.Users.FindAsync(strCurrentUserId);
+                courses = _db.Courses.Include(c => c.Departament).Include(c => c.User).Where(c=>c.DepartamentId== userss.DepID);
+
+            }
 
             if (!string.IsNullOrEmpty(searchString))
                 courses = courses.Where(s => s.User.FirstName.Contains(searchString)
@@ -110,17 +120,21 @@ namespace Personal_Pages.Controllers
                 return HttpNotFound();
             ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name", course.DepartamentId);
             ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
-                "FirstName");
-            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
-            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+                "FullName", course.TeacherId);
+            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name", course.Departament.FacultyId);
+            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name", course.Departament.Faculty.University.UniversityId);
             return View(course);
         }
 
         // POST: Courses/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Course course)
+        public async Task<ActionResult> Edit(Course course, DateTime? examDateNew)
         {
+            if (course.ExamDate != examDateNew && examDateNew != null)
+            {
+                course.ExamDate = examDateNew;
+            }
             if (ModelState.IsValid)
             {
                 _db.Entry(course).State = EntityState.Modified;
@@ -131,7 +145,7 @@ namespace Personal_Pages.Controllers
             }
             ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name", course.DepartamentId);
             ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
-                "FirstName");
+                "FirstName", course.TeacherId);
             ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
             ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
             return View(course);
@@ -194,14 +208,9 @@ namespace Personal_Pages.Controllers
                 users = _db.Users.Where(x => (x.RoleId == plm.RoleId) && (x.DepID == depId));
             var usersName = users.Select(x => new {x.UserId, x.FirstName}).ToList();
             var fullname = string.Empty;
-            foreach (var i in usersName)
+            foreach (var p in usersName.Select(i => _db.Users.Where(x => x.UserId == i.UserId)).SelectMany(user => user))
             {
-                var plm = _db.Users.Where(x => x.UserId == i.UserId);
-                foreach (var p in plm)
-                {
-                   fullname = p.FullName;
-                }
-
+                fullname = p.FullName;
             }
 
             return new JsonResult

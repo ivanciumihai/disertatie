@@ -82,6 +82,8 @@
                 }
                 else if (User.IsInRole("Student"))
                 {
+                    <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
+                    <li>@Html.ActionLink("Class Book", "Index", "ClassBooks")</li>
                 }
 
             </ul>

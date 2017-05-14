@@ -13,6 +13,7 @@ using PagedList;
 
 namespace personal_pages.Controllers
 {
+    [Authorize]
     public class ClassBooksController : Controller
     {
         private readonly personal_pageEntities _db = new personal_pageEntities();
@@ -26,6 +27,12 @@ namespace personal_pages.Controllers
             ViewBag.PromotedSortParm = string.IsNullOrEmpty(sortOrder) ? "promoted_desc" : "";
 
             var classBooks = _db.ClassBooks.Include(c => c.Course).Include(c => c.User);
+            var strCurrentUserId = User.Identity.GetUserId();
+
+            if (User.IsInRole("Student"))
+            {
+                 classBooks = _db.ClassBooks.Include(c => c.Course).Include(c => c.User).Where(x=>x.StudentId==strCurrentUserId);
+            }
 
             if (searchString != null)
             {

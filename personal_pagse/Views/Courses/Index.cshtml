@@ -8,9 +8,12 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@if (User.IsInRole("Admin") || User.IsInRole("Secretary"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
 
 @using (Html.BeginForm("Index", "Courses", FormMethod.Get))
 {
@@ -73,9 +76,14 @@
                 @Html.DisplayFor(modelItem => item.User.LastName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.CourseId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.CourseId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.CourseId })
+                @if (User.IsInRole("Admin") || User.IsInRole("Secretary"))
+                {
+                    @Html.ActionLink("Edit", "Edit", new {id = item.CourseId})
+                    Html.Raw("|");
+                    @Html.ActionLink("Details", "Details", new {id = item.CourseId}) 
+                    Html.Raw("|");
+                    @Html.ActionLink("Delete", "Delete", new {id = item.CourseId})
+                }
             </td>
         </tr>
     }

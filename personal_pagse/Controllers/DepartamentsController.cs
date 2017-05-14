@@ -8,6 +8,7 @@ using personal_pages.Helpers;
 
 namespace personal_pages.Controllers
 {
+    [Authorize(Roles = "Teacher, Admin, Secretary")]
     public class DepartamentsController : Controller
     {
         private readonly personal_pageEntities _db = new personal_pageEntities();
@@ -127,8 +128,23 @@ namespace personal_pages.Controllers
 
         public JsonResult GetFaculty(Guid universityId)
         {
-            var faculties = _db.Faculties.Where(a => a.UniversityId.Equals(universityId)).DefaultIfEmpty();
-            return new JsonResult { Data = faculties.Select(x => new { x.Name, x.FacultyId }).ToList(), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            try
+            {
+                var faculties = _db.Faculties.Where(a => a.UniversityId.Equals(universityId)).DefaultIfEmpty();
+                return new JsonResult
+                {
+                    Data = faculties.Select(x => new {x.Name, x.FacultyId}).ToList(),
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult
+                {
+                    Data = null,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
         }
     }
 }

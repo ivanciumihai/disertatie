@@ -18,6 +18,7 @@ using PagedList;
 
 namespace personal_pages.Controllers
 {
+    [Authorize]
     public class UsersProfileController : Controller
     {
         private readonly personal_pageEntities _db = new personal_pageEntities();

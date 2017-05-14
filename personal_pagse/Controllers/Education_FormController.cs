@@ -8,6 +8,7 @@ using personal_pages.Helpers;
 
 namespace Personal_Pages.Controllers
 {
+    [Authorize(Roles = "Teacher, Admin, Secretary")]
     public class Education_FormController : Controller
     {
         private readonly personal_pageEntities _db = new personal_pageEntities();
