@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using Elmah;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using personal_pages.Helpers;
 using personal_pages.Models;
@@ -22,6 +23,14 @@ namespace personal_pages.Controllers
     public class UsersProfileController : Controller
     {
         private readonly personal_pageEntities _db = new personal_pageEntities();
+        private ApplicationUserManager _userManager;
+
+        private ApplicationUserManager UserManager
+        {
+            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            set { _userManager = value; }
+        }
+
         // GET: UsersProfile
         public async Task<ViewResult> Index(string sortOrder, string searchString, string currentFilter, int? page)
         {
@@ -52,7 +61,7 @@ namespace personal_pages.Controllers
                     .Include(u => u.AspNetUser);
 
 
-            if (User.IsInRole("Teacher") || User.IsInRole("Secretary"))
+            if (User.IsInRole("Teacher"))
             {
                 var strCurrentUserId = User.Identity.GetUserId();
                 var userDetails = await _db.Users.FindAsync(strCurrentUserId);
@@ -64,7 +73,22 @@ namespace personal_pages.Controllers
                         .Include(u => u.Faculty.University)
                         .Include(u => u.AspNetRole)
                         .Include(u => u.AspNetUser)
-                        .Where(u =>u.DepID == userDetails.DepID);
+                        .Where(u => u.DepID == userDetails.DepID);
+            }
+
+            if (User.IsInRole("Secretary"))
+            {
+                var strCurrentUserId = User.Identity.GetUserId();
+                var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+
+                users =
+                    _db.Users.Include(u => u.Departament)
+                        .Include(u => u.Education_Form)
+                        .Include(u => u.Faculty)
+                        .Include(u => u.Faculty.University)
+                        .Include(u => u.AspNetRole)
+                        .Include(u => u.AspNetUser)
+                        .Where(u => u.FacultyId == userDetails.FacultyId);
             }
 
             if (!string.IsNullOrEmpty(searchString))
@@ -226,13 +250,23 @@ namespace personal_pages.Controllers
                         System.IO.File.Delete(filePath);
                     }
 
-                    var imageName = (user.FirstName + "." + user.LastName + Path.GetExtension(image.FileName)).Replace(" ","");
+                    var imageName = (user.FirstName + "." + user.LastName + Path.GetExtension(image.FileName)).Replace(" ", "");
                     var physicalPath = Server.MapPath("~/Img/" + imageName);
                     image.SaveAs(physicalPath);
                     user.ImagePath = imageName;
                 }
 
+                var userDetails = await _db.AspNetUsers.FindAsync(user.UserId);
+                var oldRole = userDetails?.AspNetRoles.First();
+
+                var newuserRole = await _db.AspNetRoles.FindAsync(user?.RoleId);
+
+                await UserManager.AddToRoleAsync(user.UserId, newuserRole?.Name);
+                await UserManager.RemoveFromRoleAsync(user.UserId, oldRole?.Name);
+
                 await _db.SaveChangesAsync();
+
+
                 return RedirectToAction("Index");
             }
             ViewBag.DepID = new SelectList(_db.Departaments, "DepId", "Name", user.DepID);
