@@ -204,8 +204,8 @@ namespace Personal_Pages.Controllers
             var role = roleManager.FindByName("Teacher").Users.ToList();
             IQueryable<User> users = null;
 
-            foreach (var plm in role)
-                users = _db.Users.Where(x => (x.RoleId == plm.RoleId) && (x.DepID == depId));
+            foreach (var item in role)
+                users = _db.Users.Where(x => (x.RoleId == item.RoleId) && (x.DepID == depId));
             var usersName = users.Select(x => new {x.UserId, x.FirstName}).ToList();
             var fullname = string.Empty;
             foreach (var p in usersName.Select(i => _db.Users.Where(x => x.UserId == i.UserId)).SelectMany(user => user))

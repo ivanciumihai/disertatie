@@ -376,7 +376,7 @@ namespace personal_pages.Controllers
                 users = _db.Users.Where(x => (x.RoleId == user.RoleId) && (x.DepID == depId));
             var usersName = users.Select(x => new { x.UserId, x.FirstName }).ToList();
             var fullname = string.Empty;
-            foreach (var p in usersName.Select(i => _db.Users.Where(x => x.UserId == i.UserId)).SelectMany(plm => plm))
+            foreach (var p in usersName.Select(i => _db.Users.Where(x => x.UserId == i.UserId)).SelectMany(item => item))
             {
                 fullname = p.FullName;
             }

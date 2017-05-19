@@ -353,5 +353,3 @@ namespace personal_pages.Controllers
 
     }
 }
-
-
