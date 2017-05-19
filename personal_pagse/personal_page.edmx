@@ -91,6 +91,7 @@
           <Property Name="DepartamentId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="TeacherId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="ExamDate" Type="datetime2" Precision="7" />
+          <Property Name="CourseDate" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="Departament">
           <Key>
@@ -714,6 +715,7 @@
           <Property Name="DepartamentId" Type="Guid" Nullable="false" />
           <Property Name="TeacherId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="ExamDate" Type="DateTime" Precision="7" />
+          <Property Name="CourseDate" Type="DateTime" Precision="7" />
           <NavigationProperty Name="ClassBooks" Relationship="personal_pageModel.FK_ClassBook_Course" FromRole="Course" ToRole="ClassBook" />
           <NavigationProperty Name="Departament" Relationship="personal_pageModel.FK_Course_Departament" FromRole="Course" ToRole="Departament" />
           <NavigationProperty Name="User" Relationship="personal_pageModel.FK_Course_Teacher" FromRole="Course" ToRole="User" />
@@ -1088,6 +1090,7 @@
           <EntitySetMapping Name="Courses">
             <EntityTypeMapping TypeName="personal_pageModel.Course">
               <MappingFragment StoreEntitySet="Course">
+                <ScalarProperty Name="CourseDate" ColumnName="CourseDate" />
                 <ScalarProperty Name="ExamDate" ColumnName="ExamDate" />
                 <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
                 <ScalarProperty Name="DepartamentId" ColumnName="DepartamentId" />

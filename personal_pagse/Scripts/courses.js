@@ -78,7 +78,7 @@ $(document)
 
 
 $(function () {
-    $('#dd').datepicker({
+    $('#exam,#course').datepicker({
         dateFormat: 'yy-mm-dd',
         onSelect: function (datetext) {
 
@@ -95,7 +95,7 @@ $(function () {
 
             datetext = datetext + " " + h + ":" + m + ":" + s;
 
-            $('#dd').val(datetext);
+            $('#exam,#course').val(datetext);
         }
     });
 });

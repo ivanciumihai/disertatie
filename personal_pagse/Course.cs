@@ -31,6 +31,9 @@ namespace personal_pages
         [Required(ErrorMessage = "Exam date cannot be empty")]
         public DateTime? ExamDate { get; set; }
 
+        [Required(ErrorMessage = "Exam date cannot be empty")]
+        public DateTime? CourseDate { get; set; }
+
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ClassBook> ClassBooks { get; set; }
 

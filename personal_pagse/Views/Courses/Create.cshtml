@@ -64,13 +64,20 @@
         </div>
 
         <div class="form-group">
-            @Html.Label("Course Date", new { @class = "control-label col-md-2" })
+            @Html.Label("Exam Date", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="text" id="dd" name="examDate" class="form-control">
+                <input type="text" id="exam" name="examDate" class="form-control">
                 @Html.ValidationMessageFor(model => model.ExamDate, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        
+        <div class="form-group">
+            @Html.Label("Course Date", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="text" id="course" name="CourseDate" class="form-control">
+                @Html.ValidationMessageFor(model => model.CourseDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

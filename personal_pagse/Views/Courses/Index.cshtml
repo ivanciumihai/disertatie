@@ -48,6 +48,12 @@
         <th>
             Teacher Last Name
         </th>
+        <th>
+            Course Date
+        </th>
+        <th>
+            Exam Date
+        </th>
         <th></th>
     </tr>
 
@@ -76,12 +82,16 @@
                 @Html.DisplayFor(modelItem => item.User.LastName)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.CourseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExamDate)
+            </td>
+            <td>
                 @if (User.IsInRole("Admin") || User.IsInRole("Secretary"))
                 {
-                    @Html.ActionLink("Edit", "Edit", new {id = item.CourseId})
-                    Html.Raw("|");
-                    @Html.ActionLink("Details", "Details", new {id = item.CourseId}) 
-                    Html.Raw("|");
+                    @Html.ActionLink("Edit ", "Edit", new {id = item.CourseId})
+                    @Html.ActionLink("Details ", "Details", new {id = item.CourseId}) 
                     @Html.ActionLink("Delete", "Delete", new {id = item.CourseId})
                 }
             </td>

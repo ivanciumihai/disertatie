@@ -6,19 +6,19 @@
     <edmx:Diagrams>
       <Diagram DiagramId="bbd9b53170294937901c6421e7de7858" Name="Diagram1" ZoomLevel="101">
         <EntityTypeShape EntityType="personal_pageModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="personal_pageModel.AspNetRole" Width="1.5" PointX="0.75" PointY="6.375" />
-        <EntityTypeShape EntityType="personal_pageModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="10.375" />
-        <EntityTypeShape EntityType="personal_pageModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="13.125" />
-        <EntityTypeShape EntityType="personal_pageModel.AspNetUser" Width="1.5" PointX="3" PointY="10.5" />
-        <EntityTypeShape EntityType="personal_pageModel.ClassBook" Width="1.5" PointX="10.5" PointY="9.125" />
+        <EntityTypeShape EntityType="personal_pageModel.AspNetRole" Width="1.5" PointX="0.75" PointY="6.5" />
+        <EntityTypeShape EntityType="personal_pageModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="10.5" />
+        <EntityTypeShape EntityType="personal_pageModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="13.25" />
+        <EntityTypeShape EntityType="personal_pageModel.AspNetUser" Width="1.5" PointX="3" PointY="10.625" />
+        <EntityTypeShape EntityType="personal_pageModel.ClassBook" Width="1.5" PointX="10.5" PointY="9.25" />
         <EntityTypeShape EntityType="personal_pageModel.Course" Width="1.5" PointX="13.5" PointY="9.25" />
-        <EntityTypeShape EntityType="personal_pageModel.Departament" Width="1.5" PointX="6" PointY="3.25" />
+        <EntityTypeShape EntityType="personal_pageModel.Departament" Width="1.5" PointX="6" PointY="16.75" />
         <EntityTypeShape EntityType="personal_pageModel.Education_Form" Width="1.5" PointX="6" PointY="7.375" />
-        <EntityTypeShape EntityType="personal_pageModel.ELMAH_Error" Width="1.5" PointX="8.75" PointY="0.75" />
-        <EntityTypeShape EntityType="personal_pageModel.Faculty" Width="1.5" PointX="3.75" PointY="3.375" />
-        <EntityTypeShape EntityType="personal_pageModel.sysdiagram" Width="1.5" PointX="2.75" PointY="6.75" />
-        <EntityTypeShape EntityType="personal_pageModel.University" Width="1.5" PointX="1.5" PointY="3.625" />
-        <EntityTypeShape EntityType="personal_pageModel.User" Width="1.5" PointX="8.25" PointY="8.25" />
+        <EntityTypeShape EntityType="personal_pageModel.ELMAH_Error" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="personal_pageModel.Faculty" Width="1.5" PointX="3.75" PointY="16.75" />
+        <EntityTypeShape EntityType="personal_pageModel.sysdiagram" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="personal_pageModel.University" Width="1.5" PointX="1.5" PointY="17.125" />
+        <EntityTypeShape EntityType="personal_pageModel.User" Width="1.5" PointX="8.25" PointY="8.375" />
         <AssociationConnector Association="personal_pageModel.FK_Users_AspNetRoles" />
         <AssociationConnector Association="personal_pageModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="personal_pageModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
