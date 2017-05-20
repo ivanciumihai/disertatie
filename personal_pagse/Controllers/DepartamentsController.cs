@@ -115,7 +115,8 @@ namespace personal_pages.Controllers
             {
                 _db.Entry(departament).State = EntityState.Modified;
                 departament.Name = StringHelper.CutWhiteSpace(departament.Name.ToTitleCase(TitleCase.All));
-                var departaments = await _db.Departaments.FindAsync(departament.DepId);
+                var db2 = new personal_pageEntities();
+                var departaments = await db2.Departaments.FindAsync(departament.DepId);
 
                 if (departament.StartDate == null)
                 {

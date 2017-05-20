@@ -176,11 +176,15 @@ namespace Personal_Pages.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Secretary")]
-        public async Task<ActionResult> Edit(Course course, DateTime? examDateNew)
+        public async Task<ActionResult> Edit(Course course, DateTime? examDateNew, DateTime? CourseDateNew)
         {
             if (course.ExamDate != examDateNew && examDateNew != null)
             {
                 course.ExamDate = examDateNew;
+            }
+            if (course.CourseDate != CourseDateNew && CourseDateNew != null)
+            {
+                course.CourseDate = CourseDateNew;
             }
             if (ModelState.IsValid)
             {
