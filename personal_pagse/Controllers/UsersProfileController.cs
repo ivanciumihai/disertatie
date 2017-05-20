@@ -148,16 +148,30 @@ namespace personal_pages.Controllers
 
         // GET: UsersProfile/Create
         [Authorize(Roles = "Admin, Secretary")]
-        public ActionResult Create()
+        public async Task<ViewResult> Create()
         {
             var ll = _db.Users.ToList();
             List<string> bb = ll.Select(a => a.UserId).ToList();
-            ViewBag.DepID = new SelectList(_db.Departaments, "DepId", "Name");
-            ViewBag.Ed_Form = new SelectList(_db.Education_Form, "id", "name");
-            ViewBag.FacultyId = new SelectList(_db.Faculties, "FacultyId", "Name");
-            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
-            ViewBag.RoleId = new SelectList(_db.AspNetRoles.Where(a => a.Name != "Admin"), "Id", "Name");
-            ViewBag.UserId = new SelectList(_db.AspNetUsers.Where(x => x.User.UserId != x.Id), "Id", "UserName");
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.DepID = new SelectList(_db.Departaments, "DepId", "Name");
+                ViewBag.Ed_Form = new SelectList(_db.Education_Form, "id", "name");
+                ViewBag.FacultyId = new SelectList(_db.Faculties, "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+                ViewBag.RoleId = new SelectList(_db.AspNetRoles.Where(a => a.Name != "Admin"), "Id", "Name");
+                ViewBag.UserId = new SelectList(_db.AspNetUsers.Where(x => x.User.UserId != x.Id), "Id", "UserName");
+            }
+            else
+            {
+                var strCurrentUserId = User.Identity.GetUserId();
+                var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+                ViewBag.DepID = new SelectList(_db.Departaments, "DepId", "Name");
+                ViewBag.Ed_Form = new SelectList(_db.Education_Form, "id", "name");
+                ViewBag.FacultyId = new SelectList(_db.Faculties.Where(x=>x.FacultyId == userDetails.FacultyId), "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities.Where(x=>x.UniversityId==userDetails.UniversityId), "UniversityId", "Name");
+                ViewBag.RoleId = new SelectList(_db.AspNetRoles.Where(a => a.Name != "Admin"), "Id", "Name");
+                ViewBag.UserId = new SelectList(_db.AspNetUsers.Where(x => x.User.UserId != x.Id && x.User.FacultyId == userDetails.FacultyId), "Id", "UserName");
+            }
             return View();
         }
 
@@ -198,12 +212,26 @@ namespace personal_pages.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.DepID = new SelectList(_db.Departaments, "DepId", "Name", user.DepID);
-            ViewBag.Ed_Form = new SelectList(_db.Education_Form, "id", "name", user.Ed_Form);
-            ViewBag.FacultyId = new SelectList(_db.Faculties, "FacultyId", "Name", user.FacultyId);
-            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name", user.UniversityId);
-            ViewBag.RoleId = User.IsInRole("Admin") ? new SelectList(_db.AspNetRoles, "Id", "Name") : new SelectList(_db.AspNetRoles.Where(a => a.Name != "Admin"), "Id", "Name");
-            ViewBag.UserId = new SelectList(_db.AspNetUsers, "Id", "UserName", user.UserId);
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.DepID = new SelectList(_db.Departaments, "DepId", "Name");
+                ViewBag.Ed_Form = new SelectList(_db.Education_Form, "id", "name");
+                ViewBag.FacultyId = new SelectList(_db.Faculties, "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+                ViewBag.RoleId = new SelectList(_db.AspNetRoles.Where(a => a.Name != "Admin"), "Id", "Name");
+                ViewBag.UserId = new SelectList(_db.AspNetUsers.Where(x => x.User.UserId != x.Id), "Id", "UserName");
+            }
+            else
+            {
+                var strCurrentUserId = User.Identity.GetUserId();
+                var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+                ViewBag.DepID = new SelectList(_db.Departaments, "DepId", "Name");
+                ViewBag.Ed_Form = new SelectList(_db.Education_Form, "id", "name");
+                ViewBag.FacultyId = new SelectList(_db.Faculties.Where(x => x.FacultyId == userDetails.FacultyId), "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities.Where(x => x.UniversityId == userDetails.UniversityId), "UniversityId", "Name");
+                ViewBag.RoleId = new SelectList(_db.AspNetRoles.Where(a => a.Name != "Admin"), "Id", "Name");
+                ViewBag.UserId = new SelectList(_db.AspNetUsers.Where(x => x.User.UserId != x.Id && x.User.FacultyId == userDetails.FacultyId), "Id", "UserName");
+            }
             return View(user);
         }
 
@@ -220,11 +248,29 @@ namespace personal_pages.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.DepID = new SelectList(_db.Departaments, "DepId", "Name", user.DepID);
-            ViewBag.Ed_Form = new SelectList(_db.Education_Form, "id", "name", user.Ed_Form);
-            ViewBag.FacultyId = new SelectList(_db.Faculties, "FacultyId", "Name", user.FacultyId);
-            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name", user.Faculty.UniversityId);
-            ViewBag.RoleId = User.IsInRole("Admin") ? new SelectList(_db.AspNetRoles, "Id", "Name") : new SelectList(_db.AspNetRoles.Where(a => a.Name != "Admin"), "Id", "Name");
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.DepID = new SelectList(_db.Departaments, "DepId", "Name", user.DepID);
+                ViewBag.Ed_Form = new SelectList(_db.Education_Form, "id", "name", user.Ed_Form);
+                ViewBag.FacultyId = new SelectList(_db.Faculties, "FacultyId", "Name", user.FacultyId);
+                ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name",
+                    user.Faculty.UniversityId);
+                ViewBag.RoleId = User.IsInRole("Admin")
+                    ? new SelectList(_db.AspNetRoles, "Id", "Name")
+                    : new SelectList(_db.AspNetRoles.Where(a => a.Name != "Admin"), "Id", "Name");
+            }
+            else
+            {
+                var strCurrentUserId = User.Identity.GetUserId();
+                var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+                ViewBag.DepID = new SelectList(_db.Departaments, "DepId", "Name");
+                ViewBag.Ed_Form = new SelectList(_db.Education_Form, "id", "name");
+                ViewBag.FacultyId = new SelectList(_db.Faculties.Where(x => x.FacultyId == userDetails.FacultyId), "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities.Where(x => x.UniversityId == userDetails.UniversityId), "UniversityId", "Name");
+                ViewBag.RoleId = new SelectList(_db.AspNetRoles.Where(a => a.Name != "Admin"), "Id", "Name");
+                ViewBag.UserId = new SelectList(_db.AspNetUsers.Where(x => x.User.UserId != x.Id && x.User.FacultyId == userDetails.FacultyId), "Id", "UserName");
+            }
+
             return View(user);
         }
 
@@ -260,20 +306,36 @@ namespace personal_pages.Controllers
                 var oldRole = userDetails?.AspNetRoles.First();
 
                 var newuserRole = await _db.AspNetRoles.FindAsync(user?.RoleId);
-
-                await UserManager.AddToRoleAsync(user.UserId, newuserRole?.Name);
-                await UserManager.RemoveFromRoleAsync(user.UserId, oldRole?.Name);
-
+                if (oldRole?.Name != newuserRole.Name)
+                {
+                    await UserManager.AddToRoleAsync(user.UserId, newuserRole?.Name);
+                    await UserManager.RemoveFromRoleAsync(user.UserId, oldRole?.Name);
+                }
                 await _db.SaveChangesAsync();
 
 
                 return RedirectToAction("Index");
             }
-            ViewBag.DepID = new SelectList(_db.Departaments, "DepId", "Name", user.DepID);
-            ViewBag.Ed_Form = new SelectList(_db.Education_Form, "id", "name", user.Ed_Form);
-            ViewBag.FacultyId = new SelectList(_db.Faculties, "FacultyId", "Name", user.FacultyId);
-            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name", user.UniversityId);
-            ViewBag.RoleId = new SelectList(_db.AspNetRoles.Where(a => a.Name != "Admin"), "Id", "Name");
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.DepID = new SelectList(_db.Departaments, "DepId", "Name");
+                ViewBag.Ed_Form = new SelectList(_db.Education_Form, "id", "name");
+                ViewBag.FacultyId = new SelectList(_db.Faculties, "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+                ViewBag.RoleId = new SelectList(_db.AspNetRoles.Where(a => a.Name != "Admin"), "Id", "Name");
+                ViewBag.UserId = new SelectList(_db.AspNetUsers.Where(x => x.User.UserId != x.Id), "Id", "UserName");
+            }
+            else
+            {
+                var strCurrentUserId = User.Identity.GetUserId();
+                var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+                ViewBag.DepID = new SelectList(_db.Departaments, "DepId", "Name");
+                ViewBag.Ed_Form = new SelectList(_db.Education_Form, "id", "name");
+                ViewBag.FacultyId = new SelectList(_db.Faculties.Where(x => x.FacultyId == userDetails.FacultyId), "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities.Where(x => x.UniversityId == userDetails.UniversityId), "UniversityId", "Name");
+                ViewBag.RoleId = new SelectList(_db.AspNetRoles.Where(a => a.Name != "Admin"), "Id", "Name");
+                ViewBag.UserId = new SelectList(_db.AspNetUsers.Where(x => x.User.UserId != x.Id && x.User.FacultyId == userDetails.FacultyId), "Id", "UserName");
+            }
             return View(user);
         }
 

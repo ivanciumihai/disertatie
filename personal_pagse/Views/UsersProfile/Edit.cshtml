@@ -43,7 +43,7 @@
         <div class="form-group">
             @Html.Label("Educational Form", new {@class = "control-label col-md-2", id = "EducationalFormLabel"})
             <div class="col-md-10">
-                @Html.DropDownList("Ed_Form", null, new {@class = "form-control"})
+                @Html.DropDownList("Ed_Form", (SelectList)ViewBag.Ed_Form," ", new {@class = "form-control"})
                 @Html.ValidationMessageFor(model => model.Ed_Form, "", new {@class = "text-danger"})
             </div>
         </div>

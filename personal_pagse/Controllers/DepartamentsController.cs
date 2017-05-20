@@ -4,27 +4,41 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Elmah;
+using Microsoft.AspNet.Identity;
 using personal_pages.Helpers;
 
 namespace personal_pages.Controllers
 {
-    [Authorize(Roles = "Teacher, Admin, Secretary")]
+    [Authorize(Roles = "Admin, Secretary")]
     public class DepartamentsController : Controller
     {
         private readonly personal_pageEntities _db = new personal_pageEntities();
         // GET: Departaments
         public async Task<ActionResult> Index()
         {
-            return View(await _db.Departaments.ToListAsync());
+            var strCurrentUserId = User.Identity.GetUserId();
+            var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+            return User.IsInRole("Secretary") ? View(await _db.Departaments.Where(x => x.FacultyId == userDetails.FacultyId).ToListAsync()) : View(await _db.Departaments.ToListAsync());
+
         }
 
 
         // GET: Departaments/Create
-        public ActionResult Create()
+        public async Task<ViewResult> Create()
         {
-            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
-            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
-
+            var strCurrentUserId = User.Identity.GetUserId();
+            var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            }
+            else
+            {
+                ViewBag.FacultyId = new SelectList(_db.Departaments.Where(x => x.FacultyId == userDetails.FacultyId), "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities.Where(x => x.UniversityId == userDetails.UniversityId), "UniversityId", "Name");
+            }
             return View();
         }
 
@@ -33,7 +47,7 @@ namespace personal_pages.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Departament departament)
         {
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
                 departament.DepId = Guid.NewGuid();
                 departament.Name = StringHelper.CutWhiteSpace(departament.Name.ToTitleCase(TitleCase.All));
@@ -42,9 +56,21 @@ namespace personal_pages.Controllers
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
-            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            var strCurrentUserId = User.Identity.GetUserId();
+            var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            }
+            else
+            {
+                ViewBag.FacultyId = new SelectList(_db.Departaments.Where(x => x.FacultyId == userDetails.FacultyId),
+                    "FacultyId", "Name");
+                ViewBag.UniversityId =
+                    new SelectList(_db.Universities.Where(x => x.UniversityId == userDetails.UniversityId),
+                        "UniversityId", "Name");
+            }
             return View(departament);
         }
 
@@ -56,8 +82,21 @@ namespace personal_pages.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
-            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            var strCurrentUserId = User.Identity.GetUserId();
+            var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            }
+            else
+            {
+                ViewBag.FacultyId = new SelectList(_db.Departaments.Where(x => x.FacultyId == userDetails.FacultyId),
+                    "FacultyId", "Name");
+                ViewBag.UniversityId =
+                    new SelectList(_db.Universities.Where(x => x.UniversityId == userDetails.UniversityId),
+                        "UniversityId", "Name");
+            }
             var departament = await _db.Departaments.FindAsync(id);
 
             if (departament == null)
@@ -86,8 +125,21 @@ namespace personal_pages.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
-            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            var strCurrentUserId = User.Identity.GetUserId();
+            var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            }
+            else
+            {
+                ViewBag.FacultyId = new SelectList(_db.Departaments.Where(x => x.FacultyId == userDetails.FacultyId),
+                    "FacultyId", "Name");
+                ViewBag.UniversityId =
+                    new SelectList(_db.Universities.Where(x => x.UniversityId == userDetails.UniversityId),
+                        "UniversityId", "Name");
+            }
             return View(departament);
         }
 
@@ -112,9 +164,20 @@ namespace personal_pages.Controllers
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
             var departament = await _db.Departaments.FindAsync(id);
-            _db.Departaments.Remove(departament);
-            await _db.SaveChangesAsync();
+
+            try
+            {
+                _db.Departaments.Remove(departament);
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Process is used");
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                return View(departament);
+            }
             return RedirectToAction("Index");
+
         }
 
         protected override void Dispose(bool disposing)
@@ -133,7 +196,7 @@ namespace personal_pages.Controllers
                 var faculties = _db.Faculties.Where(a => a.UniversityId.Equals(universityId)).DefaultIfEmpty();
                 return new JsonResult
                 {
-                    Data = faculties.Select(x => new {x.Name, x.FacultyId}).ToList(),
+                    Data = faculties.Select(x => new { x.Name, x.FacultyId }).ToList(),
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
             }

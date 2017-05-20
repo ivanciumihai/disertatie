@@ -24,10 +24,11 @@
                         @(Model.HasPassword ? Html.ActionLink("Change your password", "ChangePassword") : Html.ActionLink("Create", "SetPassword"))
                         ]
                     </dd>
-                    <dt>External Logins:</dt>
+                    <dt>Email:</dt>
                     <dd>
-                        @Model.Logins.Count [
-                        @Html.ActionLink("Manage", "ManageLogins") ]
+                        [
+                        @(Model.email )
+                        ]
                     </dd>
                     <dt>Phone Number:</dt>
                     <dd>
@@ -43,29 +44,6 @@
                             @Html.ActionLink("Add", "AddPhoneNumber")
                         }
                         ]
-                    </dd>
-                    <dt>Two-Factor Authentication:</dt>
-                    <dd>
-                        @if (Model.TwoFactor)
-                        {
-                            using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                            {
-                                @Html.AntiForgeryToken()
-                                <text>Enabled
-                                    <input type="submit" value="Disable" class="btn btn-link" />
-                                </text>
-                            }
-                        }
-                        else
-                        {
-                            using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                            {
-                                @Html.AntiForgeryToken()
-                                <text>Disabled
-                                    <input type="submit" value="Enable" class="btn btn-link" />
-                                </text>
-                            }
-                        }
                     </dd>
                 </dl>
             </div>

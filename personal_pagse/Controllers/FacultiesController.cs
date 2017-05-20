@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Elmah;
 using personal_pages.Helpers;
 
 namespace personal_pages.Controllers
@@ -89,8 +90,18 @@ namespace personal_pages.Controllers
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
             var faculty = await _db.Faculties.FindAsync(id);
-            _db.Faculties.Remove(faculty);
-            await _db.SaveChangesAsync();
+
+            try
+            {
+                _db.Faculties.Remove(faculty);
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Process is used");
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                return View(faculty);
+            }
             return RedirectToAction("Index");
         }
 

@@ -40,6 +40,10 @@ namespace Personal_Pages.Controllers
             {
                 courses = _db.Courses.Include(c => c.Departament).Include(c => c.User);
             }
+            else if (User.IsInRole("Secretary"))
+            {
+                courses = _db.Courses.Include(c => c.Departament).Include(c => c.User).Where(c => c.Departament.FacultyId == userDetails.FacultyId);
+            }
 
 
             if (!string.IsNullOrEmpty(searchString))
@@ -77,19 +81,34 @@ namespace Personal_Pages.Controllers
         }
 
         // GET: Courses/Create
-        public ActionResult Create()
+        [Authorize(Roles = "Admin, Secretary")]
+        public async Task<ViewResult> Create()
         {
-            ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name");
-            ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
-                "FullName");
-            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
-            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name");
+                ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
+                    "FullName");
+                ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            }
+            else 
+            {
+                var strCurrentUserId = User.Identity.GetUserId();
+                var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+                ViewBag.DepartamentId = new SelectList(_db.Departaments.Where(x=>x.FacultyId==userDetails.FacultyId), "DepId", "Name");
+                ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher" && x.FacultyId==userDetails.FacultyId), "UserId",
+                    "FullName");
+                ViewBag.FacultyId = new SelectList(_db.Departaments.Where(x=>x.FacultyId == userDetails.FacultyId), "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities.Where(x=>x.UniversityId == userDetails.UniversityId), "UniversityId", "Name");
+            }
             return View();
         }
 
         // POST: Courses/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Secretary")]
         public async Task<ActionResult> Create(Course course)
         {
             if (ModelState.IsValid)
@@ -102,15 +121,29 @@ namespace Personal_Pages.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name", course.DepartamentId);
-            ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
-                "FirstName");
-            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
-            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name");
+                ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
+                    "FullName");
+                ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            }
+            else
+            {
+                var strCurrentUserId = User.Identity.GetUserId();
+                var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+                ViewBag.DepartamentId = new SelectList(_db.Departaments.Where(x => x.FacultyId == userDetails.FacultyId), "DepId", "Name");
+                ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher" && x.FacultyId == userDetails.FacultyId), "UserId",
+                    "FullName");
+                ViewBag.FacultyId = new SelectList(_db.Departaments.Where(x => x.FacultyId == userDetails.FacultyId), "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities.Where(x => x.UniversityId == userDetails.UniversityId), "UniversityId", "Name");
+            }
             return View(course);
         }
 
         // GET: Courses/Edit/5
+        [Authorize(Roles = "Admin, Secretary")]
         public async Task<ActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -118,17 +151,31 @@ namespace Personal_Pages.Controllers
             var course = await _db.Courses.FindAsync(id);
             if (course == null)
                 return HttpNotFound();
-            ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name", course.DepartamentId);
-            ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
-                "FullName", course.TeacherId);
-            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name", course.Departament.FacultyId);
-            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name", course.Departament.Faculty.University.UniversityId);
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name");
+                ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
+                    "FullName");
+                ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            }
+            else
+            {
+                var strCurrentUserId = User.Identity.GetUserId();
+                var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+                ViewBag.DepartamentId = new SelectList(_db.Departaments.Where(x => x.FacultyId == userDetails.FacultyId), "DepId", "Name");
+                ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher" && x.FacultyId == userDetails.FacultyId), "UserId",
+                    "FullName");
+                ViewBag.FacultyId = new SelectList(_db.Departaments.Where(x => x.FacultyId == userDetails.FacultyId), "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities.Where(x => x.UniversityId == userDetails.UniversityId), "UniversityId", "Name");
+            }
             return View(course);
         }
 
         // POST: Courses/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Secretary")]
         public async Task<ActionResult> Edit(Course course, DateTime? examDateNew)
         {
             if (course.ExamDate != examDateNew && examDateNew != null)
@@ -143,15 +190,29 @@ namespace Personal_Pages.Controllers
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name", course.DepartamentId);
-            ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
-                "FirstName", course.TeacherId);
-            ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
-            ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.DepartamentId = new SelectList(_db.Departaments, "DepId", "Name");
+                ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher"), "UserId",
+                    "FullName");
+                ViewBag.FacultyId = new SelectList(_db.Departaments, "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities, "UniversityId", "Name");
+            }
+            else
+            {
+                var strCurrentUserId = User.Identity.GetUserId();
+                var userDetails = await _db.Users.FindAsync(strCurrentUserId);
+                ViewBag.DepartamentId = new SelectList(_db.Departaments.Where(x => x.FacultyId == userDetails.FacultyId), "DepId", "Name");
+                ViewBag.TeacherId = new SelectList(_db.Users.Where(x => x.AspNetRole.Name == "Teacher" && x.FacultyId == userDetails.FacultyId), "UserId",
+                    "FullName");
+                ViewBag.FacultyId = new SelectList(_db.Departaments.Where(x => x.FacultyId == userDetails.FacultyId), "FacultyId", "Name");
+                ViewBag.UniversityId = new SelectList(_db.Universities.Where(x => x.UniversityId == userDetails.UniversityId), "UniversityId", "Name");
+            }
             return View(course);
         }
 
         // GET: Courses/Delete/5
+        [Authorize(Roles = "Admin, Secretary")]
         public async Task<ActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -173,6 +234,7 @@ namespace Personal_Pages.Controllers
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Secretary")]
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
             try

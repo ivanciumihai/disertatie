@@ -69,6 +69,7 @@ namespace personal_pages.Controllers
 
             var model = new IndexViewModel
             {
+                email = await  UserManager.GetEmailAsync(userId),
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),

@@ -78,8 +78,8 @@ $(document)
 
 
 $(function () {
-    $('#exam,#course').datepicker({
-        dateFormat: 'yy-mm-dd',
+    $("#exam").datepicker({
+        dateFormat: "yy-mm-dd",
         onSelect: function (datetext) {
 
             var d = new Date(); // for now
@@ -95,7 +95,30 @@ $(function () {
 
             datetext = datetext + " " + h + ":" + m + ":" + s;
 
-            $('#exam,#course').val(datetext);
+            $("#exam").val(datetext);
+        }
+    });
+});
+
+$(function () {
+    $("#course").datepicker({
+        dateFormat: "yy-mm-dd",
+        onSelect: function (datetext) {
+
+            var d = new Date(); // for now
+
+            var h = d.getHours();
+            h = (h < 10) ? ("0" + h) : h;
+
+            var m = d.getMinutes();
+            m = (m < 10) ? ("0" + m) : m;
+
+            var s = d.getSeconds();
+            s = (s < 10) ? ("0" + s) : s;
+
+            datetext = datetext + " " + h + ":" + m + ":" + s;
+
+            $("#course").val(datetext);
         }
     });
 });

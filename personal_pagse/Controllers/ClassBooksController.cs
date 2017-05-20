@@ -183,7 +183,7 @@ namespace personal_pages.Controllers
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            if (User.IsInRole("Admin"))
+            if (!User.IsInRole("Admin"))
             {
                 ViewBag.CourseId = new SelectList(_db.Courses.Where(x => x.DepartamentId == userDetails.DepID),
                     "CourseId", "Name");

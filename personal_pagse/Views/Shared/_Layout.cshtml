@@ -71,13 +71,30 @@
                 else if (User.IsInRole("Teacher"))
                 {
                     <li>@Html.ActionLink("User Profile", "Index", "UsersProfile")</li>
+
                     <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
                     <li>@Html.ActionLink("Class Book", "Index", "ClassBooks")</li>
                 }
                 else if (User.IsInRole("Secretary"))
                 {
-                    <li>@Html.ActionLink("Educational Form", "Index", "Education_Form")</li>
-                    <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
+                    <li>@Html.ActionLink("Users Profile", "Index", "UsersProfile")</li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            University Administration
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="">@Html.ActionLink("Educational Form", "Index", "Education_Form")</a>
+                            </li>
+                            <li>
+                                <a href="">@Html.ActionLink("Departaments", "Index", "Departaments")</a>
+                            </li>
+                            <li>
+                                <a href="">@Html.ActionLink("Courses", "Index", "Courses")</a>
+                            </li>
+                        </ul>
+                    </li>
                     <li>@Html.ActionLink("Class Book", "Index", "ClassBooks")</li>
                 }
                 else if (User.IsInRole("Student"))

@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Elmah;
 
 namespace personal_pages.Controllers
 {
@@ -89,8 +90,19 @@ namespace personal_pages.Controllers
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
             var aspNetRole = await _db.AspNetRoles.FindAsync(id);
-            _db.AspNetRoles.Remove(aspNetRole);
-            await _db.SaveChangesAsync();
+            try
+            {
+
+
+                _db.AspNetRoles.Remove(aspNetRole);
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Process is used");
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                return View(aspNetRole);
+            }
             return RedirectToAction("Index");
         }
 

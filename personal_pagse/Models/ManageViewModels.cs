@@ -14,6 +14,7 @@ namespace personal_pages.Models
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
         public string ImagePath { get; set; }
+        public string email { get; set; }
     }
 
     public class ManageLoginsViewModel
